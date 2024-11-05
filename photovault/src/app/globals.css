@@ -6,6 +6,7 @@
   /* page size constraints */
   --page-min-width: 280px;
   --page-max-width: 1440px;
+  --page-content-width: 96%;
 
   scroll-behavior: smooth;
   color-scheme: light;
@@ -40,6 +41,10 @@ body {
   min-height: 100vh;
   color: theme(colors.black);
   background-color: theme(colors.white);
+}
+
+input {
+  outline: none;
 }
 
 /* text presets */

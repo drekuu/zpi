@@ -34,7 +34,15 @@ const config: Config = {
         afacad: ['var(--font-afacad)'],
       },
       fontSize: {},
-      colors: {},
+      colors: {
+        gray: '#f0f0f0',
+      },
+      width: {
+        content: 'var(--page-content-width)',
+      },
+      borderRadius: {
+        clickable: '3.875rem',
+      },
     },
   },
   plugins: [],

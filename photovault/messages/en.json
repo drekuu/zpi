@@ -7,6 +7,14 @@
       "home": "Home",
       "new": "New",
       "explore": "Explore"
+    },
+    "IconsBar": {
+      "alt-languages": "Change language",
+      "alt-cart": "Open cart",
+      "alt-user": "My account"
     }
+  },
+  "Search": {
+    "placeholder": "Search..."
   }
 }
