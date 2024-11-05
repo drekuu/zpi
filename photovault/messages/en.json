@@ -1,6 +1,12 @@
 {
   "HomePage": {
-    "hello": "hello",
-    "changeLanguage": "change language"
+
+  },
+  "Header": {
+    "Links": {
+      "home": "Home",
+      "new": "New",
+      "explore": "Explore"
+    }
   }
 }

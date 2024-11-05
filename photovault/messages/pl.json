@@ -1,6 +1,12 @@
 {
   "HomePage": {
-    "hello": "witaj",
-    "changeLanguage": "zmien jezyk"
+
+  },
+  "Header": {
+    "Links": {
+      "home": "Główna",
+      "new": "Nowe",
+      "explore": "Odkryj"
+    }
   }
 }

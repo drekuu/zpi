@@ -3,6 +3,7 @@ import React from 'react';
 import { Inter, DM_Sans, Rammetto_One, Afacad } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
+import Header from '@/components/Header/Header';
 import clsx from 'clsx';
 import './globals.css';
 
@@ -50,7 +51,7 @@ export default async function RootLayout({
         )}
       >
         <NextIntlClientProvider messages={messages}>
-          <header></header>
+          <Header />
           <main>{children}</main>
         </NextIntlClientProvider>
       </body>

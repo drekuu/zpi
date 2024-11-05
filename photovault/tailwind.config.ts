@@ -29,8 +29,8 @@ const config: Config = {
       },
       fontFamily: {
         inter: ['var(--font-inter)'],
-        dmSans: ['var(--font-dm-sans)'],
-        rammettoOne: ['var(--font-rammetto-one)'],
+        'dm-sans': ['var(--font-dm-sans)'],
+        'rammetto-one': ['var(--font-rammetto-one)'],
         afacad: ['var(--font-afacad)'],
       },
       fontSize: {},
