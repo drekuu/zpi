@@ -8,10 +8,33 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
+      /**
+       * Inversed default Tailwind screen breakpoints.
+       */
+      screens: {
+        '-2xl': { max: '1535px' },
+        // => @media (max-width: 1535px) { ... }
+
+        '-xl': { max: '1279px' },
+        // => @media (max-width: 1279px) { ... }
+
+        '-lg': { max: '1023px' },
+        // => @media (max-width: 1023px) { ... }
+
+        '-md': { max: '767px' },
+        // => @media (max-width: 767px) { ... }
+
+        '-sm': { max: '639px' },
+        // => @media (max-width: 639px) { ... }
       },
+      fontFamily: {
+        inter: ['var(--font-inter)'],
+        dmSans: ['var(--font-dm-sans)'],
+        rammettoOne: ['var(--font-rammetto-one)'],
+        afacad: ['var(--font-afacad)'],
+      },
+      fontSize: {},
+      colors: {},
     },
   },
   plugins: [],
