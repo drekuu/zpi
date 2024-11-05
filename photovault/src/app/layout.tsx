@@ -28,7 +28,8 @@ const afacad = Afacad({
 
 export const metadata: Metadata = {
   title: 'PhotoVault',
-  description: 'TODO',
+  description:
+    'Responsywna aplikacja webowa do prezentowania i sprzedawania fotografii',
 };
 
 export default async function RootLayout({
