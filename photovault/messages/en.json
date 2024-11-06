@@ -12,6 +12,13 @@
       "alt-languages": "Change language",
       "alt-cart": "Open cart",
       "alt-user": "My account"
+    },
+    "UserMenu": {
+      "my-account": "My account",
+      "profile": "Profile",
+      "transactions": "Transaction history",
+      "settings": "Settings",
+      "logout": "Log out"
     }
   },
   "Search": {
