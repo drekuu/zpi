@@ -1,6 +1,27 @@
 {
+  "Pages": {
+    "home": "Główna",
+    "new": "Nowe",
+    "explore": "Odkryj"
+  },
   "HomePage": {
-    "hello": "witaj",
-    "changeLanguage": "zmien jezyk"
+
+  },
+  "Header": {
+    "Icons": {
+      "alt-languages": "Zmień język",
+      "alt-cart": "Otwórz koszyk",
+      "alt-user": "Moje konto"
+    },
+    "UserMenu": {
+      "my-account": "Moje konto",
+      "profile": "Profil",
+      "transactions": "Historia transakcji",
+      "settings": "Ustawienia",
+      "logout": "Wyloguj się"
+    }
+  },
+  "Search": {
+    "placeholder": "Szukaj..."
   }
 }

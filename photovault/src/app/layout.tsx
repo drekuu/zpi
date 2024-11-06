@@ -1,25 +1,35 @@
 import type { Metadata } from 'next';
 import React from 'react';
-import localFont from 'next/font/local';
+import { Inter, DM_Sans, Rammetto_One, Afacad } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
+import Header from '@/components/Header/Header';
+import clsx from 'clsx';
 import './globals.css';
 
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-  weight: '100 900',
+// Fonts
+const inter = Inter({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-inter',
 });
-
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-  weight: '100 900',
+const dmSans = DM_Sans({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-dm-sans',
+});
+const rammettoOne = Rammetto_One({
+  subsets: ['latin', 'latin-ext'],
+  weight: '400',
+  variable: '--font-rammetto-one',
+});
+const afacad = Afacad({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-afacad',
 });
 
 export const metadata: Metadata = {
   title: 'PhotoVault',
-  description: 'TODO',
+  description:
+    'Responsywna aplikacja webowa do prezentowania i sprzedawania fotografii',
 };
 
 export default async function RootLayout({
@@ -33,10 +43,17 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={clsx(
+          inter.variable,
+          dmSans.variable,
+          rammettoOne.variable,
+          afacad.variable,
+          'antialiased mx-auto w-content',
+        )}
       >
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <Header />
+          <main>{children}</main>
         </NextIntlClientProvider>
       </body>
     </html>

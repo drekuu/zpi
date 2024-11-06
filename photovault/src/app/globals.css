@@ -3,19 +3,56 @@
 @tailwind utilities;
 
 :root {
-  --background: #fff;
-  --foreground: #171717;
+  /* page size constraints */
+  --page-min-width: 280px;
+  --page-max-width: 1440px;
+  --page-content-width: 96%;
+
+  scroll-behavior: smooth;
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  /* desktop root font-size */
+  font-size: 16px;
+
+  /* mobile root font-size */
+  @screen -sm {
+    font-size: 14px;
   }
+
+  font-weight: 400;
+  text-rendering: optimizelegibility;
+  text-size-adjust: 100%;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply font-afacad;
+
+  margin: 0 auto;
+  min-width: var(--page-min-width);
+  max-width: var(--page-max-width);
+  min-height: 100vh;
+  color: theme(colors.black);
+  background-color: theme(colors.white);
+}
+
+input {
+  &:focus {
+    outline: none;
+  }
+
+  outline: none;
+}
+
+/* text presets */
+
+.logo {
+  @apply font-rammetto-one text-2xl;
 }
