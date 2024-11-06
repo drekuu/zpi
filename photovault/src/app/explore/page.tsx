@@ -1,3 +1,10 @@
+import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
+
 export default function ExplorePage() {
-  return <h1>explore</h1>;
+  return (
+    <div>
+      <Breadcrumbs />
+      <h1>explore</h1>
+    </div>
+  );
 }

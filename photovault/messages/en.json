@@ -1,13 +1,13 @@
 {
+  "Pages": {
+    "home": "Home",
+    "new": "New",
+    "explore": "Explore"
+  },
   "HomePage": {
 
   },
   "Header": {
-    "Links": {
-      "home": "Home",
-      "new": "New",
-      "explore": "Explore"
-    },
     "IconsBar": {
       "alt-languages": "Change language",
       "alt-cart": "Open cart",

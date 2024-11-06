@@ -48,7 +48,7 @@ export default async function RootLayout({
           dmSans.variable,
           rammettoOne.variable,
           afacad.variable,
-          'antialiased',
+          'antialiased mx-auto w-content',
         )}
       >
         <NextIntlClientProvider messages={messages}>

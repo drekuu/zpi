@@ -1,13 +1,13 @@
 {
+  "Pages": {
+    "home": "Główna",
+    "new": "Nowe",
+    "explore": "Odkryj"
+  },
   "HomePage": {
 
   },
   "Header": {
-    "Links": {
-      "home": "Główna",
-      "new": "Nowe",
-      "explore": "Odkryj"
-    },
     "IconsBar": {
       "alt-languages": "Zmień język",
       "alt-cart": "Otwórz koszyk",

@@ -7,7 +7,7 @@ import Search from '@/components/Search/Search';
 import Link from 'next/link';
 
 const Links = () => {
-  const t = useTranslations('Header.Links');
+  const t = useTranslations('Pages');
   const links = [
     { name: 'home', href: '/' },
     { name: 'new', href: '/new' },
@@ -39,7 +39,7 @@ const Actions = () => {
 
 export default function Header() {
   return (
-    <header className='mx-auto w-content flex py-6 gap-2 items-center border-b border-b-black border-opacity-10'>
+    <header className='flex py-6 gap-2 items-center border-b border-b-black border-opacity-10'>
       <Link href='/' className='logo'>
         PhotoVault
       </Link>
