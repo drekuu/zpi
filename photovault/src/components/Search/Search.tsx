@@ -13,7 +13,7 @@ export default function Search({ className }: SearchProps) {
   return (
     <div
       className={clsx(
-        'bg-gray flex items-center gap-3 relative rounded-clickable px-3 py-2',
+        'bg-gray flex items-center gap-3 relative rounded-4xl px-3 py-2',
         className,
       )}
     >

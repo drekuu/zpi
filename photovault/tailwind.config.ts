@@ -36,12 +36,17 @@ const config: Config = {
       fontSize: {},
       colors: {
         gray: '#f0f0f0',
+        slate: '#334155',
+        'slate-light': '#f1f5f9',
       },
       width: {
         content: 'var(--page-content-width)',
       },
       borderRadius: {
-        clickable: '3.875rem',
+        '4xl': '3.875rem',
+      },
+      boxShadow: {
+        light: '0px 4px 6px 0px rgba(0, 0, 0, 0.09)',
       },
     },
   },
