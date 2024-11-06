@@ -11,7 +11,9 @@ interface MenuProps {
   /**
    * Children are menu items, use {@link MenuItem}
    */
-  children: Array<ReactElement<typeof MenuItem>>;
+  children:
+    | Array<ReactElement<typeof MenuItem>>
+    | ReactElement<typeof MenuItem>;
 
   /**
    * Additional styling for menu, pass the positioning here
@@ -54,7 +56,7 @@ export default function Menu({
       <div
         className={clsx(
           className,
-          'flex flex-col w-fit text-slate text-sm bg-white font-inter font-medium rounded-xl shadow-light absolute',
+          'flex flex-col w-fit text-slate text-sm bg-white font-inter font-medium rounded-xl shadow-light absolute top-[calc(100%+16px)] right-0',
         )}
       >
         {children}

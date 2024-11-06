@@ -18,20 +18,15 @@ interface UserMenuProps {
 
 export default function UserMenu({ children }: UserMenuProps) {
   const t = useTranslations('Header.UserMenu');
-  const userMenuRef = useRef<HTMLDivElement>(null);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
   const router = useRouter();
 
   return (
-    <div ref={userMenuRef} className='relative'>
-      <div onClick={() => setUserMenuOpen(!userMenuOpen)}>{children}</div>
+    <div ref={ref} className='relative'>
+      <div onClick={() => setOpen(!open)}>{children}</div>
 
-      <Menu
-        open={userMenuOpen}
-        setOpen={setUserMenuOpen}
-        ref={userMenuRef}
-        className='min-w-[220px] -bottom-[100%+16px] right-0'
-      >
+      <Menu open={open} setOpen={setOpen} ref={ref} className='min-w-[220px]'>
         <MenuItem>{t('my-account')}</MenuItem>
         <Separator />
 
