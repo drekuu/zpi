@@ -10,19 +10,23 @@ import './globals.css';
 // Fonts
 const inter = Inter({
   subsets: ['latin', 'latin-ext'],
+  display: 'swap',
   variable: '--font-inter',
 });
 const dmSans = DM_Sans({
   subsets: ['latin', 'latin-ext'],
+  display: 'swap',
   variable: '--font-dm-sans',
 });
 const rammettoOne = Rammetto_One({
   subsets: ['latin', 'latin-ext'],
   weight: '400',
+  display: 'swap',
   variable: '--font-rammetto-one',
 });
 const afacad = Afacad({
   subsets: ['latin', 'latin-ext'],
+  display: 'swap',
   variable: '--font-afacad',
 });
 
