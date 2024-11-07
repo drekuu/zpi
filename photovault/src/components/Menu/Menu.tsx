@@ -2,7 +2,7 @@
  * Floating menu component
  */
 
-import { ReactElement, RefObject } from 'react';
+import { ReactElement, forwardRef, RefObject } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
 import MenuItem from './components/MenuItem';
 import clsx from 'clsx';
@@ -30,37 +30,30 @@ interface MenuProps {
    * @param state New state
    */
   setOpen: (state: boolean) => void;
-
-  /**
-   * Reference to the parent component containing the menu,
-   * used for detecting outside clicks
-   */
-  ref: RefObject<HTMLElement>;
 }
 
 /**
  * Menu component
- * @note Outside clicks are handled and close the menu
+ * @note Pass the `ref` prop to automatically close the menu on outside clicks
  */
-export default function Menu({
-  children,
-  className,
-  open,
-  setOpen,
-  ref,
-}: MenuProps) {
-  useOnClickOutside(ref, () => setOpen(false));
+const Menu = forwardRef<HTMLElement, MenuProps>(
+  ({ children, className, open, setOpen }, ref) => {
+    useOnClickOutside(ref as RefObject<HTMLElement>, () => setOpen(false));
 
-  return (
-    open && (
-      <div
-        className={clsx(
-          className,
-          'flex flex-col w-fit text-slate text-sm bg-white font-inter font-medium rounded-xl shadow-light absolute top-[calc(100%+16px)] right-0',
-        )}
-      >
-        {children}
-      </div>
-    )
-  );
-}
+    return (
+      open && (
+        <div
+          className={clsx(
+            className,
+            'flex flex-col w-fit text-slate text-sm bg-white font-inter font-medium rounded-xl shadow-light absolute top-[calc(100%+16px)] right-0',
+          )}
+        >
+          {children}
+        </div>
+      )
+    );
+  },
+);
+Menu.displayName = 'Menu';
+
+export default Menu;
