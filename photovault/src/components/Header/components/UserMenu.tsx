@@ -1,7 +1,6 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import Menu from '@/components/Menu/Menu';
 import MenuItem from '@/components/Menu/components/MenuItem';
 import Separator from '@/components/Menu/components/Separator';
@@ -31,23 +30,23 @@ export default function UserMenu({ children }: UserMenuProps) {
         <Separator />
 
         <MenuItem onClick={() => router.push('/me')}>
-          <Image draggable={false} src={UserIcon} alt='' />
+          <UserIcon draggable={false} />
           <p>{t('profile')}</p>
         </MenuItem>
 
         <MenuItem onClick={() => router.push('/transactions')}>
-          <Image draggable={false} src={CreditCardIcon} alt='' />
+          <CreditCardIcon draggable={false} />
           <p>{t('transactions')}</p>
         </MenuItem>
 
         <MenuItem onClick={() => router.push('/settings')}>
-          <Image draggable={false} src={SettingsIcon} alt='' />
+          <SettingsIcon draggable={false} />
           <p>{t('settings')}</p>
         </MenuItem>
 
         <Separator />
         <MenuItem onClick={() => {}}>
-          <Image draggable={false} src={LogoutIcon} alt='' />
+          <LogoutIcon draggable={false} />
           <p>{t('logout')}</p>
         </MenuItem>
       </Menu>

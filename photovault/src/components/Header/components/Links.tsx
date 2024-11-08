@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function Links() {
   const t = useTranslations('Pages');
   const links = [
-    { name: 'home', href: '/' },
+    { name: 'home', href: '/home' },
     { name: 'new', href: '/new' },
     { name: 'explore', href: '/explore' },
   ] as const;

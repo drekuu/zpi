@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import SearchIcon from '@/../public/icons/search.svg';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 interface SearchProps {
@@ -17,7 +16,7 @@ export default function Search({ className }: SearchProps) {
         className,
       )}
     >
-      <Image className='absolute pointer-events-none' src={SearchIcon} alt='' />
+      <SearchIcon className='absolute pointer-events-none' />
       <input
         className='bg-inherit pl-9 w-full rounded-[inherit]'
         placeholder={t('placeholder')}

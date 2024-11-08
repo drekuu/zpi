@@ -7,7 +7,7 @@ export default function PhotographerCard() {
   const images = [Image1, Image2];
 
   return (
-    <div className='w-[450px] justify-between gap-5 flex items-center p-4 border border-black rounded-2xxl'>
+    <div className='justify-between gap-5 flex items-center p-4 border border-black rounded-2xxl'>
       <Image
         className='max-w-[60px] aspect-square object-cover rounded-full'
         src={ProfileImage}
