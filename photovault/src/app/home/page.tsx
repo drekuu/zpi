@@ -1,10 +1,5 @@
-'use client';
-
-import SliderSection from '@/app/home/_components/SliderSection';
-import { SwiperSlide } from 'swiper/react';
+import SliderSection, { Slide } from '@/app/home/_components/SliderSection';
 import PhotographerCard from '@/app/home/_components/PhotographerCard/PhotographerCard';
-import { Swiper } from 'swiper/react';
-import 'swiper/css';
 
 export default function HomePage() {
   return (
@@ -13,15 +8,11 @@ export default function HomePage() {
 
       <div className='flex flex-col gap-24'>
         <SliderSection title='Discover new photographs'>
-          <div className='flex items-center'>
-            <Swiper className='w-full' slidesPerView='auto'>
-              {[...Array(5)].map((_, i) => (
-                <SwiperSlide className='max-w-[450px] mr-5' key={i}>
-                  <PhotographerCard />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+          {[...Array(5)].map((_, i) => (
+            <Slide className='max-w-[450px]' key={i}>
+              <PhotographerCard />
+            </Slide>
+          ))}
         </SliderSection>
       </div>
     </div>
