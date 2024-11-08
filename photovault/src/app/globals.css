@@ -56,3 +56,13 @@ input {
 .logo {
   @apply font-rammetto-one text-2xl;
 }
+
+h3 {
+  @apply font-bold;
+
+  font-size: 2rem;
+}
+
+h4 {
+  @apply text-2xl font-bold;
+}

@@ -36,6 +36,7 @@ const config: Config = {
       fontSize: {},
       colors: {
         gray: '#f0f0f0',
+        'dark-grey': '#909090',
         slate: '#334155',
         'slate-light': '#f1f5f9',
       },
@@ -43,6 +44,7 @@ const config: Config = {
         content: 'var(--page-content-width)',
       },
       borderRadius: {
+        '2xxl': '1.25rem',
         '4xl': '3.875rem',
       },
       boxShadow: {
