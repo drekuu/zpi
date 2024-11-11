@@ -5,7 +5,14 @@
     "explore": "Odkryj"
   },
   "HomePage": {
-
+    "Sections": {
+      "new-photographers": "Odkryj nowych fotografów",
+      "new-photos": "Odkryj nowe zdjęcia"
+    },
+    "Photographer": {
+      "about-me": "O mnie",
+      "from": "Fotograf z {location}"
+    }
   },
   "Header": {
     "Icons": {

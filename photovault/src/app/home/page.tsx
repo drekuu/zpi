@@ -4,16 +4,18 @@ import PlaceholderImage1 from './_components/static/image-placeholder-1.jpg';
 import PlaceholderImage2 from './_components/static/image-placeholder-2.jpg';
 import PlaceholderImage3 from './_components/static/image-placeholder-3.jpg';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 export default function HomePage() {
   const images = [PlaceholderImage1, PlaceholderImage2, PlaceholderImage3];
+  const t = useTranslations('HomePage.Sections');
 
   return (
     <div className='my-8'>
       <p className='text-center logo mb-14'>PhotoVault</p>
 
       <div className='flex flex-col gap-24'>
-        <SliderSection title='Discover new photographs'>
+        <SliderSection title={t('new-photographers')}>
           {[...Array(10)].map((_, i) => (
             <Slide className='max-w-[450px]' key={i}>
               <PhotographerCard />
@@ -21,7 +23,7 @@ export default function HomePage() {
           ))}
         </SliderSection>
 
-        <SliderSection title='Discover new photos'>
+        <SliderSection title={t('new-photos')}>
           {[...Array(20)].map((_, i) => (
             <Slide className='!w-auto max-h-[220px]' key={i}>
               <Image height={220} src={images[i % images.length]} alt='' />
