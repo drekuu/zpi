@@ -3,8 +3,8 @@ import LanguagesIcon from '@/../public/icons/header/languages.svg';
 import CartIcon from '@/../public/icons/header/cart.svg';
 import UserIcon from '@/../public/icons/header/user.svg';
 import Link from 'next/link';
-import UserMenu from '@/components/Header/components/UserMenu';
-import LanguageMenu from '@/components/Header/components/LanguageMenu';
+import UserMenu from './Menu/UserMenu';
+import LanguageMenu from './Menu/LanguageMenu';
 
 export default function Icons() {
   const t = useTranslations('Header.Icons');

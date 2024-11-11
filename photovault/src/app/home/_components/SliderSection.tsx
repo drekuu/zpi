@@ -4,17 +4,8 @@ import { ReactNode, Children, isValidElement, useRef } from 'react';
 import RightArrowIcon from '@/../public/icons/right-arrow.svg';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide, SwiperClass } from 'swiper/react';
-import clsx from 'clsx';
 import 'swiper/css';
-
-interface SlideProps {
-  className?: string;
-  children: ReactNode;
-}
-
-export const Slide = ({ children }: SlideProps) => {
-  return <div>{children}</div>;
-};
+import clsx from 'clsx';
 
 interface SliderSectionProps {
   title: string;

@@ -1,4 +1,4 @@
-import SliderSection, { Slide } from './_components/SliderSection';
+import SliderSection from './_components/SliderSection';
 import PhotographerCard from './_components/PhotographerCard/PhotographerCard';
 import PlaceholderImage1 from './_components/static/image-placeholder-1.jpg';
 import PlaceholderImage2 from './_components/static/image-placeholder-2.jpg';
@@ -17,17 +17,22 @@ export default function HomePage() {
       <div className='flex flex-col gap-24'>
         <SliderSection title={t('new-photographers')}>
           {[...Array(10)].map((_, i) => (
-            <Slide className='max-w-[450px]' key={i}>
+            <div className='max-w-[450px]' key={i}>
               <PhotographerCard />
-            </Slide>
+            </div>
           ))}
         </SliderSection>
 
         <SliderSection title={t('new-photos')}>
           {[...Array(20)].map((_, i) => (
-            <Slide className='!w-auto max-h-[220px]' key={i}>
-              <Image height={220} src={images[i % images.length]} alt='' />
-            </Slide>
+            <div className='!w-auto max-h-[220px]' key={i}>
+              <Image
+                className='w-full h-full'
+                height={220}
+                src={images[i % images.length]}
+                alt=''
+              />
+            </div>
           ))}
         </SliderSection>
       </div>
