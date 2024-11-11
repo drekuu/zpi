@@ -1,48 +1,62 @@
 import { useState } from "react";
 import useRegex from "./regex";
+import { useRouter } from 'next/navigation'
 
 const useRegister = () => {
     const { validatePassword, validateEmail } = useRegex()
-
-    const [username, setUsername] = useState<string>();
-    const [email, setEmail] = useState<string>();
-    const [password, setPassword] = useState<string>();
-    const [aboutMe, setAboutMe] = useState<string>();
+    const router = useRouter()
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [aboutMe, setAboutMe] = useState("");
 
     const sendRegisterRequest = (url: string, data: Record<string, unknown>) => {
         fetch(url, {
             method: "POST",
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            credentials:'include'
+        }).then(async response => {
+            if (response.status == 201) {
+
+                router.push('/login')
+            }
+            else if (response.status == 403) {
+                alert((await response.json()).status)
+            }
+            else{
+                alert("Unknown error")
+            }
         })
-        .catch(error => console.error('Error registering:', error));
+            .catch(error => console.error('Error registering:', error));
     }
-    
+
     const userRegisterValidate = () => {
-        if(!email) {
+        if (!email) {
             alert("Email is required")
             return false
         }
-        if(!username) {
+        if (!username) {
             alert("Username is required")
             return false
         }
-        if(!password) {
+        if (!password) {
             alert("Password is required")
             return false
         }
-        if(!validateEmail(email!!)){
+        if (!validateEmail(email!!)) {
             alert("Incorrect email")
             return false
         }
-        if(!validatePassword(password!!)){
+        if (!validatePassword(password!!)) {
             alert("Password too weak")
             return false
         }
         return true
     }
 
-    const registerUser = () => {
-        if(userRegisterValidate()) {
+    const registerUser = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (userRegisterValidate()) {
             sendRegisterRequest('/api/register', {
                 username: username,
                 email: email,
@@ -51,8 +65,9 @@ const useRegister = () => {
         }
     }
 
-    const registerPhotograph = () => {
-        if(userRegisterValidate()){
+    const registerPhotograph = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (userRegisterValidate()) {
             sendRegisterRequest('/api/register', {
                 username: username,
                 email: email,
@@ -62,7 +77,7 @@ const useRegister = () => {
         }
     }
 
-    return { setUsername, setEmail, setPassword, setAboutMe, registerUser, registerPhotograph }
+    return { username, email, password, aboutMe, setUsername, setEmail, setPassword, setAboutMe, registerUser, registerPhotograph }
 }
 
 export default useRegister
