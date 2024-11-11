@@ -51,7 +51,7 @@ export const putFile = async (
       }),
     );
   } catch (err) {
-    console.log('[cloud] putFile error: ', err);
+    console.error('[cloud] putFile error: ', err);
   }
 };
 
@@ -64,6 +64,6 @@ export const deleteFile = async (keyName: string) => {
       }),
     );
   } catch (err) {
-    console.log('[cloud] deleteFile error: ', err);
+    console.error('[cloud] deleteFile error: ', err);
   }
 };

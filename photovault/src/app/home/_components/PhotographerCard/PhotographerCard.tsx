@@ -1,6 +1,6 @@
 import ProfileImage from './static/profile-image-placeholder.jpg';
-import Image1 from './static/image-placeholder-1.jpg';
-import Image2 from './static/image-placeholder-2.jpg';
+import Image1 from '../static/image-placeholder-1.jpg';
+import Image2 from '../static/image-placeholder-2.jpg';
 import Image from 'next/image';
 
 export default function PhotographerCard() {
