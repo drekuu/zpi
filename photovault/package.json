@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:studio": "npx env-cmd -f .env.development \"prisma studio\""
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.686.0",
@@ -15,9 +16,9 @@
     "country-flag-icons": "^1.5.13",
     "next": "14.2.17",
     "next-intl": "^3.24.0",
+    "prisma": "^5.22.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "prisma": "^5.22.0",
     "usehooks-ts": "^3.1.0",
     "uuid": "^11.0.2",
     "zustand": "^5.0.1"
@@ -27,6 +28,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.20",
+    "env-cmd": "^10.1.0",
     "eslint": "^8",
     "eslint-config-next": "15.0.1",
     "eslint-config-prettier": "^9.1.0",
