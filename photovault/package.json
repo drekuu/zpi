@@ -14,7 +14,7 @@
     "@types/jsonwebtoken": "^9.0.7",
     "bcrypt": "^5.1.1",
     "clsx": "^2.1.1",
-    "cookies-next": "^5.0.2",
+    "cookies-next": "^4.3.0",
     "country-flag-icons": "^1.5.13",
     "jsonwebtoken": "^9.0.2",
     "next": "14.2.17",
