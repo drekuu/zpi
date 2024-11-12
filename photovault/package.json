@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma:studio": "npx env-cmd -f .env.development \"prisma studio\""
+    "prisma:studio": "npx env-cmd -f .env.development \"prisma studio\"",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.686.0",
