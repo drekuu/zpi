@@ -23,5 +23,16 @@
   },
   "Search": {
     "placeholder": "Search..."
+  },
+  "Form":{
+    "login": "Login",
+    "join": "Join",
+    "no-account": "Don't have an account? ",
+    "forgot-password": "Forgot password?",
+    "password": "Password",
+    "username": "Username",
+    "register": "Register",
+    "register-photograph": "Want to register as a photograph?",
+    "about-me": "About me"
   }
 }
