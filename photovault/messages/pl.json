@@ -30,5 +30,16 @@
   },
   "Search": {
     "placeholder": "Szukaj..."
+  },
+  "Form":{
+    "login": "Zaloguj się",
+    "join": "Dołącz",
+    "no-account": "Nie posiadasz konta? ",
+    "forgot-password": "Zapomniałeś hasła?",
+    "password": "Hasło",
+    "username": "Nazwa użytkownika",
+    "register": "Zarejestruj się",
+    "register-photograph": "Chcesz się zarejestrować jako fotograf?",
+    "about-me": "O mnie"
   }
 }
