@@ -1,7 +1,6 @@
 'use client';
 
 import RightArrowIcon from '@/../public/icons/right-arrow.svg';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Fragment, useMemo } from 'react';
@@ -19,7 +18,7 @@ export default function Breadcrumbs() {
   const breadcrumbs = useMemo(() => {
     const parts = pathname.split('/').slice(1);
     let accumulatedHref = '/';
-    const result: Array<Breadcrumb> = [{ name: 'home', href: '/' }];
+    const result: Array<Breadcrumb> = [{ name: 'home', href: '/home' }];
 
     parts.forEach((part) => {
       accumulatedHref += part;
@@ -40,11 +39,9 @@ export default function Breadcrumbs() {
             {t(breadcrumb.name)}
           </Link>
           {idx !== breadcrumbs.length - 1 && (
-            <Image
+            <RightArrowIcon
               className='pointer-events-none select-none'
               draggable={false}
-              src={RightArrowIcon}
-              alt=''
             />
           )}
         </Fragment>

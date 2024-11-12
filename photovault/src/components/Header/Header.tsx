@@ -6,7 +6,7 @@ import Icons from './components/Icons';
 export default function Header() {
   return (
     <header className='flex py-6 gap-2 items-center border-b border-b-black border-opacity-10'>
-      <Link href='/' className='logo'>
+      <Link href='/home' className='logo'>
         PhotoVault
       </Link>
       <Links />
