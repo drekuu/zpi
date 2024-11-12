@@ -57,7 +57,9 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <Header />
-          <main>{children}</main>
+          <main className='max-w-[var(--page-max-width)] mx-auto'>
+            {children}
+          </main>
         </NextIntlClientProvider>
       </body>
     </html>

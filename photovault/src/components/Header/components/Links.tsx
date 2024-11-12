@@ -10,7 +10,7 @@ export default function Links() {
   ] as const;
 
   return (
-    <div className='flex gap-10 mx-auto'>
+    <div className='flex gap-10 justify-between w-full mx-10 max-w-[300px]'>
       {links.map((link) => (
         <Link href={link.href} key={link.name}>
           {t(link.name)}
