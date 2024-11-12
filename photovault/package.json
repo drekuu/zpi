@@ -6,11 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:studio": "npx env-cmd -f .env.development \"prisma studio\"",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.686.0",
     "@prisma/client": "^5.22.0",
+    "@svgr/webpack": "^8.1.0",
     "@types/jsonwebtoken": "^9.0.7",
     "bcrypt": "^5.1.1",
     "clsx": "^2.1.1",
@@ -22,6 +25,8 @@
     "prisma": "^5.22.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "swiper": "^11.1.14",
+    "tailwind-gradient-mask-image": "^1.2.0",
     "usehooks-ts": "^3.1.0",
     "uuid": "^11.0.2",
     "zustand": "^5.0.1"
@@ -32,6 +37,8 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.20",
+    "env-cmd": "^10.1.0",
+    "babel-plugin-inline-react-svg": "^2.0.2",
     "eslint": "^8",
     "eslint-config-next": "15.0.1",
     "eslint-config-prettier": "^9.1.0",

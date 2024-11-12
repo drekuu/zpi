@@ -5,7 +5,7 @@
 :root {
   /* page size constraints */
   --page-min-width: 280px;
-  --page-max-width: 1440px;
+  --page-max-width: 1920px;
   --page-content-width: 96%;
 
   scroll-behavior: smooth;
@@ -55,4 +55,14 @@ input {
 
 .logo {
   @apply font-rammetto-one text-2xl;
+}
+
+h3 {
+  @apply font-bold;
+
+  font-size: 2rem;
+}
+
+h4 {
+  @apply text-2xl font-bold;
 }

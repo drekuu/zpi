@@ -45,7 +45,7 @@ const Menu = forwardRef<HTMLElement, MenuProps>(
         <div
           className={clsx(
             className,
-            'flex flex-col w-fit text-slate text-sm bg-white font-inter font-medium rounded-xl shadow-light absolute top-[calc(100%+16px)] right-0',
+            'flex flex-col w-fit text-slate text-sm bg-white font-inter font-medium rounded-xl shadow-light absolute top-[calc(100%+16px)] right-0 z-10',
           )}
         >
           {children}
