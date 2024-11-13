@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { devtools, persist, createJSONStorage } from 'zustand/middleware';
 
 interface PhotographState {
-  description: string;
+  description: string | null;
 }
 
 interface UserDataState {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import useRegex from './regex';
 import { signup } from '@/app/api/register';
 import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 type RegisterData = {
   username: string;
@@ -11,6 +12,7 @@ type RegisterData = {
 };
 
 const useRegister = () => {
+  const router = useRouter();
   const { mutate } = useMutation({
     mutationFn: (registerData: RegisterData) =>
       signup(
@@ -20,12 +22,10 @@ const useRegister = () => {
         registerData.description,
       ),
     onSuccess: (response) => {
-      if (response) {
-        if (response.status == 403) {
-          alert(response.message);
-        } else {
-          alert('Unknown error');
-        }
+      if (response?.status === 200) {
+        router.push('/login');
+      } else if (response?.status === 403) {
+        alert(response.content);
       }
     },
     onError: (error) => console.error('Error registering:', error),

@@ -8,6 +8,9 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { signin } from '@/app/api/login';
 import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/stores/user';
+import type { UserWithRelations } from '@/models/user';
 
 type LoginData = {
   email: string;
@@ -15,12 +18,23 @@ type LoginData = {
 };
 
 export default function Login() {
+  const { setUserData, setPhotograph } = useUserStore((store) => store);
+  const router = useRouter();
   const { mutate } = useMutation({
     mutationFn: (loginData: LoginData) =>
       signin(loginData.email, loginData.password),
     onSuccess: (response) => {
-      if (response?.status === 403) {
-        alert(response.message);
+      if (response?.status === 200) {
+        router.push('/home');
+
+        const user: UserWithRelations = JSON.parse(response.content);
+        setUserData({ email: user.email, username: user.username });
+
+        if (user.photograph) {
+          setPhotograph({ description: user.photograph.description });
+        }
+      } else if (response?.status === 403) {
+        alert(response.content);
       }
     },
     onError: (error) => console.error('Error logging user:', error),

@@ -10,6 +10,7 @@ import UserIcon from '@/../public/icons/menu/user.svg';
 import LogoutIcon from '@/../public/icons/menu/logout.svg';
 import { ReactNode, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { logout } from '@/app/api/logout';
 
 interface UserMenuProps {
   children: ReactNode;
@@ -29,7 +30,7 @@ export default function UserMenu({ children }: UserMenuProps) {
         <MenuItem>{t('my-account')}</MenuItem>
         <Separator />
 
-        <MenuItem onClick={() => router.push('/me')}>
+        <MenuItem onClick={() => router.push('/profile')}>
           <UserIcon draggable={false} />
           <p>{t('profile')}</p>
         </MenuItem>
@@ -45,7 +46,12 @@ export default function UserMenu({ children }: UserMenuProps) {
         </MenuItem>
 
         <Separator />
-        <MenuItem onClick={() => {}}>
+        <MenuItem
+          onClick={() => {
+            void logout();
+            setOpen(false);
+          }}
+        >
           <LogoutIcon draggable={false} />
           <p>{t('logout')}</p>
         </MenuItem>

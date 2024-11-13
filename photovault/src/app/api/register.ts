@@ -2,7 +2,6 @@
 
 import bcrypt from 'bcrypt';
 import prisma from '@/app/api/_lib/prisma';
-import { redirect } from 'next/navigation';
 
 export async function signup(
   username: string,
@@ -35,9 +34,9 @@ export async function signup(
   } catch {
     return {
       status: 403,
-      message: 'Email or username already exists',
+      content: 'Email or username already exists',
     };
   }
 
-  redirect('/login');
+  return { status: 200, content: 'ok' };
 }

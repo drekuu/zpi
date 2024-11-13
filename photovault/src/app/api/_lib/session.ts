@@ -14,7 +14,7 @@ if (!SECRET_KEY) {
 
 const ENCODED_KEY = new TextEncoder().encode(SECRET_KEY);
 
-export async function encrypt(payload: any) {
+export async function encryptSession(payload: any) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -22,7 +22,7 @@ export async function encrypt(payload: any) {
     .sign(ENCODED_KEY);
 }
 
-export async function decrypt(session?: string) {
+export async function decryptSession(session?: string) {
   if (!session) {
     console.error('[session:decrypt] no session provided');
   }
@@ -40,7 +40,7 @@ export async function decrypt(session?: string) {
 
 export async function createSession(userSession: UserSession) {
   const expiresAt = new Date(Date.now() + SESSION_DURATION);
-  const session = await encrypt(userSession);
+  const session = await encryptSession(userSession);
 
   cookies().set('session', session, {
     httpOnly: true,
@@ -53,9 +53,12 @@ export async function createSession(userSession: UserSession) {
 
 export async function updateSession() {
   const session = cookies().get('session')?.value;
-  const payload = await decrypt(session);
+  if (!session) {
+    return null;
+  }
 
-  if (!session || !payload) {
+  const payload = await decryptSession(session);
+  if (!payload) {
     return null;
   }
 
@@ -75,12 +78,14 @@ export async function deleteSession() {
 }
 
 export async function verifySession() {
-  const cookie = cookies().get('session')?.value;
-  const session = await decrypt(cookie);
+  const session = cookies().get('session')?.value;
+  if (session) {
+    const payload = await decryptSession(session);
 
-  if (!session?.userId) {
-    redirect('/login');
+    if (payload?.userId) {
+      return payload as UserSession;
+    }
   }
 
-  return session as UserSession;
+  redirect('/login');
 }
