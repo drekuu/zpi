@@ -6,12 +6,11 @@ import Button from '@/components/Form/Button';
 import InputField from '@/components/Form/InputField';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { signin } from '@/app/api/login';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter();
   const t = useTranslations('Form');
 
   const login = async (e: React.FormEvent) => {
@@ -20,24 +19,9 @@ export default function Login() {
       alert('Email and password are required');
       return;
     }
-    await fetch('/api/login', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    })
+    signin(email, password)
       .then(async (response) => {
-        if (response.status == 200) {
-          const resp = (await response.json()).token;
-          console.log(resp);
-          document.cookie = `token=${resp}; Path=/; max-age=10h`;
-          // TODO
-          // document.cookie = `token=${resp}; HttpOnly; Path=/; max-age=10h`;
-          console.log(document.cookie);
-          router.push('/');
-        } else if (response.status == 403)
-          alert((await response.json()).status);
+        if (response && response.status == 403) alert(response.message);
       })
       .catch((error) => console.error('Error logging user:', error));
   };

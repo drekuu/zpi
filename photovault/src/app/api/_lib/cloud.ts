@@ -1,3 +1,4 @@
+import 'server-only';
 import {
   S3Client,
   PutObjectCommand,
@@ -51,7 +52,7 @@ export const putFile = async (
       }),
     );
   } catch (err) {
-    console.error('[cloud] putFile error: ', err);
+    console.error('[cloud:putFile] error: ', err);
   }
 };
 
@@ -64,6 +65,6 @@ export const deleteFile = async (keyName: string) => {
       }),
     );
   } catch (err) {
-    console.error('[cloud] deleteFile error: ', err);
+    console.error('[cloud:deleteFile] error: ', err);
   }
 };

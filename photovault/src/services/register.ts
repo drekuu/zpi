@@ -1,28 +1,30 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import useRegex from './regex';
-import { useRouter } from 'next/navigation';
+import { signup } from '@/app/api/register';
+
+type RegisterForm = {
+  username: string;
+  email: string;
+  password: string;
+  description?: string;
+};
 
 const useRegister = () => {
   const { validatePassword, validateEmail } = useRegex();
-  const router = useRouter();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [aboutMe, setAboutMe] = useState('');
 
-  const sendRegisterRequest = (url: string, data: Record<string, unknown>) => {
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      credentials: 'include',
-    })
+  const sendRegisterRequest = (data: RegisterForm) => {
+    signup(data.username, data.password, data.email, data.description)
       .then(async (response) => {
-        if (response.status == 201) {
-          router.push('/login');
-        } else if (response.status == 403) {
-          alert((await response.json()).status);
-        } else {
-          alert('Unknown error');
+        if (response) {
+          if (response.status == 403) {
+            alert(response.message);
+          } else {
+            alert('Unknown error');
+          }
         }
       })
       .catch((error) => console.error('Error registering:', error));
@@ -55,7 +57,7 @@ const useRegister = () => {
   const registerUser = (e: React.FormEvent) => {
     e.preventDefault();
     if (userRegisterValidate()) {
-      sendRegisterRequest('/api/register', {
+      sendRegisterRequest({
         username: username,
         email: email,
         password: password,
@@ -66,7 +68,7 @@ const useRegister = () => {
   const registerPhotograph = (e: React.FormEvent) => {
     e.preventDefault();
     if (userRegisterValidate()) {
-      sendRegisterRequest('/api/register', {
+      sendRegisterRequest({
         username: username,
         email: email,
         password: password,
