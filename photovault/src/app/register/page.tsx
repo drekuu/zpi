@@ -55,7 +55,7 @@ export default function Register() {
               href='/register/photograph'
               className='flex justify-center hover:text-opacity-80 transition-colors'
             >
-              {t('register-photograph')}
+              {t('register-photograph-link')}
             </Link>
           </p>
         </div>

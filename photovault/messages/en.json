@@ -59,8 +59,21 @@
     "forgot-password": "Forgot password?",
     "password": "Password",
     "username": "Username",
-    "register": "Register",
-    "register-photograph": "Want to register as a photograph?",
+    "register": "Register user",
+    "register-photograph": "Register photograph",
+    "register-photograph-link": "Want to register as a photograph?",
     "about-me": "About me"
+  },
+  "Profile":{
+    "about-me": "About me",
+    "management-view": "Management view",
+    "user-view": "User view",
+    "photos": "Photos",
+    "status": "Status",
+    "category": "Category",
+    "license": "License",
+    "price": "Price",
+    "visible": "Visible",
+    "hidden": "Hidden"
   }
 }
