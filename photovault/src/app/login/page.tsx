@@ -7,8 +7,24 @@ import InputField from '@/components/Form/InputField';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { signin } from '@/app/api/login';
+import { useMutation } from '@tanstack/react-query';
+
+type LoginData = {
+  email: string;
+  password: string;
+};
 
 export default function Login() {
+  const { mutate } = useMutation({
+    mutationFn: (loginData: LoginData) =>
+      signin(loginData.email, loginData.password),
+    onSuccess: (response) => {
+      if (response?.status === 403) {
+        alert(response.message);
+      }
+    },
+    onError: (error) => console.error('Error logging user:', error),
+  });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const t = useTranslations('Form');
@@ -19,11 +35,7 @@ export default function Login() {
       alert('Email and password are required');
       return;
     }
-    signin(email, password)
-      .then(async (response) => {
-        if (response && response.status == 403) alert(response.message);
-      })
-      .catch((error) => console.error('Error logging user:', error));
+    mutate({ email, password });
   };
 
   return (

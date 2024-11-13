@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import useRegex from './regex';
 import { signup } from '@/app/api/register';
+import { useMutation } from '@tanstack/react-query';
 
-type RegisterForm = {
+type RegisterData = {
   username: string;
   email: string;
   password: string;
@@ -10,25 +11,30 @@ type RegisterForm = {
 };
 
 const useRegister = () => {
+  const { mutate } = useMutation({
+    mutationFn: (registerData: RegisterData) =>
+      signup(
+        registerData.username,
+        registerData.password,
+        registerData.email,
+        registerData.description,
+      ),
+    onSuccess: (response) => {
+      if (response) {
+        if (response.status == 403) {
+          alert(response.message);
+        } else {
+          alert('Unknown error');
+        }
+      }
+    },
+    onError: (error) => console.error('Error registering:', error),
+  });
   const { validatePassword, validateEmail } = useRegex();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [aboutMe, setAboutMe] = useState('');
-
-  const sendRegisterRequest = (data: RegisterForm) => {
-    signup(data.username, data.password, data.email, data.description)
-      .then(async (response) => {
-        if (response) {
-          if (response.status == 403) {
-            alert(response.message);
-          } else {
-            alert('Unknown error');
-          }
-        }
-      })
-      .catch((error) => console.error('Error registering:', error));
-  };
 
   const userRegisterValidate = () => {
     if (!email) {
@@ -57,7 +63,7 @@ const useRegister = () => {
   const registerUser = (e: React.FormEvent) => {
     e.preventDefault();
     if (userRegisterValidate()) {
-      sendRegisterRequest({
+      mutate({
         username: username,
         email: email,
         password: password,
@@ -68,7 +74,7 @@ const useRegister = () => {
   const registerPhotograph = (e: React.FormEvent) => {
     e.preventDefault();
     if (userRegisterValidate()) {
-      sendRegisterRequest({
+      mutate({
         username: username,
         email: email,
         password: password,
