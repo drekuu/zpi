@@ -10,7 +10,7 @@ export default function Icons() {
   const t = useTranslations('Header.Icons');
 
   return (
-    <div className='flex ml-auto gap-4'>
+    <div className='flex justify-end gap-4'>
       <LanguageMenu>
         <LanguagesIcon
           draggable={false}

@@ -4,6 +4,7 @@ import { Inter, DM_Sans, Rammetto_One, Afacad } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import Header from '@/components/Header/Header';
+import Providers from './providers';
 import clsx from 'clsx';
 import './globals.css';
 
@@ -56,8 +57,12 @@ export default async function RootLayout({
         )}
       >
         <NextIntlClientProvider messages={messages}>
-          <Header />
-          <main>{children}</main>
+          <Providers>
+            <Header />
+            <main className='max-w-[var(--page-max-width)] mx-auto'>
+              {children}
+            </main>
+          </Providers>
         </NextIntlClientProvider>
       </body>
     </html>

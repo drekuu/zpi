@@ -20,12 +20,16 @@
       "alt-cart": "Open cart",
       "alt-user": "My account"
     },
+    "LanguageMenu": {
+      "choose": "Select language"
+    },
     "UserMenu": {
-      "my-account": "My account",
+      "hello": "Hello, {username}",
       "profile": "Profile",
       "transactions": "Transaction history",
       "settings": "Settings",
-      "logout": "Log out"
+      "logout": "Log out",
+      "login": "Log in"
     }
   },
   "Search": {

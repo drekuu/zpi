@@ -1,0 +1,5 @@
+import type { Prisma } from '@prisma/client';
+
+export type UserWithRelations = Prisma.UserGetPayload<{
+  include: { photograph: true };
+}>;

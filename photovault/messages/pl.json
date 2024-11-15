@@ -20,12 +20,16 @@
       "alt-cart": "Otwórz koszyk",
       "alt-user": "Moje konto"
     },
+    "LanguageMenu": {
+      "choose": "Wybierz język"
+    },
     "UserMenu": {
-      "my-account": "Moje konto",
+      "hello": "Witaj, {username}",
       "profile": "Profil",
       "transactions": "Historia transakcji",
       "settings": "Ustawienia",
-      "logout": "Wyloguj się"
+      "logout": "Wyloguj się",
+      "login": "Zaloguj się"
     }
   },
   "Search": {
