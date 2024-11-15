@@ -54,12 +54,12 @@ export async function createSession(userSession: UserSession) {
 export async function updateSession() {
   const session = cookies().get('session')?.value;
   if (!session) {
-    return null;
+    return false;
   }
 
   const payload = await decryptSession(session);
   if (!payload) {
-    return null;
+    return false;
   }
 
   const expires = new Date(Date.now() + SESSION_DURATION);
@@ -71,6 +71,8 @@ export async function updateSession() {
     sameSite: 'strict',
     path: '/',
   });
+
+  return true;
 }
 
 export async function deleteSession() {

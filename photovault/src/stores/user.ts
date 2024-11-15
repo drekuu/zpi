@@ -11,11 +11,13 @@ interface UserDataState {
 }
 
 interface UserState {
+  loggedIn: boolean;
   userData?: UserDataState;
   photograph?: PhotographState;
 }
 
 interface UserActions {
+  setLoggedIn: (state: boolean) => void;
   setUserData: (state: UserDataState) => void;
   setPhotograph: (state: PhotographState) => void;
 }
@@ -26,8 +28,10 @@ export const useUserStore = create<UserStore>()(
   devtools(
     persist(
       (set) => ({
+        loggedIn: false,
         userData: undefined,
         photograph: undefined,
+        setLoggedIn: (state: boolean) => set({ loggedIn: state }),
         setUserData: (state: UserDataState) => set({ userData: state }),
         setPhotograph: (state: PhotographState) => set({ photograph: state }),
       }),

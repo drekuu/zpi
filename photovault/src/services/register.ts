@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useRegex from './regex';
-import { signup } from '@/app/api/register';
+import { signup } from '@/app/api/auth/register';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 

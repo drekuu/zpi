@@ -6,7 +6,7 @@ import Button from '@/components/Form/Button';
 import InputField from '@/components/Form/InputField';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { signin } from '@/app/api/login';
+import { signin } from '@/app/api/auth/login';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/user';
@@ -18,14 +18,16 @@ type LoginData = {
 };
 
 export default function Login() {
-  const { setUserData, setPhotograph } = useUserStore((store) => store);
+  const { setUserData, setPhotograph, setLoggedIn } = useUserStore(
+    (store) => store,
+  );
   const router = useRouter();
   const { mutate } = useMutation({
     mutationFn: (loginData: LoginData) =>
       signin(loginData.email, loginData.password),
     onSuccess: (response) => {
       if (response?.status === 200) {
-        router.push('/home');
+        setLoggedIn(true);
 
         const user: UserWithRelations = JSON.parse(response.content);
         setUserData({ email: user.email, username: user.username });
@@ -33,6 +35,8 @@ export default function Login() {
         if (user.photograph) {
           setPhotograph({ description: user.photograph.description });
         }
+
+        router.push('/home');
       } else if (response?.status === 403) {
         alert(response.content);
       }
