@@ -24,12 +24,14 @@
       "choose": "Wybierz język"
     },
     "UserMenu": {
-      "hello": "Witaj, {username}",
+      "hello": "Witaj, {username}!",
+      "hello-nologon": "Witaj w PhotoVault!",
       "profile": "Profil",
       "transactions": "Historia transakcji",
       "settings": "Ustawienia",
       "logout": "Wyloguj się",
-      "login": "Zaloguj się"
+      "login": "Zaloguj się",
+      "register": "Zarejestruj się"
     }
   },
   "Search": {
