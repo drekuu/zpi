@@ -1,10 +1,10 @@
 'use server';
 
-import { deleteSession, updateSession } from '../_lib/session';
+import { deleteSession, updateSession as update } from '../_lib/session';
 import { redirect } from 'next/navigation';
 
-export async function update(): Promise<boolean> {
-  return await updateSession();
+export async function updateSession(): Promise<boolean> {
+  return await update();
 }
 
 export async function logout(): Promise<void> {

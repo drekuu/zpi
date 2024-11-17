@@ -1,7 +1,7 @@
 'use server';
 
 import bcrypt from 'bcrypt';
-import prisma from '@/app/api/_lib/prisma';
+import prisma from '../_lib/prisma';
 
 export async function signup(
   username: string,
