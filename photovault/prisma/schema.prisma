@@ -11,93 +11,101 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  username  String  @unique
-  password String
-  photograph Photograph?
-  deliveryData DeliveryData[]
-  digitalTransaction DigitalTransaction[]
+  id                  Int                   @id @default(autoincrement())
+  email               String                @unique
+  username            String                @unique
+  password            String
+  photograph          Photograph?
+  deliveryData        DeliveryData[]
+  digitalTransaction  DigitalTransaction[]
   physicalTransaction PhysicalTransaction[]
 }
 
 model Photograph {
-  id    Int     @id @default(autoincrement())
-  user  User  @relation(fields: [userId], references: [id])
-  userId Int @unique
-  description String?
-  photo Photo[]
+  id                Int     @id @default(autoincrement())
+  user              User    @relation(fields: [userId], references: [id])
+  userId            Int     @unique
+  displayedUserName String?
+  avatarURL         String?
+  description       String?
+  photo             Photo[]
 }
 
 model Photo {
-  id    Int     @id @default(autoincrement())
-  photograph  Photograph  @relation(fields: [photographId], references: [id])
-  photographId Int @unique
-  title String   
-  license Boolean
-  tags String?
-  price Decimal
-  licensePrice Decimal
-  categories Category[]
-  digitalTransaction DigitalTransaction[]
+  id                  Int                   @id @default(autoincrement())
+  photograph          Photograph            @relation(fields: [photographId], references: [id])
+  photographId        Int                   @unique
+  photoURL            String
+  title               String
+  license             Boolean
+  tags                Tag[]
+  price               Decimal
+  licensePrice        Decimal
+  categories          Category[]
+  digitalTransaction  DigitalTransaction[]
   physicalTransaction PhysicalTransaction[]
 }
 
 model DeliveryData {
-  id    Int     @id @default(autoincrement())
-  user  User?  @relation(fields: [userId], references: [id])
-  userId Int @unique
-  name String 
-  surname String
-  country String
-  city String
-  street String
-  zipCode String
-  telephone String
+  id                  Int                   @id @default(autoincrement())
+  user                User?                 @relation(fields: [userId], references: [id])
+  userId              Int                   @unique
+  name                String
+  surname             String
+  country             String
+  city                String
+  street              String
+  zipCode             String
+  telephone           String
   physicalTransaction PhysicalTransaction[]
 }
 
 model DigitalTransaction {
-  id    Int     @id @default(autoincrement())
-  user  User?  @relation(fields: [userId], references: [id])
-  userId Int @unique
-  email String?
+  id      Int     @id @default(autoincrement())
+  user    User?   @relation(fields: [userId], references: [id])
+  userId  Int     @unique
+  email   String?
   license Boolean
-  photo  Photo  @relation(fields: [photoId], references: [id]) 
-  photoId Int @unique
+  photo   Photo   @relation(fields: [photoId], references: [id])
+  photoId Int     @unique
 }
 
 model Delivery {
-  id    Int     @id @default(autoincrement())
-  type  String
-  price Decimal
+  id                  Int                   @id @default(autoincrement())
+  type                String
+  price               Decimal
   physicalTransaction PhysicalTransaction[]
 }
 
 model PhysicalTransaction {
-  id    Int     @id @default(autoincrement())
-  user  User?  @relation(fields: [userId], references: [id])
-  userId Int @unique
-  email String?
-  photo  Photo  @relation(fields: [photoId], references: [id]) 
-  photoId Int @unique
-  delivery  Delivery  @relation(fields: [deliveryId], references: [id]) 
-  deliveryId Int @unique
-  paymentMethod  PaymentMethod  @relation(fields: [paymentMethodId], references: [id]) 
-  paymentMethodId Int @unique
-  deliveryData  DeliveryData  @relation(fields: [deliveryDataId], references: [id])
-  deliveryDataId Int @unique
+  id              Int           @id @default(autoincrement())
+  user            User?         @relation(fields: [userId], references: [id])
+  userId          Int           @unique
+  email           String?
+  photo           Photo         @relation(fields: [photoId], references: [id])
+  photoId         Int           @unique
+  delivery        Delivery      @relation(fields: [deliveryId], references: [id])
+  deliveryId      Int           @unique
+  paymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+  paymentMethodId Int           @unique
+  deliveryData    DeliveryData  @relation(fields: [deliveryDataId], references: [id])
+  deliveryDataId  Int           @unique
 }
 
 model PaymentMethod {
-  id    Int     @id @default(autoincrement())
-  type  String
+  id                  Int                   @id @default(autoincrement())
+  type                String
   physicalTransaction PhysicalTransaction[]
 }
 
 model Category {
   id    Int     @id @default(autoincrement())
-  name String  @unique
+  name  String  @unique
   photo Photo[]
 }
 
+model Tag {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  photo Photo[]
+}
