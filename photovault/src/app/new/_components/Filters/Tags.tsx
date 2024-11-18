@@ -1,10 +1,10 @@
 'use client';
 
-import Search from '@/components/Search/Search';
 import Accordion from '@/components/Accordion/Accordion';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useAllTags } from '@/services/query/tag';
 import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
+import SearchWithResult from '@/components/Search/SearchWithResult';
 
 interface TagsProps {
   selectedTags: Array<string>;
@@ -13,16 +13,36 @@ interface TagsProps {
 
 export default function Tags({ selectedTags, setSelectedTags }: TagsProps) {
   const query = useAllTags();
-  const data = query.data;
-
+  const tags = query.data;
   const [search, setSearch] = useState('');
+  const filteredTags = useMemo(
+    () =>
+      tags
+        ?.map((tag) => ({
+          id: tag.id,
+          name: tag.name,
+          onClick: () => {
+            setSelectedTags([...selectedTags, tag.name]);
+          },
+        }))
+        .filter(
+          (tag) =>
+            !selectedTags.includes(tag.name) &&
+            (!search || tag.name.includes(search.toLowerCase())),
+        ),
+    [selectedTags, search, setSelectedTags, tags],
+  );
 
   return (
     <Accordion childrenClassName='gap-5' name='Tags'>
       <LoadedQuery handleError={true} query={query}>
-        {data && (
+        {tags && filteredTags && (
           <>
-            <Search value={search} setValue={setSearch} />
+            <SearchWithResult
+              results={filteredTags}
+              value={search}
+              setValue={setSearch}
+            />
 
             <div className='flex flex-wrap gap-2'>
               {selectedTags.map((tag, idx) => (

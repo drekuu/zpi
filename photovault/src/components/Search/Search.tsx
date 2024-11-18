@@ -4,17 +4,24 @@ import clsx from 'clsx';
 import SearchIcon from '@/../public/icons/search.svg';
 import { useTranslations } from 'next-intl';
 
-interface SearchProps {
+export interface SearchProps {
   className?: string;
   value: string;
   setValue(value: string): void;
+  onClick?(): void;
 }
 
-export default function Search({ className, value, setValue }: SearchProps) {
+export default function Search({
+  className,
+  value,
+  setValue,
+  onClick,
+}: SearchProps) {
   const t = useTranslations('Search');
 
   return (
     <div
+      onClick={onClick}
       className={clsx(
         'bg-gray flex items-center gap-3 relative rounded-4xl px-3 py-2',
         className,
