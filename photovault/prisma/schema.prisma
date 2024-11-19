@@ -34,7 +34,7 @@ model Photograph {
 model Photo {
   id                  Int                   @id @default(autoincrement())
   photograph          Photograph            @relation(fields: [photographId], references: [id])
-  photographId        Int                   @unique
+  photographId        Int
   photoURL            String
   title               String
   license             Boolean
