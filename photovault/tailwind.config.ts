@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss';
 
-const config: Config = {
+export default {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -39,6 +39,7 @@ const config: Config = {
         'dark-grey': '#909090',
         slate: '#334155',
         'slate-light': '#f1f5f9',
+        checked: '#1e293b',
       },
       width: {
         content: 'var(--page-content-width)',
@@ -52,7 +53,6 @@ const config: Config = {
       },
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require('tailwind-gradient-mask-image')],
-};
-
-export default config;
+} satisfies Config;

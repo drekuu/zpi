@@ -1,0 +1,38 @@
+.horizontal-slider {
+  height: 50px;
+}
+
+.slider-thumb {
+  position: relative;
+  border-radius: 50%;
+  background-color: black;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  top: 15px;
+
+  & > p {
+    position: absolute;
+    top: 100%;
+    transform: translateX(-25%);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+}
+
+.slider-track {
+  position: relative;
+  background: theme(colors.black);
+  top: 20px;
+  height: 5px;
+  border-radius: 5px;
+
+  &.slider-track-0,
+  &.slider-track-2 {
+    background: theme(colors.gray);
+  }
+
+  &.slider-track-1 {
+    background: theme(colors.black);
+  }
+}

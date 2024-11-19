@@ -1,4 +1,6 @@
 {
+  "Categories": {},
+  "Tags": {},
   "Pages": {
     "home": "Home",
     "new": "New",
@@ -14,6 +16,18 @@
       "from": "Photographer from {location}"
     }
   },
+  "NewPage": {
+    "Filters": {
+      "filters": "Filters",
+      "category": "Category",
+      "price": "Price",
+      "tags": "Tags",
+      "apply": "Apply filter"
+    },
+    "Photos": {
+      "no-results": "No photos found"
+    }
+  },
   "Header": {
     "Icons": {
       "alt-languages": "Change language",
@@ -24,18 +38,21 @@
       "choose": "Select language"
     },
     "UserMenu": {
-      "hello": "Hello, {username}",
+      "hello": "Hello, {username}!",
+      "hello-nologon": "Welcome to PhotoVault!",
       "profile": "Profile",
       "transactions": "Transaction history",
       "settings": "Settings",
       "logout": "Log out",
-      "login": "Log in"
+      "login": "Log in",
+      "register": "Sign up"
     }
   },
   "Search": {
-    "placeholder": "Search..."
+    "placeholder": "Search...",
+    "no-results": "No results"
   },
-  "Form":{
+  "Form": {
     "login": "Login",
     "join": "Join",
     "no-account": "Don't have an account? ",

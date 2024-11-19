@@ -1,4 +1,22 @@
 {
+  "Categories": {
+    "landscape": "Krajobraz",
+    "animals": "Zwierzęta",
+    "nature": "Natura",
+    "portrait": "Portret"
+  },
+  "Tags": {
+    "cat": "kot",
+    "dog": "pies",
+    "horse": "koń",
+    "lion": "lew",
+    "tiger": "tygrys",
+    "wolf": "wilk",
+    "bear": "niedźwiedź",
+    "cow": "krowa",
+    "moose": "łoś",
+    "sheep": "owca"
+  },
   "Pages": {
     "home": "Główna",
     "new": "Nowe",
@@ -14,6 +32,18 @@
       "from": "Fotograf z {location}"
     }
   },
+  "NewPage": {
+    "Filters": {
+      "filters": "Filtry",
+      "category": "Kategoria",
+      "price": "Cena",
+      "tags": "Tagi",
+      "apply": "Zastosuj filtr"
+    },
+    "Photos": {
+      "no-results": "Nie znaleziono zdjęć"
+    }
+  },
   "Header": {
     "Icons": {
       "alt-languages": "Zmień język",
@@ -24,18 +54,21 @@
       "choose": "Wybierz język"
     },
     "UserMenu": {
-      "hello": "Witaj, {username}",
+      "hello": "Witaj, {username}!",
+      "hello-nologon": "Witaj w PhotoVault!",
       "profile": "Profil",
       "transactions": "Historia transakcji",
       "settings": "Ustawienia",
       "logout": "Wyloguj się",
-      "login": "Zaloguj się"
+      "login": "Zaloguj się",
+      "register": "Zarejestruj się"
     }
   },
   "Search": {
-    "placeholder": "Szukaj..."
+    "placeholder": "Szukaj...",
+    "no-results": "Brak wyników"
   },
-  "Form":{
+  "Form": {
     "login": "Zaloguj się",
     "join": "Dołącz",
     "no-account": "Nie posiadasz konta? ",

@@ -9,6 +9,7 @@ import SettingsIcon from '@/../public/icons/menu/settings.svg';
 import UserIcon from '@/../public/icons/menu/user.svg';
 import LogoutIcon from '@/../public/icons/menu/logout.svg';
 import LoginIcon from '@/../public/icons/menu/login.svg';
+import RegisterIcon from '@/../public/icons/menu/register.svg';
 import { ReactNode, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/app/api/auth/session';
@@ -65,6 +66,9 @@ export default function UserMenu({ children }: UserMenuProps) {
           </>
         ) : (
           <>
+            <MenuItem>{t('hello-nologon')}</MenuItem>
+            <Separator />
+
             <MenuItem
               onClick={() => {
                 router.push('/login');
@@ -73,6 +77,16 @@ export default function UserMenu({ children }: UserMenuProps) {
             >
               <LoginIcon draggable={false} />
               <p>{t('login')}</p>
+            </MenuItem>
+
+            <MenuItem
+              onClick={() => {
+                router.push('/register');
+                setOpen(false);
+              }}
+            >
+              <RegisterIcon draggable={false} />
+              <p>{t('register')}</p>
             </MenuItem>
           </>
         )}
