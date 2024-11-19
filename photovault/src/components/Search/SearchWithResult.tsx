@@ -25,7 +25,7 @@ export default function SearchWithResult(props: SearchWithResultProps) {
       <Search onClick={() => setOpen(true)} {...props} />
 
       {open && (
-        <div className='flex flex-col gap-2 bg-gray rounded-2xl px-3 py-2'>
+        <div className='max-h-[150px] overflow-y-auto flex flex-col gap-2 bg-gray rounded-2xl px-3 py-2'>
           {props.results.map((result) => (
             <div
               className='cursor-pointer'

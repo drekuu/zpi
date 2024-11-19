@@ -22,6 +22,7 @@
     "clsx": "^2.1.1",
     "cookies-next": "^4.3.0",
     "country-flag-icons": "^1.5.13",
+    "immer": "^10.1.1",
     "jose": "^5.9.6",
     "lodash": "^4.17.21",
     "next": "14.2.17",

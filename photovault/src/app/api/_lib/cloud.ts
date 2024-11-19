@@ -15,16 +15,18 @@ const BUCKET_NAME = process.env.CLOUD_BUCKET_NAME;
 const ACCESS_KEY_ID = process.env.CLOUD_KEY_ID;
 const SECRET_ACCESS_KEY = process.env.CLOUD_APPLICATION_KEY;
 const FILE_PREFIX = process.env.CLOUD_FILE_PREFIX;
+const PUBLIC_URL = process.env.CLOUD_PUBLIC_URL;
 
 if (
   !REGION ||
   !BUCKET_NAME ||
   !ACCESS_KEY_ID ||
   !SECRET_ACCESS_KEY ||
-  !FILE_PREFIX
+  !FILE_PREFIX ||
+  !PUBLIC_URL
 ) {
   throw new Error(
-    'Missing one of the following environment variables: CLOUD_REGION, CLOUD_BUCKET_NAME, CLOUD_KEY_ID, CLOUD_APPLICATION_KEY, CLOUD_FILE_PREFIX',
+    'Missing any of the following environment variables: CLOUD_REGION, CLOUD_BUCKET_NAME, CLOUD_KEY_ID, CLOUD_APPLICATION_KEY, CLOUD_FILE_PREFIX, CLOUD_PUBLIC_URL',
   );
 }
 
@@ -39,10 +41,14 @@ if (!global.s3) {
   });
 }
 
-export const putFile = async (
+export function getFilePublicUrl(keyName: string) {
+  return `${PUBLIC_URL}${FILE_PREFIX}${keyName}`;
+}
+
+export async function putFile(
   keyName: string,
   body?: StreamingBlobPayloadInputTypes,
-) => {
+) {
   try {
     await s3.send(
       new PutObjectCommand({
@@ -54,9 +60,9 @@ export const putFile = async (
   } catch (err) {
     console.error('[cloud:putFile] error: ', err);
   }
-};
+}
 
-export const deleteFile = async (keyName: string) => {
+export async function deleteFile(keyName: string) {
   try {
     await s3.send(
       new DeleteObjectCommand({
@@ -67,4 +73,4 @@ export const deleteFile = async (keyName: string) => {
   } catch (err) {
     console.error('[cloud:deleteFile] error: ', err);
   }
-};
+}

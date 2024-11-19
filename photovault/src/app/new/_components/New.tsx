@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useAllCategories } from '@/services/query/category';
 import LoadedQueries from '@/components/LoadedQuery/LoadedQueries';
 import { useAllTags } from '@/services/query/tag';
+import Photos from './Photos';
 
 export default function New() {
   const pathname = usePathname();
@@ -19,9 +20,9 @@ export default function New() {
       <div>
         <Breadcrumbs additionalNames={category ? [category] : undefined} />
 
-        <div>
+        <div className='flex gap-5 items-start'>
           <Filters category={category} />
-          <div></div>
+          <Photos />
         </div>
       </div>
     </LoadedQueries>
