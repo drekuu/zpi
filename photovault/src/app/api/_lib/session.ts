@@ -3,15 +3,12 @@ import { SignJWT, jwtVerify } from 'jose';
 import { UserSession } from '@/models/session';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { getRequiredEnv } from '@/utils/env';
 
 const SESSION_DURATION_TEXT = '10h';
 const SESSION_DURATION = 10 * 60 * 60 * 1000;
 
-const SECRET_KEY = process.env.JWT_SECRET_KEY;
-if (!SECRET_KEY) {
-  throw new Error('Missing JWT_SECRET_KEY environment variable');
-}
-
+const SECRET_KEY = getRequiredEnv('JWT_SECRET_KEY');
 const ENCODED_KEY = new TextEncoder().encode(SECRET_KEY);
 
 export async function encryptSession(payload: any) {
