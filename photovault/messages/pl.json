@@ -68,6 +68,10 @@
     "placeholder": "Szukaj...",
     "no-results": "Brak wyników"
   },
+  "LoadedQuery": {
+    "load-failed": "Nie udało się załadować danych",
+    "try-again": "Spróbuj ponownie"
+  },
   "Form": {
     "login": "Zaloguj się",
     "join": "Dołącz",

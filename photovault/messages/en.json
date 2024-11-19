@@ -52,6 +52,10 @@
     "placeholder": "Search...",
     "no-results": "No results"
   },
+  "LoadedQuery": {
+    "load-failed": "Failed to load data",
+    "try-again": "Try again"
+  },
   "Form": {
     "login": "Login",
     "join": "Join",

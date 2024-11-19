@@ -1,3 +1,6 @@
+import { getPhotos } from '@/app/api/photo';
+import { Unpacked } from '@/utils/typescript';
+
 export type PhotoFilters = {
   /**
    * Category ID
@@ -14,3 +17,5 @@ export type PhotoFilters = {
    */
   tags: Array<number>;
 };
+
+export type Photo = Unpacked<Awaited<ReturnType<typeof getPhotos>>>;

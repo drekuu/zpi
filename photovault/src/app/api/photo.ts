@@ -47,3 +47,13 @@ export async function getPhotos(filters: PhotoFilters) {
     ),
   );
 }
+
+export async function getPhoto(id: number) {
+  const photo = await prisma.photo.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  return _.pick(photo, ['title', 'photoURL', 'id']);
+}
