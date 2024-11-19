@@ -20,8 +20,8 @@ export default function New() {
       <div>
         <Breadcrumbs additionalNames={category ? [category] : undefined} />
 
-        <div className='flex gap-5 items-start'>
-          <Filters category={category} />
+        <div className='flex gap-10 items-start'>
+          <Filters urlCategory={category} />
           <Photos />
         </div>
       </div>

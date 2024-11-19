@@ -3,6 +3,7 @@
 import Search, { SearchProps } from './Search';
 import { useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
+import { useTranslations } from 'next-intl';
 
 type SearchResult = {
   id: number;
@@ -15,6 +16,7 @@ interface SearchWithResultProps extends SearchProps {
 }
 
 export default function SearchWithResult(props: SearchWithResultProps) {
+  const t = useTranslations('Search');
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -25,7 +27,7 @@ export default function SearchWithResult(props: SearchWithResultProps) {
       <Search onClick={() => setOpen(true)} {...props} />
 
       {open && (
-        <div className='max-h-[150px] overflow-y-auto flex flex-col gap-2 bg-gray rounded-2xl px-3 py-2'>
+        <div className='select-none max-h-[150px] overflow-y-auto flex flex-col gap-2 bg-gray rounded-2xl px-3 py-2'>
           {props.results.map((result) => (
             <div
               className='cursor-pointer'
@@ -35,7 +37,7 @@ export default function SearchWithResult(props: SearchWithResultProps) {
               {result.name}
             </div>
           ))}
-          {props.results.length === 0 && <p>No results</p>}
+          {props.results.length === 0 && <p>{t('no-results')}</p>}
         </div>
       )}
     </div>

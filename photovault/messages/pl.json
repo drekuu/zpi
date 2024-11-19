@@ -14,6 +14,18 @@
       "from": "Fotograf z {location}"
     }
   },
+  "NewPage": {
+    "Filters": {
+      "filters": "Filtry",
+      "category": "Kategoria",
+      "price": "Cena",
+      "tags": "Tagi",
+      "apply": "Zastosuj filtr"
+    },
+    "Photos": {
+      "no-results": "Nie znaleziono zdjęć"
+    }
+  },
   "Header": {
     "Icons": {
       "alt-languages": "Zmień język",
@@ -35,9 +47,10 @@
     }
   },
   "Search": {
-    "placeholder": "Szukaj..."
+    "placeholder": "Szukaj...",
+    "no-results": "Brak wyników"
   },
-  "Form":{
+  "Form": {
     "login": "Zaloguj się",
     "join": "Dołącz",
     "no-account": "Nie posiadasz konta? ",

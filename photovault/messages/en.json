@@ -14,6 +14,18 @@
       "from": "Photographer from {location}"
     }
   },
+  "NewPage": {
+    "Filters": {
+      "filters": "Filters",
+      "category": "Category",
+      "price": "Price",
+      "tags": "Tags",
+      "apply": "Apply filter"
+    },
+    "Photos": {
+      "no-results": "No photos found"
+    }
+  },
   "Header": {
     "Icons": {
       "alt-languages": "Change language",
@@ -35,9 +47,10 @@
     }
   },
   "Search": {
-    "placeholder": "Search..."
+    "placeholder": "Search...",
+    "no-results": "No results"
   },
-  "Form":{
+  "Form": {
     "login": "Login",
     "join": "Join",
     "no-account": "Don't have an account? ",

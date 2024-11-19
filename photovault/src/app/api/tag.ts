@@ -6,5 +6,5 @@ import _ from 'lodash';
 export async function getAllTags() {
   const tags = await prisma.tag.findMany();
 
-  return _.map(tags, (tag) => _.pick(tag, ['id', 'name']));
+  return tags.map((tag) => _.pick(tag, ['id', 'name']));
 }

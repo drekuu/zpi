@@ -39,7 +39,7 @@ export default function DoubleRangeSlider({
       ariaValuetext={(state) => `Thumb value ${state.valueNow} ${postfix}`}
       renderThumb={({ key, ...props }, state) => (
         <div key={key} {...props}>
-          <p>{`${state.valueNow} ${postfix}`}</p>
+          <p className='text-sm'>{`${state.valueNow.toLocaleString()} ${postfix}`}</p>
         </div>
       )}
       pearling

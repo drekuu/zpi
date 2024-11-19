@@ -1,21 +1,16 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-
-interface FiltersState {
-  category?: string;
-  priceRange: number[];
-  tags: Array<string>;
-}
+import { PhotoFilters } from '@/models/photo';
 
 interface NewPageState {
-  filters: FiltersState;
+  filters: PhotoFilters;
 }
 
 interface NewPageActions {
-  setCategoryFilter: (category: string | undefined) => void;
+  setCategoryFilter: (category: number | undefined) => void;
   setPriceRangeFilter: (priceRange: number[]) => void;
-  setTagsFilter: (tags: Array<string>) => void;
+  setTagsFilter: (tags: Array<number>) => void;
 }
 
 type NewPageStore = NewPageState & NewPageActions;
@@ -28,7 +23,7 @@ export const useNewPageStore = create<NewPageStore>()(
         priceRange: [],
         tags: [],
       },
-      setCategoryFilter: (category: string | undefined) =>
+      setCategoryFilter: (category: number | undefined) =>
         set((state) => {
           state.filters.category = category;
         }),
@@ -36,7 +31,7 @@ export const useNewPageStore = create<NewPageStore>()(
         set((state) => {
           state.filters.priceRange = priceRange;
         }),
-      setTagsFilter: (tags: Array<string>) =>
+      setTagsFilter: (tags: Array<number>) =>
         set((state) => {
           state.filters.tags = tags;
         }),

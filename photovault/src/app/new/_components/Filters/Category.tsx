@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
 import { notFound } from 'next/navigation';
 import { useAllCategories } from '@/services/query/category';
+import { useTranslations } from 'next-intl';
 
 interface CategoryProps {
   selectedCategory: string | undefined;
@@ -17,17 +18,10 @@ export default function Category({
   selectedCategory,
   setSelectedCategory,
 }: CategoryProps) {
+  const t = useTranslations('NewPage.Filters');
   const query = useAllCategories();
-  const data = query.data;
+  const categories = query.data ? Object.values(query.data) : undefined;
 
-  const categories = useMemo(
-    () =>
-      data?.map((category) => ({
-        ...category,
-        hrefKey: category.name.toLowerCase().replace(' ', '_'),
-      })),
-    [data],
-  );
   const [search, setSearch] = useState('');
   const filteredCategories = useMemo(
     () =>
@@ -48,7 +42,7 @@ export default function Category({
   }, [categories, selectedCategory]);
 
   return (
-    <Accordion childrenClassName='gap-5' name='Category'>
+    <Accordion childrenClassName='gap-5' name={t('category')}>
       <LoadedQuery handleError={true} query={query}>
         {filteredCategories && (
           <>

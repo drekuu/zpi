@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { useAllTags } from '@/services/query/tag';
 import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
 import SearchWithResult from '@/components/Search/SearchWithResult';
+import { useTranslations } from 'next-intl';
 
 interface TagsProps {
   selectedTags: Array<string>;
@@ -12,8 +13,10 @@ interface TagsProps {
 }
 
 export default function Tags({ selectedTags, setSelectedTags }: TagsProps) {
+  const t = useTranslations('NewPage.Filters');
   const query = useAllTags();
-  const tags = query.data;
+  const tags = query.data ? Object.values(query.data) : undefined;
+
   const [search, setSearch] = useState('');
   const filteredTags = useMemo(
     () =>
@@ -34,7 +37,7 @@ export default function Tags({ selectedTags, setSelectedTags }: TagsProps) {
   );
 
   return (
-    <Accordion childrenClassName='gap-5' name='Tags'>
+    <Accordion childrenClassName='gap-5' name={t('tags')}>
       <LoadedQuery handleError={true} query={query}>
         {tags && filteredTags && (
           <>

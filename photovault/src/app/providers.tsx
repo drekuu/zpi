@@ -18,6 +18,7 @@ export default function Providers({
           queries: {
             retry: false,
             retryOnMount: false,
+            refetchOnWindowFocus: false,
           },
         },
       }),
