@@ -1,6 +1,6 @@
-import en from './messages/en.json';
+import pl from './messages/pl.json';
 
-type Messages = typeof en;
+type Messages = typeof pl;
 
 declare global {
   // eslint-disable-next-line

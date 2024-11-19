@@ -8,6 +8,7 @@ import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
 import { notFound } from 'next/navigation';
 import { useAllCategories } from '@/services/query/category';
 import { useTranslations } from 'next-intl';
+import { getLocale } from '@/services/localeClient';
 
 interface CategoryProps {
   selectedCategory: string | undefined;
@@ -18,16 +19,27 @@ export default function Category({
   selectedCategory,
   setSelectedCategory,
 }: CategoryProps) {
+  const locale = getLocale();
   const t = useTranslations('NewPage.Filters');
+  const categoryT = useTranslations('Categories');
+
   const query = useAllCategories();
   const categories = query.data ? Object.values(query.data) : undefined;
 
   const [search, setSearch] = useState('');
   const filteredCategories = useMemo(
     () =>
-      categories?.filter((category) =>
-        category.name.toLowerCase().includes(search.toLowerCase()),
-      ),
+      categories
+        ?.map((category) => ({
+          ...category,
+          name:
+            locale === 'en'
+              ? category.name
+              : categoryT(category.hrefKey as any),
+        }))
+        ?.filter((category) =>
+          category.name.toLowerCase().includes(search.toLowerCase()),
+        ),
     [categories, search],
   );
 
@@ -54,7 +66,11 @@ export default function Category({
                   key={category.id}
                   checked={selectedCategory === category.hrefKey}
                   id={category.hrefKey}
-                  label={category.name}
+                  label={
+                    locale === 'en'
+                      ? category.name
+                      : categoryT(category.hrefKey as any)
+                  }
                   onClick={() => {
                     if (selectedCategory === category.hrefKey) {
                       setSelectedCategory(undefined);

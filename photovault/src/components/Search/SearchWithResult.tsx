@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 
 type SearchResult = {
   id: number;
-  name: string;
+  displayName: string;
   onClick(): void;
 };
 
@@ -34,7 +34,7 @@ export default function SearchWithResult(props: SearchWithResultProps) {
               key={result.id}
               onClick={result.onClick}
             >
-              {result.name}
+              {result.displayName}
             </div>
           ))}
           {props.results.length === 0 && <p>{t('no-results')}</p>}

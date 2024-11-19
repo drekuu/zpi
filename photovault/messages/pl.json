@@ -1,4 +1,22 @@
 {
+  "Categories": {
+    "landscape": "Krajobraz",
+    "animals": "Zwierzęta",
+    "nature": "Natura",
+    "portrait": "Portret"
+  },
+  "Tags": {
+    "cat": "kot",
+    "dog": "pies",
+    "horse": "koń",
+    "lion": "lew",
+    "tiger": "tygrys",
+    "wolf": "wilk",
+    "bear": "niedźwiedź",
+    "cow": "krowa",
+    "moose": "łoś",
+    "sheep": "owca"
+  },
   "Pages": {
     "home": "Główna",
     "new": "Nowe",
