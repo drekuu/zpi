@@ -74,6 +74,17 @@
     "license": "License",
     "price": "Price",
     "visible": "Visible",
-    "hidden": "Hidden"
+    "hidden": "Hidden",
+    "no-username": "No username",
+    "no-email": "No email",
+    "no-about-me": "No about me",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "enter-avatar": "Enter avatar URL",
+    "enter-username": "Enter displayed username",
+    "enter-email": "Enter email",
+    "enter-about-me": "Enter about me",
+    "profile-picture": "Profile picture"
   }
 }

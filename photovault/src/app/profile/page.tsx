@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ManagementTable from './_components/ManagementTable';
-import ProfileCard from './_components/ProfileCardMe';
+import ProfileCardMe from './_components/ProfileCardMe';
 import ViewButton from './_components/ViewButton';
 import jwt from 'jsonwebtoken';
 
@@ -15,17 +15,23 @@ export default function Profile() {
     return decoded.username;
   }
 
+  const [username, setUsername] = useState('');
 
-    return (
-      <div className='my-8'>
-        {}
-    <div className="flex overflow-hidden relative flex-col py-12">
-        <ProfileCard />
-        <ViewButton username={parseToken(document.cookie)}/>
-        <ManagementTable/>
+  useEffect(() => {
+    const username = parseToken(document.cookie);
+    setUsername(username);
+  }, []);
+  
+  return (
+    <div className='my-8'>
+      { }
+      <div className="flex overflow-hidden relative flex-col py-12">
+        <ProfileCardMe username={username} />
+        <ViewButton username={username} />
+        <ManagementTable />
 
       </div>
     </div>
-    );
-  };
+  );
+};
 

@@ -90,6 +90,17 @@
     "license": "Licencja",
     "price": "Cena",
     "visible": "Widoczne",
-    "hidden": "Ukryte"
+    "hidden": "Ukryte",
+    "no-username": "Brak nazwy użytkownika",
+    "no-email": "Brak adresu email",
+    "no-about-me": "Brak opisu o mnie",
+    "edit": "Edytuj",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "enter-avatar": "Wprowadź URL awatara",
+    "enter-about-me": "Wprowadź opis o mnie",
+    "enter-email": "Wprowadź adres email",
+    "enter-username": "Wprowadź nazwę użytkownika",
+    "profile-picture": "Zdjęcie profilowe"
   }
 }

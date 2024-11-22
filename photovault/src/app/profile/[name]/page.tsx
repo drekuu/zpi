@@ -14,9 +14,7 @@ export default function Profile({
   const [email, setEmail] = useState('')
 
   useEffect(() => {
-    console.log(params)
     const username = params.name
-    console.log(username) 
     fetch(`/api/photograph/${username}`)
       .then(res => res.json())
       .then(data => {
