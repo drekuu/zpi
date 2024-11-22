@@ -20,7 +20,7 @@ export const useNewPageStore = create<NewPageStore>()(
     immer((set) => ({
       filters: {
         category: undefined,
-        priceRange: [],
+        priceRange: [0, 1000],
         tags: [],
       },
       setCategoryFilter: (category: number | undefined) =>

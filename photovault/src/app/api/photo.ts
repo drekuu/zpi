@@ -53,7 +53,38 @@ export async function getPhoto(id: number) {
     where: {
       id,
     },
+    include: {
+      photograph: true,
+      tags: true,
+      categories: true,
+    },
   });
 
-  return _.pick(photo, ['title', 'photoURL', 'id']);
+  if (!photo) {
+    return null;
+  }
+
+  return _.pick(
+    {
+      ...photo,
+      tags: photo.tags.map((tag) => _.pick(tag, ['id', 'name'])),
+      categories: photo.categories.map((category) =>
+        _.pick(category, ['id', 'name']),
+      ),
+      price: photo.price.toNumber(),
+      licensePrice: photo.licensePrice.toNumber(),
+      photoURL: getFilePublicUrl(photo.photoURL),
+    },
+    [
+      'title',
+      'photoURL',
+      'id',
+      'price',
+      'tags',
+      'licensePrice',
+      'categories',
+      'photograph.displayedUserName',
+      'photograph.avatarURL',
+    ],
+  );
 }

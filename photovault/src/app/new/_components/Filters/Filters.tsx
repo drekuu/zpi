@@ -70,6 +70,11 @@ export default function Filters({ urlCategory }: FiltersProps) {
 
       <Button
         onClick={() => {
+          if (categories) {
+            setCategoryFilter(
+              selectedCategory ? categories[selectedCategory]?.id : undefined,
+            );
+          }
           setPriceRangeFilter(selectedPriceRange);
           setTagsFilter(selectedTags.map((tag) => tags![tag].id));
 
