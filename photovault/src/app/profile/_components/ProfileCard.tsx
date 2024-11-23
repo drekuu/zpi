@@ -5,6 +5,7 @@ import ProfileAvatar from '../static/Profile_avatar_placeholder_large.png'
 import Image from 'next/image';
 import EmailIcon from '../static/mail.svg';
 
+
 interface UserViewButtonProps {
   displayedUsername: string;
   email: string;

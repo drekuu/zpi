@@ -47,3 +47,28 @@ export async function getPhotos(filters: PhotoFilters) {
     ),
   );
 }
+
+export async function getPhotosByPhotographer(username: string) {
+  const photos = await prisma.photo.findMany({
+    where: {
+      photograph: 
+         {
+            user: {
+              is: {
+                username: username,
+              },
+            },
+          }
+    },
+  });
+
+  return photos.map((photo) =>
+    _.pick(
+      {
+        ...photo,
+        photoURL: getFilePublicUrl(photo.photoURL),
+      },
+      ['title', 'photoURL', 'id'],
+    ),
+  );
+}
