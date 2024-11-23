@@ -1,6 +1,7 @@
-import prisma from "@/lib/prisma";
+
 import { NextResponse } from "next/server";
 import { describe } from "node:test";
+import prisma from "../../_lib/prisma";
 
 export async function GET(req: Request, { params }: { params: Promise<{ name: string }> }) {
   const name = (await params).name
@@ -20,9 +21,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ name: st
     return new NextResponse(JSON.stringify(
       {
         displayedUserName: photograph?.displayedUserName,
-        avatarUrl: photograph?.avatarUrl,
+        avatarUrl: photograph?.avatarURL,
         describe: photograph?.description,
-        email: photograph?.user.email,
+        displayedEmail: photograph?.user.email,
       }
     ), { status: 200 })
   
@@ -34,6 +35,9 @@ export async function  
     const name = (await params).name;
     const data = await req.json();
 
+    console.log(data)
+    console.log(name)
+
     const updatedPhotograph = await prisma.photograph.updateMany({
       where: {
         user: {
@@ -44,13 +48,10 @@ export async function  
       },
       data: {
         displayedUserName: data.displayedUserName,
-        avatarUrl: data.avatarUrl,
+        avatarURL: data.avatarUrl,
         description: data.aboutMe,
-        email: data.email
+        displayedEmail: data.email
       },
-      include: { 
-        user: true
-      }
     });
 
     return new NextResponse(JSON.stringify(updatedPhotograph), { status: 200 });

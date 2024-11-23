@@ -28,6 +28,7 @@ model Photograph {
   displayedUserName String?
   avatarURL         String?
   description       String?
+  displayedEmail    String?
   photo             Photo[]
 }
 

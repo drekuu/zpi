@@ -6,6 +6,7 @@ import ProfileAvatar from '../static/Profile_avatar_placeholder_large.png'
 import EditIcon from '../static/edit.svg';
 import EmailIcon from '../static/mail.svg';
 import Image from 'next/image';
+import Loading from '@/components/LoadedQuery/components/Loading';
 
 interface UserViewButtonProps {
   username: string;
@@ -15,37 +16,61 @@ export default function PhotographerCardMe({ username }: UserViewButtonProps) {
   const t = useTranslations('Profile');
 
   const [displayedUsername, setDisplayedUsername] = useState('');
+  const [displayedUsernameTemp, setDisplayedUsernameTemp] = useState('');
   const [avatarUrl, setAvatarUrl] = useState<string>();
+  const [avatarUrlTemp, setAvatarUrlTemp] = useState<string>();
   const [aboutMe, setDescription] = useState<string>();
+  const [aboutMeTemp, setDescriptionTemp] = useState<string>();
   const [email, setEmail] = useState('');
+  const [emailTemp, setEmailTemp] = useState('');
   const [isEditing, setIsEditing] = useState(false); 
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    fetch(`/api/photograph/${username}`)
+    setDisplayedUsernameTemp(displayedUsername);
+    setAvatarUrlTemp(avatarUrl ? avatarUrl : '');
+    setDescriptionTemp(aboutMe);
+    setEmailTemp(email);
+    console.log('User data:', { displayedUsername, avatarUrl, aboutMe, email });
+    console.log('User data temp:', { displayedUsernameTemp, avatarUrlTemp, aboutMeTemp, emailTemp });
+  }, [displayedUsername, avatarUrl, aboutMe, email]);
+
+  useEffect(() => {
+    fetch(`/api/photograph/${username}`, {
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    })
       .then(res => res.json())
       .then(data => {
         setDisplayedUsername(data.displayedUserName);
         setAvatarUrl(data.avatarUrl);
         setDescription(data.describe);
         setEmail(data.email);
+        setIsLoading(false);
       });
-  }, []);
+  }, [username]);
 
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
   const handleSaveClick = () => {
+    setDisplayedUsername(displayedUsernameTemp);
+    setAvatarUrl(avatarUrlTemp);
+    setDescription(aboutMeTemp);
+    setEmail(emailTemp);
     fetch(`/api/photograph/${username}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        displayedUserName: displayedUsername,
-        avatarUrl: avatarUrl,
-        aboutMe: aboutMe,
-        email: email,
+        displayedUserName: displayedUsernameTemp,
+        avatarUrl: avatarUrlTemp,
+        aboutMe: aboutMeTemp,
+        email: emailTemp,
       }),
     })
       .then(res => res.json())
@@ -60,36 +85,17 @@ export default function PhotographerCardMe({ username }: UserViewButtonProps) {
       });
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target;   
-
-    switch (name) {
-      case 'displayedUsername':
-        setDisplayedUsername(value);
-        break;
-      case 'avatarUrl':
-        setAvatarUrl(value);
-        break;
-      case 'email':
-        setEmail(value);
-        break;
-      case 'aboutMe':
-        setDescription(value);
-        break;
-    }
-  };
-
   const actualAvatarUrl = avatarUrl ? avatarUrl : ProfileAvatar;
 
-  return (
+  return isLoading ? <Loading /> : (
     <header className="flex overflow-hidden z-0 flex-wrap gap-8 justify-center items-start self-center px-4 py-5 max-md:max-w-full">
       <div className="flex overflow-hidden flex-col rounded-[62px] w-[162px]">
         {isEditing ? (
           <input
             type="text"
             name="avatarUrl"
-            value={avatarUrl}
-            onChange={handleInputChange}
+            value={avatarUrlTemp}
+            onChange={(e)=> setAvatarUrlTemp(e.target.value)}
             placeholder={t("enter-avatar")}
           />
         ) : (
@@ -106,8 +112,8 @@ export default function PhotographerCardMe({ username }: UserViewButtonProps) {
           <input
             type="text"
             name="displayedUsername"
-            value={displayedUsername}
-            onChange={handleInputChange}
+            value={displayedUsernameTemp}
+            onChange={(e) => setDisplayedUsernameTemp(e.target.value)}
             placeholder={t("enter-username")}
             className="text-3xl font-bold w-full" 
           />
@@ -124,8 +130,8 @@ export default function PhotographerCardMe({ username }: UserViewButtonProps) {
             <input
               type="text"
               name="email"
-              value={email}
-              onChange={handleInputChange}
+              value={emailTemp}
+              onChange={(e) => setEmailTemp(e.target.value)}
               placeholder={t("enter-email")}
               className="basic-auto"
             />
@@ -138,8 +144,8 @@ export default function PhotographerCardMe({ username }: UserViewButtonProps) {
         {isEditing ? (
           <textarea
             name="aboutMe"
-            value={aboutMe}
-            onChange={handleInputChange}
+            value={aboutMeTemp}
+            onChange={(e) => setDescriptionTemp(e.target.value)}
             placeholder={t("enter-about-me")}
             className="mt-3"
           />
