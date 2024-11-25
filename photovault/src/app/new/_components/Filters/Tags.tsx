@@ -37,7 +37,7 @@ export default function Tags({ selectedTags, setSelectedTags }: TagsProps) {
             !selectedTags.includes(tag.name) &&
             (!search || tag.displayName.includes(search.toLowerCase())),
         ),
-    [locale, selectedTags, search, setSelectedTags, tags],
+    [locale, selectedTags, search, setSelectedTags, tags, tagsT],
   );
 
   return (

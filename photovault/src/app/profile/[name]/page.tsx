@@ -1,76 +1,61 @@
 'use client';
-import React, { useEffect, useMemo, useState } from 'react';
+
+import React from 'react';
 import ProfileCard from '../_components/ProfileCard';
-import Loading from '@/components/LoadedQuery/components/Loading';
-import { getPhotosByPhotographer } from '@/app/api/photo';
+import { useGetPhotosByPhotographer } from '@/services/query/photo';
+import { useGetPhotographer } from '@/services/query/photograph';
+import LoadedQueries from '@/components/LoadedQuery/LoadedQueries';
+import { useTranslations } from 'next-intl';
 
-export default function Profile({
-  params,
-}: {
-  params: { name: string }
-}) {
+export default function Profile({ params }: { params: { name: string } }) {
+  const t = useTranslations('Profile');
 
-  const [displayedUsername, setDisplayedUsername] = useState('')
-  const [avatarUrl, setAvatarUrl] = useState<string>()
-  const [description, setDescription] = useState<string>()
-  const [email, setEmail] = useState('')
-  const query = getPhotosByPhotographer(params.name);
-  const [photos, setPhotos] = useState<Pick<{ photoURL: string; id: number; photographId: number; title: string; license: boolean; price: number; licensePrice: number; }, "id" | "photoURL" | "title">[]>([]);
+  const photosQuery = useGetPhotosByPhotographer(params.name);
+  const photos = photosQuery.data;
 
-  useEffect(() => {
-    query.then(data => {
-      setPhotos(data);
-    });
-  }, []);
+  const photographerQuery = useGetPhotographer(params.name);
+  const photographer = photographerQuery.data;
 
-  const [isLoading, setIsLoading] = useState(true)  
-
-  useEffect(() => {
-    const username = params.name
-    fetch(`/api/photograph/${username}`)
-      .then(res => res.json())
-      .then(data => {
-        setDisplayedUsername(data.displayedUserName)
-        setAvatarUrl(data.avatarUrl)
-        setDescription(data.describe)
-        setEmail(data.email)
-        setIsLoading(false)
-      })
-
-  }, [])
-  
-    return isLoading ? <Loading /> :  (
-      <div className='my-8'>
-
-    <div className="flex overflow-hidden relative flex-col py-12 gap-20">
-        <ProfileCard displayedUsername={displayedUsername} email={email} avatarUrl={avatarUrl} aboutMe={description}/>
-        <div className='w-full flex flex-wrap gap-5'>
-     
-        {photos && (
-          <>
-            {photos.map((photo) => (
-              <div
-                className='flex-auto  max-w-[300px] cursor-pointer'
-                key={photo.id}
-              >
-                <picture>
-                  <img
-                    className='object-cover object-center w-full h-full'
-                    src={photo.photoURL}
-                    alt={photo.title}
-                  />
-                </picture>
-              </div>
-            ))}
-            {photos.length === 0 && (
-              <p className='mx-auto'>no-results</p>
-            )}
-          </>
-        )}
-  
-    </div>
-      </div>
-    </div>
-    );
-  };
-
+  return (
+    <LoadedQueries
+      queries={[photosQuery, photographerQuery]}
+      onlyFirstLoad={false}
+    >
+      {photos && photographer && (
+        <div className='my-8'>
+          <div className='flex overflow-hidden relative flex-col py-12 gap-20'>
+            <ProfileCard
+              displayedUsername={photographer.displayedUserName}
+              email={photographer.displayedEmail}
+              avatarUrl={photographer.avatarURL}
+              aboutMe={photographer.description}
+            />
+            <div className='w-full flex flex-wrap gap-5'>
+              {photos && (
+                <>
+                  {photos.map((photo) => (
+                    <div
+                      className='flex-auto  max-w-[300px] cursor-pointer'
+                      key={photo.id}
+                    >
+                      <picture>
+                        <img
+                          className='object-cover object-center w-full h-full'
+                          src={photo.photoURL}
+                          alt={photo.title}
+                        />
+                      </picture>
+                    </div>
+                  ))}
+                  {photos.length === 0 && (
+                    <p className='mx-auto'>{t('no-results')}</p>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </LoadedQueries>
+  );
+}

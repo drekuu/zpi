@@ -64,7 +64,7 @@
     "register-photograph-link": "Want to register as a photograph?",
     "about-me": "About me"
   },
-  "Profile":{
+  "Profile": {
     "about-me": "About me",
     "management-view": "Management view",
     "user-view": "User view",
@@ -85,6 +85,7 @@
     "enter-username": "Enter displayed username",
     "enter-email": "Enter email",
     "enter-about-me": "Enter about me",
-    "profile-picture": "Profile picture"
+    "profile-picture": "Profile picture",
+    "no-results": "No results"
   }
 }

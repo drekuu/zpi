@@ -1,7 +1,7 @@
 'use client';
 import Button from '@/components/Form/Button';
 import InputField from '@/components/Form/InputField';
-import useRegister from '@/services/register';
+import useRegister from '@/services/mutation/register';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 

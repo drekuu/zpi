@@ -1,6 +1,6 @@
 'use client';
 
-import useRegister from '@/services/register';
+import useRegister from '@/services/mutation/register';
 import InputField from '@/components/Form/InputField';
 import Button from '@/components/Form/Button';
 import { useTranslations } from 'next-intl';
@@ -11,7 +11,6 @@ export default function Register() {
     username,
     email,
     password,
-    aboutMe,
     setUsername,
     setEmail,
     setPassword,

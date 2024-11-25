@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
-import useRegex from './regex';
+import useRegex from '../regex';
 import { signup } from '@/app/api/auth/register';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-
-type RegisterData = {
-  username: string;
-  email: string;
-  password: string;
-  description?: string;
-};
+import { RegisterData } from '@/models/register';
 
 const useRegister = () => {
   const router = useRouter();

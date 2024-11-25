@@ -80,7 +80,7 @@
     "register-photograph-link": "Chcesz się zarejestrować jako fotograf?",
     "about-me": "O mnie"
   },
-  "Profile":{
+  "Profile": {
     "about-me": "O mnie",
     "management-view": "Widok zarządzania",
     "user-view": "Widok użytkownika",
@@ -101,6 +101,7 @@
     "enter-about-me": "Wprowadź opis o mnie",
     "enter-email": "Wprowadź adres email",
     "enter-username": "Wprowadź nazwę użytkownika",
-    "profile-picture": "Zdjęcie profilowe"
+    "profile-picture": "Zdjęcie profilowe",
+    "no-results": "Brak wyników"
   }
 }

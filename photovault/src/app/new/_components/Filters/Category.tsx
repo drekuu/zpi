@@ -40,7 +40,7 @@ export default function Category({
         ?.filter((category) =>
           category.name.toLowerCase().includes(search.toLowerCase()),
         ),
-    [categories, search],
+    [categories, search, categoryT, locale],
   );
 
   useEffect(() => {
