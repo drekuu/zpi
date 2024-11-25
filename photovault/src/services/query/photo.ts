@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getPhotos, getPhotosByPhotographer } from '@/app/api/photo';
-import { getPhoto, getPhotos } from '@/app/api/photo';
+import { getPhotos, getPhoto, getPhotosByPhotographer } from '@/app/api/photo';
 import { PhotoFilters } from '@/models/photo';
 
 export function usePhotos(filters: PhotoFilters) {
