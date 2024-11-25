@@ -1,7 +1,7 @@
 'use client';
 import Button from '@/components/Form/Button';
 import InputField from '@/components/Form/InputField';
-import useRegister from '@/services/register';
+import useRegister from '@/services/mutation/register';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 
@@ -55,7 +55,7 @@ export default function Register() {
               href='/register/photograph'
               className='flex justify-center hover:text-opacity-80 transition-colors'
             >
-              {t('register-photograph')}
+              {t('register-photograph-link')}
             </Link>
           </p>
         </div>

@@ -14,14 +14,18 @@ import { ReactNode, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/app/api/auth/session';
 import { useUserStore } from '@/stores/user';
+import { useGetMyself } from '@/services/query/user';
+import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
 
 interface UserMenuProps {
   children: ReactNode;
 }
 
 export default function UserMenu({ children }: UserMenuProps) {
+  const query = useGetMyself();
+  const username = query.data?.username;
+
   const { setLoggedIn, loggedIn } = useUserStore((store) => store);
-  const username = useUserStore((store) => store.userData?.username);
   const t = useTranslations('Header.UserMenu');
   const ref = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -33,7 +37,7 @@ export default function UserMenu({ children }: UserMenuProps) {
 
       <Menu open={open} setOpen={setOpen} ref={ref} className='min-w-[220px]'>
         {loggedIn ? (
-          <>
+          <LoadedQuery query={query} handleError={true}>
             <MenuItem>{t('hello', { username })}</MenuItem>
             <Separator />
 
@@ -63,7 +67,7 @@ export default function UserMenu({ children }: UserMenuProps) {
               <LogoutIcon draggable={false} />
               <p>{t('logout')}</p>
             </MenuItem>
-          </>
+          </LoadedQuery>
         ) : (
           <>
             <MenuItem>{t('hello-nologon')}</MenuItem>

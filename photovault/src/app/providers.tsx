@@ -2,7 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { useState, useEffect, ReactNode } from 'react';
+import { useEffect, ReactNode, useState } from 'react';
 import { updateSession } from '@/app/api/auth/session';
 import { useUserStore } from '@/stores/user';
 

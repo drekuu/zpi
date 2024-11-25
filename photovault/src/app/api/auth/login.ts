@@ -3,7 +3,6 @@
 import bcrypt from 'bcrypt';
 import prisma from '../_lib/prisma';
 import { createSession } from '../_lib/session';
-import _ from 'lodash';
 
 export async function signin(email: string, password: string) {
   const user = await prisma.user.findFirst({
@@ -34,8 +33,5 @@ export async function signin(email: string, password: string) {
 
   return {
     status: 200,
-    content: JSON.stringify(
-      _.pick(user, ['email', 'username', 'photograph.description']),
-    ),
   };
 }

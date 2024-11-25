@@ -16,6 +16,11 @@ export type PhotoFilters = {
    * List of tag IDs
    */
   tags: Array<number>;
+
+  /**
+   * Photographer username
+   */
+  photographUsername?: string;
 };
 
 export type Photo = Unpacked<Awaited<ReturnType<typeof getPhotos>>>;

@@ -2,7 +2,6 @@ import 'server-only';
 import { SignJWT, jwtVerify } from 'jose';
 import { UserSession } from '@/models/session';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import { getRequiredEnv } from '@/utils/env';
 
 const SESSION_DURATION_TEXT = '10h';
@@ -86,5 +85,5 @@ export async function verifySession() {
     }
   }
 
-  redirect('/login');
+  return null;
 }

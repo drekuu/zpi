@@ -1,6 +1,6 @@
 'use client';
 
-import useRegister from '@/services/register';
+import useRegister from '@/services/mutation/register';
 import InputField from '@/components/Form/InputField';
 import Button from '@/components/Form/Button';
 import { useTranslations } from 'next-intl';
@@ -11,11 +11,9 @@ export default function Register() {
     username,
     email,
     password,
-    aboutMe,
     setUsername,
     setEmail,
     setPassword,
-    setAboutMe,
     registerPhotograph: register,
   } = useRegister();
 
@@ -26,7 +24,7 @@ export default function Register() {
         className='flex flex-col text-base max-w-[450px] w-full text-black text-opacity-40 bg-white p-8 rounded-lg shadow-md'
       >
         <h1 className='w-full text-4xl font-bold text-center text-black mb-6'>
-          {t('register')}
+          {t('register-photograph')}
         </h1>
         <InputField
           label={t('username')}
@@ -49,15 +47,7 @@ export default function Register() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <InputField
-          label={t('about-me')}
-          type='About me'
-          value={aboutMe}
-          onChange={(e) => setAboutMe(e.target.value)}
-          required
-        />
-
-        <Button type='submit'>{t('register')}</Button>
+        <Button type='submit'>{t('register-photograph')}</Button>
       </form>
     </div>
   );
