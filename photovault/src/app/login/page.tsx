@@ -10,7 +10,6 @@ import { signin } from '@/app/api/auth/login';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/user';
-import type { UserWithRelations } from '@/models/user';
 
 type LoginData = {
   email: string;
@@ -18,9 +17,7 @@ type LoginData = {
 };
 
 export default function Login() {
-  const { setUserData, setPhotograph, setLoggedIn } = useUserStore(
-    (store) => store,
-  );
+  const { setLoggedIn } = useUserStore((store) => store);
   const router = useRouter();
   const { mutate } = useMutation({
     mutationFn: (loginData: LoginData) =>
@@ -28,13 +25,6 @@ export default function Login() {
     onSuccess: (response) => {
       if (response?.status === 200) {
         setLoggedIn(true);
-
-        const user: UserWithRelations = JSON.parse(response.content);
-        setUserData({ email: user.email, username: user.username });
-
-        if (user.photograph) {
-          setPhotograph({ description: user.photograph.description });
-        }
 
         router.push('/home');
       } else if (response?.status === 403) {

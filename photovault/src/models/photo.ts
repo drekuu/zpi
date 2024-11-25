@@ -13,4 +13,9 @@ export type PhotoFilters = {
    * List of tag IDs
    */
   tags: Array<number>;
+
+  /**
+   * Photographer username
+   */
+  photographUsername?: string;
 };
