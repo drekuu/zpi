@@ -6,6 +6,7 @@ import { getLocale, getMessages } from 'next-intl/server';
 import Header from '@/components/Header/Header';
 import Providers from './providers';
 import clsx from 'clsx';
+import { TunnelExit, TunnelProvider } from '@mittwald/react-tunnel';
 import './globals.css';
 
 // Fonts
@@ -39,8 +40,10 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   const locale = await getLocale();
   const messages = await getMessages();
@@ -60,7 +63,12 @@ export default async function RootLayout({
           <Providers>
             <Header />
             <main className='max-w-[var(--page-max-width)] mx-auto'>
-              {children}
+              {/* @see https://github.com/vercel/next.js/discussions/49749 */}
+              <TunnelProvider>
+                {modal}
+                {children}
+                <TunnelExit />
+              </TunnelProvider>
             </main>
           </Providers>
         </NextIntlClientProvider>

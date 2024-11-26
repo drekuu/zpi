@@ -9,6 +9,7 @@ import { useAllTags } from '@/services/query/tag';
 import { useTranslations } from 'next-intl';
 import { getLocale } from '@/services/localeClient';
 import { ReactNode } from 'react';
+import { TunnelEntry } from '@mittwald/react-tunnel';
 
 export default function New({ children }: { children: ReactNode }) {
   const locale = getLocale();
@@ -23,21 +24,23 @@ export default function New({ children }: { children: ReactNode }) {
   const tagsQuery = useAllTags();
 
   return (
-    <LoadedQueries queries={[categoriesQuery, tagsQuery]}>
-      <div>
-        <Breadcrumbs
-          additionalNames={
-            categoryName
-              ? [locale === 'en' ? categoryName : t(category as any)]
-              : undefined
-          }
-        />
+    <TunnelEntry staticEntryId='NewPage'>
+      <LoadedQueries queries={[categoriesQuery, tagsQuery]}>
+        <div>
+          <Breadcrumbs
+            additionalNames={
+              categoryName
+                ? [locale === 'en' ? categoryName : t(category as any)]
+                : undefined
+            }
+          />
 
-        <div className='flex gap-10 items-start'>
-          <Filters urlCategory={category} />
-          {children}
+          <div className='flex gap-10 items-start'>
+            <Filters urlCategory={category} />
+            {children}
+          </div>
         </div>
-      </div>
-    </LoadedQueries>
+      </LoadedQueries>
+    </TunnelEntry>
   );
 }

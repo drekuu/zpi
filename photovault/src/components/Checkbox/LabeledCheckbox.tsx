@@ -6,6 +6,7 @@ interface LabeledCheckbox {
   label: string;
   checked: boolean;
   onClick?: () => void;
+  noCheckbox?: boolean;
 }
 
 export default function LabeledCheckbox({
@@ -13,6 +14,7 @@ export default function LabeledCheckbox({
   label,
   checked,
   onClick,
+  noCheckbox = false,
 }: LabeledCheckbox) {
   return (
     <div
@@ -29,7 +31,7 @@ export default function LabeledCheckbox({
       >
         {label}
       </label>
-      <Checkbox checked={checked} id={id} />
+      {!noCheckbox && <Checkbox checked={checked} id={id} />}
     </div>
   );
 }

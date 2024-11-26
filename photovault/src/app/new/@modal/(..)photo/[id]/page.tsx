@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import Modal from './_components/Modal';
 import Photo from '@/app/photo/[id]/_components/Photo';
+import Modal from '@/components/Modal/Modal';
 
 export default async function PhotoModal({
   params,
@@ -14,7 +14,6 @@ export default async function PhotoModal({
 
   return (
     <Modal>
-      adsjskldjasljsakla
       <Photo id={+id} />
     </Modal>
   );
