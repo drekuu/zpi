@@ -14,7 +14,7 @@ export default async function PhotoModal({
 
   return (
     <Modal>
-      xddd
+      adsjskldjasljsakla
       <Photo id={+id} />
     </Modal>
   );

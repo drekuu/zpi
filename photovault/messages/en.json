@@ -4,7 +4,8 @@
   "Pages": {
     "home": "Home",
     "new": "New",
-    "explore": "Explore"
+    "explore": "Explore",
+    "photo": "Photo"
   },
   "HomePage": {
     "Sections": {

@@ -2,12 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { decryptSession } from '@/app/api/_lib/session';
 import { cookies } from 'next/headers';
 
-const protectedRoutes = ['/profile'];
+const photographProtectedRoutes = ['/profile'];
+const protectedRoutes = [...photographProtectedRoutes];
 const publicRoutes = ['/login', '/register'];
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.includes(path);
+  const isPhotographProtectedRoute = photographProtectedRoutes.includes(path);
   const isPublicRoute = publicRoutes.includes(path);
 
   if (!isProtectedRoute && !isPublicRoute) {
@@ -33,6 +35,10 @@ export default async function middleware(req: NextRequest) {
   }
 
   if (isPublicRoute && session.userId) {
+    return NextResponse.redirect(new URL('/home', req.nextUrl));
+  }
+
+  if (isPhotographProtectedRoute && !session.isPhotograph) {
     return NextResponse.redirect(new URL('/home', req.nextUrl));
   }
 

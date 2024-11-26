@@ -3,8 +3,17 @@
 import bcrypt from 'bcrypt';
 import prisma from '../_lib/prisma';
 import { createSession } from '../_lib/session';
+import { UserData } from '@/models/user';
 
-export async function signin(email: string, password: string) {
+type SigninResult = {
+  status: number;
+  content: string | UserData;
+};
+
+export async function signin(
+  email: string,
+  password: string,
+): Promise<SigninResult> {
   const user = await prisma.user.findFirst({
     where: {
       email: email,
@@ -33,5 +42,10 @@ export async function signin(email: string, password: string) {
 
   return {
     status: 200,
+    content: {
+      email: user.email,
+      username: user.username,
+      isPhotograph: !!user.photograph,
+    },
   };
 }
