@@ -94,9 +94,7 @@ export async function getPhotosByPhotographer(username: string) {
     where: {
       photograph: {
         user: {
-          is: {
-            username: username,
-          },
+          username: username,
         },
       },
     },
