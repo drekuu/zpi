@@ -1,6 +1,5 @@
 import { describe, expect, test } from 'vitest';
 import mockRouter from 'next-router-mock';
-import { render } from '@testing-library/react';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
 import { renderWithNextIntl } from './utils';
 
@@ -53,8 +52,12 @@ describe('Breadcrumbs', () => {
         text: 'Nature',
       },
       {
-        href: '/new/nature',
-        text: 'Nature',
+        href: '/new/nature/5',
+        text: 'Test',
+      },
+      {
+        href: '/new/nature/5/10',
+        text: 'Test2',
       },
     ]);
   });
