@@ -71,7 +71,7 @@ export default function Photo({ id }: { id: number }) {
             <div className='flex flex-col gap-5 mt-10'>
               <ChipList name='Categories'>
                 {photo?.categories?.map((category) => (
-                  <Chip key={id}>{category.name}</Chip>
+                  <Chip key={category.id}>{category.name}</Chip>
                 ))}
               </ChipList>
 
