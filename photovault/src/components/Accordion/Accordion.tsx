@@ -5,6 +5,9 @@ import { ReactNode, useState } from 'react';
 import clsx from 'clsx';
 
 interface AccordionProps {
+  /**
+   * Displayed text regardless of open state
+   */
   name: string;
   children: ReactNode;
   childrenClassName?: string;
@@ -31,6 +34,7 @@ export default function Accordion({
       </div>
 
       <div
+        data-testid='children-test'
         className={clsx(
           childrenClassName,
           open ? 'flex' : 'hidden',

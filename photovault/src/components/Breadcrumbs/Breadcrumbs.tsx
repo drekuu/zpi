@@ -14,17 +14,34 @@ type Breadcrumb = {
 };
 
 interface BreadcrumbsProps {
+  /**
+   * Names of parts excluding the first one
+   * @example
+   * // path /new/nature/5
+   * additionalNames = [
+   *   'Nature' // provide name to the 'nature' part,
+   *   'Example' // provide name to the '5' part
+   * ];
+   */
   additionalNames?: Array<string>;
 }
 
+/**
+ * Component that divides the current path into parts and renders links to them
+ * @note When the `additionalNames` parameter is omitted, the component only renders the first part
+ */
 export default function Breadcrumbs({ additionalNames }: BreadcrumbsProps) {
   const t = useTranslations('Pages');
   const pathname = usePathname();
+
   const breadcrumbs = useMemo(() => {
+    // Use only the first part when `additionalNames` is not provided
     const parts = pathname
       .split('/')
       .slice(1)
       .splice(0, 1 + (additionalNames?.length ?? 0));
+
+    // Additional home part, always included
     const result: Array<Breadcrumb> = [
       { id: 'home', displayName: t('home'), href: '/home' },
     ];
