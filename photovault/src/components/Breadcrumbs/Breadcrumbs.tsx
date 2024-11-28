@@ -28,7 +28,14 @@ interface BreadcrumbsProps {
 
 /**
  * Component that divides the current path into parts and renders links to them
- * @note When the `additionalNames` parameter is omitted, the component only renders the first part
+ * @note An additional `/home` crumb is added by default, however it is not added to the href's of other crumbs \
+ * When the `additionalNames` parameter is omitted, the component only renders the first part
+ * @example
+ * // href /new/nature/5
+ * additionalNames = [
+ *   'Nature'
+ * ];
+ * // resulting breadcrumbs: Home (/home), New (/new), Nature (/new/nature)
  */
 export default function Breadcrumbs({ additionalNames }: BreadcrumbsProps) {
   const t = useTranslations('Pages');

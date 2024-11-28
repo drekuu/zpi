@@ -1,4 +1,4 @@
-import { describe, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import mockRouter from 'next-router-mock';
 import { render } from '@testing-library/react';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
@@ -9,7 +9,53 @@ describe('Breadcrumbs', () => {
     await mockRouter.push('/new/nature/5/10');
     const component = await renderWithNextIntl(<Breadcrumbs />);
 
-    const links = component.findAllByRole('link');
-    console.log(links);
+    const links = await component.findAllByRole('link');
+    const linksData = links.map((link) => ({
+      href: link.getAttribute('href'),
+      text: link.firstChild?.textContent,
+    }));
+
+    expect(linksData).toStrictEqual([
+      {
+        href: '/home',
+        text: 'Home',
+      },
+      {
+        href: '/new',
+        text: 'New',
+      },
+    ]);
+  });
+
+  test('renders additionalNames when provided', async () => {
+    await mockRouter.push('/new/nature/5/10');
+    const component = await renderWithNextIntl(
+      <Breadcrumbs additionalNames={['Nature', 'Test', 'Test2']} />,
+    );
+
+    const links = await component.findAllByRole('link');
+    const linksData = links.map((link) => ({
+      href: link.getAttribute('href'),
+      text: link.firstChild?.textContent,
+    }));
+
+    expect(linksData).toStrictEqual([
+      {
+        href: '/home',
+        text: 'Home',
+      },
+      {
+        href: '/new',
+        text: 'New',
+      },
+      {
+        href: '/new/nature',
+        text: 'Nature',
+      },
+      {
+        href: '/new/nature',
+        text: 'Nature',
+      },
+    ]);
   });
 });
