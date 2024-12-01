@@ -17,7 +17,7 @@ const Separator = () => {
 };
 
 interface FiltersProps {
-  urlCategory: string;
+  urlCategory?: string;
 }
 
 export default function Filters({ urlCategory }: FiltersProps) {
@@ -43,7 +43,7 @@ export default function Filters({ urlCategory }: FiltersProps) {
   useEffect(() => {
     setSelectedCategory(urlCategory);
 
-    if (categories) {
+    if (categories && urlCategory) {
       setCategoryFilter(categories[urlCategory]?.id);
     }
   }, [setCategoryFilter, categories, urlCategory]);

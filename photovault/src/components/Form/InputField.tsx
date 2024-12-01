@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { HTMLInputTypeAttribute } from 'react';
 
 interface InputFieldProps {
   label: string;
-  type: string;
+  type: HTMLInputTypeAttribute;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;

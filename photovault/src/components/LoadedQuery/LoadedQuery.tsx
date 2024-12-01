@@ -20,7 +20,10 @@ export default function LoadedQuery({
   return (
     <>
       {handleError && query.isError && (
-        <div className='flex flex-col gap-2 items-center justify-center'>
+        <div
+          data-testid='loadedquery-error'
+          className='flex flex-col gap-2 items-center justify-center'
+        >
           <p>{t('load-failed')}</p>
           <Button onClick={() => query.refetch()}>{t('try-again')}</Button>
         </div>

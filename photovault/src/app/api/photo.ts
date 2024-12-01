@@ -54,7 +54,11 @@ export async function getPhoto(id: number) {
       id,
     },
     include: {
-      photograph: true,
+      photograph: {
+        include: {
+          user: true,
+        },
+      },
       tags: true,
       categories: true,
     },
@@ -85,6 +89,7 @@ export async function getPhoto(id: number) {
       'categories',
       'photograph.displayedUserName',
       'photograph.avatarURL',
+      'photograph.user.username',
     ],
   );
 }

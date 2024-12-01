@@ -3,7 +3,7 @@
 import { usePhoto } from '@/services/query/photo';
 import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
 import { useEffect } from 'react';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import AvatarPlaceholder from '@/../public/image/avatar-placeholder.svg';
 import ChipList from './ChipList';
 import Chip from '@/components/Chip/Chip';
@@ -15,6 +15,8 @@ const Separator = () => {
 export default function Photo({ id }: { id: number }) {
   const query = usePhoto(id);
   const photo = query.data;
+
+  const router = useRouter();
 
   useEffect(() => {
     if (photo === null) {
@@ -34,7 +36,13 @@ export default function Photo({ id }: { id: number }) {
 
           <div className='w-1/2'>
             <p className='text-4xl font-bold mb-2'>{photo.title}</p>
-            <div className='select-none cursor-pointer flex items-center gap-2'>
+
+            <div
+              onClick={() =>
+                router.push(`/profile/${photo.photograph?.user.username}`)
+              }
+              className='select-none cursor-pointer flex items-center gap-2'
+            >
               <picture className='w-[50px] h-[50px] object-cover object-center'>
                 {photo.photograph?.avatarURL ? (
                   // eslint-disable-next-line @next/next/no-img-element

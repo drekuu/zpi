@@ -3,7 +3,7 @@
 import RightArrowIcon from '@/../public/icons/right-arrow.svg';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Fragment, useMemo } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import clsx from 'clsx';
 
@@ -24,6 +24,11 @@ interface BreadcrumbsProps {
    * ];
    */
   additionalNames?: Array<string>;
+
+  /**
+   * Path prefixes to ignore when pathname gets changed
+   */
+  prefixesBlacklist?: Array<string>;
 }
 
 /**
@@ -37,9 +42,22 @@ interface BreadcrumbsProps {
  * ];
  * // resulting breadcrumbs: Home (/home), New (/new), Nature (/new/nature)
  */
-export default function Breadcrumbs({ additionalNames }: BreadcrumbsProps) {
+export default function Breadcrumbs({
+  additionalNames,
+  prefixesBlacklist,
+}: BreadcrumbsProps) {
   const t = useTranslations('Pages');
-  const pathname = usePathname();
+  const path = usePathname();
+
+  const [pathname, setPathname] = useState(path);
+  useEffect(() => {
+    if (
+      !prefixesBlacklist ||
+      prefixesBlacklist.every((prefix) => !path.startsWith(prefix))
+    ) {
+      setPathname(path);
+    }
+  }, [prefixesBlacklist, path]);
 
   const breadcrumbs = useMemo(() => {
     // Use only the first part when `additionalNames` is not provided

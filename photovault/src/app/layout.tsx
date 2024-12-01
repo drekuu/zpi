@@ -63,9 +63,10 @@ export default async function RootLayout({
           <Providers>
             <Header />
             <main className='max-w-[var(--page-max-width)] mx-auto'>
+              {modal}
+
               {/* @see https://github.com/vercel/next.js/discussions/49749 */}
               <TunnelProvider>
-                {modal}
                 {children}
                 <TunnelExit />
               </TunnelProvider>
