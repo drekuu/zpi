@@ -42,16 +42,13 @@ export async function getMyself() {
     where: {
       userId: session.userId,
     },
-    include: {
-      user: true,
-    },
   });
 
   return _.pick(photograph, [
     'displayedUserName',
     'avatarUrl',
     'description',
-    'user.email',
+    'displayedEmail',
   ]);
 }
 

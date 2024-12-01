@@ -4,7 +4,8 @@
   "Pages": {
     "home": "Home",
     "new": "New",
-    "explore": "Explore"
+    "explore": "Explore",
+    "photo": "Photo"
   },
   "HomePage": {
     "Sections": {
@@ -51,6 +52,10 @@
   "Search": {
     "placeholder": "Search...",
     "no-results": "No results"
+  },
+  "LoadedQuery": {
+    "load-failed": "Failed to load data",
+    "try-again": "Try again"
   },
   "Form": {
     "login": "Login",

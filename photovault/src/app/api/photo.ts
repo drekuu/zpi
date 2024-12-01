@@ -48,14 +48,58 @@ export async function getPhotos(filters: PhotoFilters) {
   );
 }
 
+export async function getPhoto(id: number) {
+  const photo = await prisma.photo.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      photograph: {
+        include: {
+          user: true,
+        },
+      },
+      tags: true,
+      categories: true,
+    },
+  });
+
+  if (!photo) {
+    return null;
+  }
+
+  return _.pick(
+    {
+      ...photo,
+      tags: photo.tags.map((tag) => _.pick(tag, ['id', 'name'])),
+      categories: photo.categories.map((category) =>
+        _.pick(category, ['id', 'name']),
+      ),
+      price: photo.price.toNumber(),
+      licensePrice: photo.licensePrice.toNumber(),
+      photoURL: getFilePublicUrl(photo.photoURL),
+    },
+    [
+      'title',
+      'photoURL',
+      'id',
+      'price',
+      'tags',
+      'licensePrice',
+      'categories',
+      'photograph.displayedUserName',
+      'photograph.avatarURL',
+      'photograph.user.username',
+    ],
+  );
+}
+
 export async function getPhotosByPhotographer(username: string) {
   const photos = await prisma.photo.findMany({
     where: {
       photograph: {
         user: {
-          is: {
-            username: username,
-          },
+          username: username,
         },
       },
     },

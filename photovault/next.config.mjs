@@ -14,6 +14,9 @@ const nextConfig = {
 
     return config;
   },
+  compiler: {
+    reactRemoveProperties: { properties: ['^data-testid$'] },
+  },
 };
 
 export default withNextIntl(nextConfig);

@@ -4,6 +4,8 @@ import { usePhotos } from '@/services/query/photo';
 import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
 import { useNewPageStore } from '@/stores/page/new';
 import { useTranslations } from 'next-intl';
+import Photo from './Photo';
+import Link from 'next/link';
 
 export default function Photos() {
   const t = useTranslations('NewPage.Photos');
@@ -18,18 +20,9 @@ export default function Photos() {
         {photos && (
           <>
             {photos.map((photo) => (
-              <div
-                className='flex-auto h-[250px] [&:nth-last-child(-n+2)]:max-w-[300px] cursor-pointer'
-                key={photo.id}
-              >
-                <picture>
-                  <img
-                    className='object-cover object-center w-full h-full'
-                    src={photo.photoURL}
-                    alt={photo.title}
-                  />
-                </picture>
-              </div>
+              <Link key={photo.id} href={`/photo/${photo.id}`} passHref>
+                <Photo photo={photo} />
+              </Link>
             ))}
             {photos.length === 0 && (
               <p className='mx-auto'>{t('no-results')}</p>

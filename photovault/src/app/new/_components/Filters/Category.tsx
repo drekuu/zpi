@@ -63,6 +63,7 @@ export default function Category({
             <div>
               {filteredCategories.map((category) => (
                 <LabeledCheckbox
+                  noCheckbox={true}
                   key={category.id}
                   checked={selectedCategory === category.hrefKey}
                   id={category.hrefKey}

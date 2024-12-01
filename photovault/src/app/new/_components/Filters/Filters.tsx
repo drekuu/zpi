@@ -17,7 +17,7 @@ const Separator = () => {
 };
 
 interface FiltersProps {
-  urlCategory: string;
+  urlCategory?: string;
 }
 
 export default function Filters({ urlCategory }: FiltersProps) {
@@ -43,7 +43,7 @@ export default function Filters({ urlCategory }: FiltersProps) {
   useEffect(() => {
     setSelectedCategory(urlCategory);
 
-    if (categories) {
+    if (categories && urlCategory) {
       setCategoryFilter(categories[urlCategory]?.id);
     }
   }, [setCategoryFilter, categories, urlCategory]);
@@ -70,6 +70,11 @@ export default function Filters({ urlCategory }: FiltersProps) {
 
       <Button
         onClick={() => {
+          if (categories) {
+            setCategoryFilter(
+              selectedCategory ? categories[selectedCategory]?.id : undefined,
+            );
+          }
           setPriceRangeFilter(selectedPriceRange);
           setTagsFilter(selectedTags.map((tag) => tags![tag].id));
 

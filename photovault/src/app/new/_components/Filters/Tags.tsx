@@ -7,6 +7,7 @@ import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
 import SearchWithResult from '@/components/Search/SearchWithResult';
 import { useTranslations } from 'next-intl';
 import { getLocale } from '@/services/localeClient';
+import Chip from '@/components/Chip/Chip';
 
 interface TagsProps {
   selectedTags: Array<string>;
@@ -53,9 +54,8 @@ export default function Tags({ selectedTags, setSelectedTags }: TagsProps) {
 
             <div className='flex flex-wrap gap-2'>
               {selectedTags.map((tag, idx) => (
-                <div
+                <Chip
                   key={idx}
-                  className='select-none cursor-pointer flex items-center justify-center min-w-[50px] w-fit bg-gray border-[0.5px] border-black border-opacity-80 rounded-4xl'
                   onClick={() =>
                     setSelectedTags(selectedTags.toSpliced(idx, 1))
                   }
@@ -63,7 +63,7 @@ export default function Tags({ selectedTags, setSelectedTags }: TagsProps) {
                   <p className='text-sm text-black text-opacity-60'>
                     {locale === 'en' ? tag : tagsT(tag as any)}
                   </p>
-                </div>
+                </Chip>
               ))}
             </div>
           </>

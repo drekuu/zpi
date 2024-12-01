@@ -8,13 +8,7 @@ import { RegisterData } from '@/models/register';
 const useRegister = () => {
   const router = useRouter();
   const { mutate } = useMutation({
-    mutationFn: (registerData: RegisterData) =>
-      signup(
-        registerData.username,
-        registerData.password,
-        registerData.email,
-        registerData.description,
-      ),
+    mutationFn: (registerData: RegisterData) => signup(registerData),
     onSuccess: (response) => {
       if (response?.status === 200) {
         router.push('/login');
@@ -28,7 +22,6 @@ const useRegister = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [aboutMe, setAboutMe] = useState('');
 
   const userRegisterValidate = () => {
     if (!email) {
@@ -61,6 +54,7 @@ const useRegister = () => {
         username: username,
         email: email,
         password: password,
+        photograph: false,
       });
     }
   };
@@ -72,7 +66,7 @@ const useRegister = () => {
         username: username,
         email: email,
         password: password,
-        description: aboutMe,
+        photograph: true,
       });
     }
   };
@@ -81,11 +75,9 @@ const useRegister = () => {
     username,
     email,
     password,
-    aboutMe,
     setUsername,
     setEmail,
     setPassword,
-    setAboutMe,
     registerUser,
     registerPhotograph,
   };

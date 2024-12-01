@@ -1,0 +1,14 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Accordion > renders children properly [snapshot] 1`] = `
+HTMLCollection [
+  <div>
+    <p>
+      hello from child
+    </p>
+  </div>,
+  <div>
+    hello from second child
+  </div>,
+]
+`;
