@@ -11,16 +11,21 @@ import {
 import { usePathname, useRouter } from 'next/navigation';
 import { useOnClickOutside } from 'usehooks-ts';
 import CloseIcon from '@/../public/icons/close.svg';
+import { usePopupStore } from '@/stores/popup';
 
 interface ModalProps {
   children: ReactNode;
 }
 
+/**
+ * Modal is a type of popup that is accessed through a URL
+ */
 export default function Modal({ children }: ModalProps) {
   const router = useRouter();
   const pathname = usePathname();
   const dialogRef = useRef<ElementRef<'dialog'>>(null);
   const contentRef = useRef<ElementRef<'div'>>(null);
+  const isPopupOpen = usePopupStore((store) => store.isOpen);
 
   const openedPathname = useState(pathname)[0];
 
@@ -42,7 +47,11 @@ export default function Modal({ children }: ModalProps) {
     }
   }, []);
 
-  useOnClickOutside(contentRef, onDismiss);
+  useOnClickOutside(contentRef, () => {
+    if (!isPopupOpen()) {
+      onDismiss();
+    }
+  });
 
   return (
     <dialog

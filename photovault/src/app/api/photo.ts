@@ -85,6 +85,7 @@ export async function getPhoto(id: number) {
       'id',
       'price',
       'tags',
+      'license',
       'licensePrice',
       'categories',
       'photograph.displayedUserName',

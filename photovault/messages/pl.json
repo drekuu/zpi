@@ -108,5 +108,14 @@
     "enter-username": "Wprowadź nazwę użytkownika",
     "profile-picture": "Zdjęcie profilowe",
     "no-results": "Brak wyników"
+  },
+  "Photo": {
+    "none": "brak",
+    "by": "przez",
+    "price": "Cena:",
+    "commercial-price": "Cena licencji komercyjnej:",
+    "categories": "Kategorie",
+    "tags": "Tagi",
+    "cart-add": "Dodaj do koszyka"
   }
 }

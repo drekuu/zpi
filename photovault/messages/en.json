@@ -92,5 +92,14 @@
     "enter-about-me": "Enter about me",
     "profile-picture": "Profile picture",
     "no-results": "No results"
+  },
+  "Photo": {
+    "none": "none",
+    "by": "by",
+    "price": "Price:",
+    "commercial-price": "Commercial license price:",
+    "categories": "Categories",
+    "tags": "Tags",
+    "cart-add": "Add to cart"
   }
 }

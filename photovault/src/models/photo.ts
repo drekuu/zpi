@@ -1,4 +1,4 @@
-import { getPhotos } from '@/app/api/photo';
+import { getPhoto, getPhotos } from '@/app/api/photo';
 import { Unpacked } from '@/utils/typescript';
 
 export type PhotoFilters = {
@@ -16,11 +16,7 @@ export type PhotoFilters = {
    * List of tag IDs
    */
   tags: Array<number>;
-
-  /**
-   * Photographer username
-   */
-  photographUsername?: string;
 };
 
-export type Photo = Unpacked<Awaited<ReturnType<typeof getPhotos>>>;
+export type PartialPhoto = Unpacked<Awaited<ReturnType<typeof getPhotos>>>;
+export type Photo = Awaited<ReturnType<typeof getPhoto>>;
