@@ -1,4 +1,4 @@
-import { getPhoto, getPhotos } from '@/app/api/photo';
+import { getPhoto, getPhotos, getPhotosByIds } from '@/app/api/photo';
 import { Unpacked } from '@/utils/typescript';
 
 export type PhotoFilters = {
@@ -18,5 +18,14 @@ export type PhotoFilters = {
   tags: Array<number>;
 };
 
-export type PartialPhoto = Unpacked<Awaited<ReturnType<typeof getPhotos>>>;
-export type Photo = Awaited<ReturnType<typeof getPhoto>>;
+export type GalleryPhoto = NonNullable<
+  Unpacked<Awaited<ReturnType<typeof getPhotos>>>
+>;
+export type FullPhoto = NonNullable<Awaited<ReturnType<typeof getPhoto>>>;
+export type CartPhotoDetails = NonNullable<
+  Unpacked<Awaited<ReturnType<typeof getPhotosByIds>>>
+>;
+
+export type CartPhotosDetails = {
+  [key: number]: CartPhotoDetails;
+};

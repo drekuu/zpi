@@ -1,15 +1,17 @@
 import withPopup, { PopupProps } from '@/components/Popup/Popup';
-import { Photo } from '@/models/photo';
+import { FullPhoto } from '@/models/photo';
 import { useState } from 'react';
 import LabeledCheckbox from '@/components/Checkbox/LabeledCheckbox';
 import Button from '@/components/Form/Button';
 import { useCartStore } from '@/stores/cart';
+import { useTranslations } from 'next-intl';
 
 interface AddPhotoToCartProps extends PopupProps {
-  photo: Photo;
+  photo: FullPhoto;
 }
 
 function AddPhotoToCart({ photo, close }: AddPhotoToCartProps) {
+  const t = useTranslations('Popups.AddPhotoToCart');
   const [commercialLicense, setCommercialLicense] = useState(false);
   const [digitalCopy, setDigitalCopy] = useState(true);
 
@@ -17,24 +19,24 @@ function AddPhotoToCart({ photo, close }: AddPhotoToCartProps) {
 
   return (
     <div>
-      <p className='text-2xl font-bold'>Select photo format</p>
+      <p className='text-2xl font-bold'>{t('select-format')}</p>
       <div className='my-2'>
         <LabeledCheckbox
           id='format-digital'
-          label='Digital'
+          label={t('format-digital')}
           checked={digitalCopy}
           onClick={() => setDigitalCopy(true)}
         />
         <LabeledCheckbox
           id='format-physical'
-          label='Physical'
+          label={t('format-physical')}
           checked={!digitalCopy}
           onClick={() => setDigitalCopy(false)}
         />
       </div>
-      {photo!.license && (
+      {photo.license && (
         <LabeledCheckbox
-          label='Commercial license'
+          label={t('commercial-license')}
           id='commercial-license'
           checked={commercialLicense}
           onClick={() => setCommercialLicense(!commercialLicense)}
@@ -43,7 +45,7 @@ function AddPhotoToCart({ photo, close }: AddPhotoToCartProps) {
       <Button
         onClick={() => {
           addToCart({
-            photoId: photo!.id!,
+            photoId: photo.id!,
             quantity: 1,
             commercialLicense: commercialLicense,
             digitalCopy: digitalCopy,
@@ -51,7 +53,7 @@ function AddPhotoToCart({ photo, close }: AddPhotoToCartProps) {
           close();
         }}
       >
-        Add
+        {t('add')}
       </Button>
     </div>
   );

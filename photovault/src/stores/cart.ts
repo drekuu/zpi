@@ -11,6 +11,7 @@ interface CartActions {
   addToCart: (photo: CartPhoto) => void;
   removeFromCart: (index: number) => void;
   changeQuantity: (index: number, quantity: number) => void;
+  isEmpty: () => boolean;
 }
 
 type CartStore = CartState & CartActions;
@@ -19,7 +20,7 @@ export const useCartStore = create<CartStore>()(
   devtools(
     persist(
       immer(
-        (set): CartStore => ({
+        (set, get): CartStore => ({
           photos: [],
           addToCart: (photo: CartPhoto) =>
             set((state) => {
@@ -33,9 +34,13 @@ export const useCartStore = create<CartStore>()(
             set((state) => {
               state.photos[index].quantity = quantity;
             }),
+          isEmpty: () => get().photos.length === 0,
         }),
       ),
-      { name: 'cart', storage: createJSONStorage(() => localStorage) },
+      {
+        name: 'cart',
+        storage: createJSONStorage(() => localStorage),
+      },
     ),
   ),
 );

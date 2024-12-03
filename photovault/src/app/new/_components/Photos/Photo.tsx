@@ -1,9 +1,9 @@
 'use client';
 
-import type { PartialPhoto } from '@/models/photo';
+import type { GalleryPhoto } from '@/models/photo';
 
 interface PhotoProps {
-  photo: PartialPhoto;
+  photo: GalleryPhoto;
 }
 
 export default function Photo({ photo }: PhotoProps) {

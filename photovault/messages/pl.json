@@ -21,7 +21,17 @@
     "home": "Główna",
     "new": "Nowe",
     "explore": "Odkryj",
-    "photo": "Zdjęcie"
+    "photo": "Zdjęcie",
+    "cart": "Koszyk"
+  },
+  "Popups": {
+    "AddPhotoToCart": {
+      "select-format": "Wybierz format zdjęcia",
+      "format-digital": "Cyfrowy",
+      "format-physical": "Fizyczny",
+      "commercial-license": "Licencja komercyjna",
+      "add": "Dodaj"
+    }
   },
   "HomePage": {
     "Sections": {

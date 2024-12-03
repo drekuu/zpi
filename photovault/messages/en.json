@@ -5,7 +5,17 @@
     "home": "Home",
     "new": "New",
     "explore": "Explore",
-    "photo": "Photo"
+    "photo": "Photo",
+    "cart": "Cart"
+  },
+  "Popups": {
+    "AddPhotoToCart": {
+      "select-format": "Select photo format",
+      "format-digital": "Digital",
+      "format-physical": "Physical",
+      "commercial-license": "Commercial license",
+      "add": "Add"
+    }
   },
   "HomePage": {
     "Sections": {
