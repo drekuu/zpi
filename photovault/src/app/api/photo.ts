@@ -1,8 +1,9 @@
 'use server';
 
 import prisma from './_lib/prisma';
-import { getFilePublicUrl } from './_lib/cloud';
+import { getFilePublicUrl, putFile } from './_lib/cloud';
 import { PhotoFilters } from '@/models/photo';
+import { StreamingBlobPayloadInputTypes } from '@smithy/types';
 import _ from 'lodash';
 
 export async function getPhotos(filters?: PhotoFilters) {
@@ -147,4 +148,43 @@ export async function getPhotosByPhotographer(username: string) {
       ['title', 'photoURL', 'id'],
     ),
   );
+}
+
+export async function putPhoto(photoId: string, photo: StreamingBlobPayloadInputTypes) {
+  await putFile(photoId, photo);
+  await prisma.photo.create({
+    data: {
+      // photographId        Int
+      // photoURL            String
+      // title               String
+      // license             Boolean
+      // tags                Tag[]
+      // price               Decimal
+      // licensePrice        Decimal
+      // categories          Category[]
+      // digitalTransaction  DigitalTransaction[]
+      // physicalTransaction PhysicalTransaction[]
+      photographId: 2,
+      photoURL: photoId,
+      title: 'New photo',
+      license: false,
+      tags: {
+        connect: [
+          {
+            id: 1,
+          },
+        ],
+      },
+      price: 0,
+      licensePrice: 0,
+      categories: {
+        connect: [
+          {
+            id: 1,
+          },
+        ],
+    },
+  }});
+
+  return { status: 200, content: 'ok' };
 }

@@ -1,11 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
 import {
   getPhotos,
   getPhoto,
   getPhotosByPhotographer,
   getPhotosByIds,
+  putPhoto,
 } from '@/app/api/photo';
 import { CartPhotosDetails, PhotoFilters } from '@/models/photo';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { StreamingBlobPayloadInputTypes } from '@smithy/types';
 
 export function usePhotos(filters?: PhotoFilters) {
   return useQuery({
@@ -41,4 +43,15 @@ export function usePhotosByPhotographer(username: string) {
     queryKey: ['photographer', 'photos', username],
     queryFn: () => getPhotosByPhotographer(username).then((photos) => photos),
   });
+}
+
+export function usePutPhoto() {
+  const { mutate } = useMutation({
+    mutationFn: (a: {photoId: string, photo: StreamingBlobPayloadInputTypes}) => putPhoto(a.photoId, a.photo),
+    onSuccess: (response) => {
+      console.log("Success")
+    },
+    onError: (error) => console.error('Error:', error),
+  });
+  return { mutate }
 }
