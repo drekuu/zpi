@@ -1,13 +1,45 @@
-import React from 'react';
-import PhotoTableRow from '../../profile/_components/PhotoTableRow';
+import { useMemo, useState } from 'react';
+import {
+  MRT_EditActionButtons,
+  MaterialReactTable,
+  // createRow,
+  type MRT_ColumnDef,
+  type MRT_Row,
+  type MRT_TableOptions,
+  useMaterialReactTable,
+} from 'material-react-table';
+import {
+  Box,
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
+import {
+  QueryClient,
+  QueryClientProvider,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { values } from 'lodash';
+import { putFile } from '@/app/api/_lib/cloud';
+import { putPhoto } from '@/app/api/photo';
+import { usePutPhoto } from '@/services/query/photo';
+import { StreamingBlobPayloadInputTypes } from '@smithy/types';
 
-interface Photo {
+
+type Photo = {
   id: number;
   image: string;
   title: string;
   tags: string;
   status: 'Visible' | 'Hidden';
-  category: string;
+  category: string[];
   license?: string;
   price: string;
 }
@@ -20,7 +52,7 @@ const photos: Photo[] = [
     title: 'Laying cat',
     tags: '#cat #nature',
     status: 'Visible',
-    category: 'Animals, Nature',
+    category: ['Animals', 'Nature'],
     license: '465zł',
     price: '100 zł',
   },
@@ -31,7 +63,7 @@ const photos: Photo[] = [
     title: 'Horse in mountains',
     tags: '#horse #nature #mountains',
     status: 'Hidden',
-    category: 'Animals, Nature',
+    category: ['Animals', 'Nature'],
     price: '150zł',
   },
   {
@@ -41,11 +73,22 @@ const photos: Photo[] = [
     title: 'Person in front of a sun...',
     tags: '#person #people #sunset',
     status: 'Visible',
-    category: 'People, Landsccape',
+    category: ['People', 'Landscape'],
     price: '30zł',
   },
 ];
 
+
+const category = [
+  {value:'Animals', label:'Animals'},
+  {value:'Nature', label:'Nature'},
+  {value:'People', label:'People'},
+  {value:'Landscape', label:'Landscape'},
+  {value:'City', label:'City'},
+  {value:'Abstract', label:'Abstract'},
+  {value:'Other', label:'Other'},
+];
+/* 
 const ManagementTable = () => {
   return (
     <section className='flex z-0 flex-col justify-center p-6 mt-16 w-full bg-white max-md:px-5 max-md:mt-10 max-md:max-w-full'>
@@ -86,6 +129,402 @@ const ManagementTable = () => {
       </div>
     </section>
   );
+};
+ */
+
+const ManagementTable = () => {
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string | undefined>
+  >({});
+
+  const [fileUploaded, setUploadedFile] = useState<Blob>();
+
+  function useAddPhoto() {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: async (photo: Photo) => {
+        const key = "ID1"
+        const photoBlob = new Blob([photo.image], { type: 'image/jpeg' });
+        return Promise.resolve();
+      },
+      //client side optimistic update
+      // onMutate: (newUserInfo: Photo) => {
+      //   queryClient.setQueryData(
+      //     ['photos'],
+      //     (prevUsers: any) =>
+      //       [
+      //         ...prevUsers,
+      //         {
+      //           ...newUserInfo,
+      //           id: (Math.random() + 1).toString(36).substring(7),
+      //         },
+      //       ] as Photo[],
+      //   );
+      // },
+      // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+    });
+  }
+  
+  //READ hook (get users from api)
+  function useGetPhotos() {
+    return useQuery<Photo[]>({
+      queryKey: ['photos'],
+      queryFn: async () => {
+        //send api request here
+        await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
+        return Promise.resolve(photos);
+      },
+      refetchOnWindowFocus: false,
+    });
+  }
+  
+  //UPDATE hook (put user in api)
+  function useUpdatePhoto() {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: async (photo: Photo) => {
+        //send api update request here
+        await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
+        return Promise.resolve();
+      },
+      //client side optimistic update
+      onMutate: (newPhotoInfo: Photo) => {
+        queryClient.setQueryData(['photos'], (prevPhotos: any) =>
+          prevPhotos?.map((prevPhoto: Photo) =>
+            prevPhoto.id === newPhotoInfo.id ? newPhotoInfo : prevPhoto,
+          ),
+        );
+      },
+      // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+    });
+  }
+  
+  //DELETE hook (delete user in api)
+  function useDeletePhoto() {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: async (photoId: number) => {
+        //send api update request here
+        await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
+        return Promise.resolve();
+      },
+      //client side optimistic update
+      onMutate: (photoId: number) => {
+        queryClient.setQueryData(['photo'], (prevPhotos: any) =>
+          prevPhotos?.filter((photo: Photo) => photo.id !== photoId),
+        );
+      },
+      // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+    });
+  }
+  
+  const queryClient = new QueryClient();
+  
+  const ExampleWithProviders = () => (
+    //Put this with your other react-query providers near root of your app
+    <QueryClientProvider client={queryClient}>
+      <ManagementTable />
+    </QueryClientProvider>
+  );
+    
+  const validateRequired = (value: string) => !!value.length;
+  function validatePhoto(photo: Photo) {
+    return {
+      title: validateRequired(photo.title) ? undefined : 'Title is required',
+      tags: validateRequired(photo.tags) ? undefined : 'Tags are required',
+      status: validateRequired(photo.status) ? undefined : 'Status is required',
+      category: photo.category.length > 0 ? undefined : 'Category is required',
+      price: validateRequired(photo.price) ? undefined : 'Price is required',
+    };
+  }
+  
+  const columns = useMemo<MRT_ColumnDef<Photo>[]>(
+    () => [
+      {
+        accessorKey: 'id',
+        header: 'Id',
+        enableEditing: false,
+        size: 80,
+      },
+      {
+        accessorKey: 'image',
+        header: 'Image',
+        enableEditing: true,
+        Cell: ({ row }) => (
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                }}
+              >
+                <img
+                  alt="avatar"
+                  height={30}
+                  src={row.original.image}
+                  loading="lazy"
+                  style={{ borderRadius: '50%' }}
+                />
+              </Box>
+            ),
+        muiEditTextFieldProps: {
+          type: 'file',
+          accept: 'image/*',
+          required: true,
+          error: !!validationErrors.image,
+          helperText: validationErrors.image,
+          onChange: (e: any) => {
+            var file = e.target.files[0]; 
+            var reader = new FileReader();
+          
+            reader.onload = (event) => {
+              setUploadedFile(event.target?.result); 
+            };
+          
+            reader.readAsDataURL(file); 
+          
+          }
+        },
+      },
+      {
+        accessorKey: 'title',
+        header: 'Title',
+        muiEditTextFieldProps: {
+          required: true,
+          error: !!validationErrors.title,
+          helperText: validationErrors.title,
+        },
+      },
+      {
+        accessorKey: 'tags',
+        header: 'Tags',
+        muiEditTextFieldProps: {
+          required: true,
+          error: !!validationErrors.tags,
+          helperText: validationErrors.tags,
+        },
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        muiEditTextFieldProps: {
+          required: true,
+          error: !!validationErrors.status,
+          helperText: validationErrors.status,
+        },
+      }, 
+    {
+        accessorKey: 'category',
+        header: 'Category',
+        editVariant: 'select',
+        editSelectOptions: category,
+        muiEditTextFieldProps: {
+          select: true,
+          required: true,
+          error: !!validationErrors.category,
+          helperText: validationErrors.category,
+        },
+      
+      },
+      {
+        accessorKey: 'additionalCategory',
+        header: 'Additional category',
+        editVariant: 'select',
+        editSelectOptions: category,
+        muiEditTextFieldProps: {
+          select: true,
+          required: false,
+          error: !!validationErrors.category,
+          helperText: validationErrors.category,
+        },
+        
+      },
+      {
+        accessorKey: 'license',
+        header: 'License',
+        muiEditTextFieldProps: {
+          required: false,
+          error: !!validationErrors.license,
+          helperText: validationErrors.license,
+        }
+      },
+      {
+        accessorKey: 'price',
+        header: 'Price',
+        muiEditTextFieldProps: {
+          required: true,
+          error: !!validationErrors.price,
+          helperText: validationErrors.price,
+        }
+      },
+    ],
+    [validationErrors],
+  );
+
+
+  //hooks
+  const {
+    mutateAsync: addPhoto,
+    isPending: isAddingPhoto
+  } = useAddPhotoBetter();
+
+  const {
+    data: fetchedPhotos = [],
+    isError: isLoadingPhotosError,
+    isFetching: isFetchingPhotos,
+    isLoading: isLoadingPhotos,
+  } = useGetPhotos();
+
+  const {
+    mutateAsync: updatePhoto,
+    isPending: isUpdatingPhoto,
+  } = useUpdatePhoto();
+
+  const {
+    mutateAsync: deletePhoto,
+    isPending: isDeletingPhoto,
+  } = useDeletePhoto();
+
+  function useAddPhotoBetter() {
+    const { mutate } = usePutPhoto(); 
+
+    return useMutation({
+      mutationFn: async (photo: Photo) => {
+        const key = "ID1.jpg"
+
+        mutate({
+          photoId: key,
+          photo: fileUploaded!!
+        });
+        return Promise.resolve();
+      },
+    });
+  }
+
+  //actions
+  const handleAddPhoto: MRT_TableOptions<Photo>['onCreatingRowSave'] = async ({
+    values,
+    table,
+  }) => {
+    const newValidationErrors = validatePhoto(values);
+    if (Object.values(newValidationErrors).some((error) => error)) {
+      setValidationErrors(newValidationErrors);
+      return;
+    }
+    setValidationErrors({});
+    await addPhoto(values);  
+    table.setCreatingRow(null);
+  };
+
+  const handleSavePhoto: MRT_TableOptions<Photo>['onEditingRowSave'] = async ({
+    values,
+    table,
+  }) => {
+    const newValidationErrors = validatePhoto(values);
+    if (Object.values(newValidationErrors).some((error) => error)) {
+      setValidationErrors(newValidationErrors);
+      return;
+    }
+    setValidationErrors({});
+    await updatePhoto(values);
+    table.setEditingRow(null);
+  };
+
+  const openDeleteConfirmModal = (row: MRT_Row<Photo>) => {
+    if (window.confirm('Are you sure you want to delete this photo?')) {
+      deletePhoto(row.original.id);
+    }
+  };
+
+
+  const table = useMaterialReactTable({
+    columns,
+    data: fetchedPhotos,
+    createDisplayMode: 'modal',
+    editDisplayMode: 'modal',
+    enableEditing: true,
+    getRowId: (row) => row.id,
+    muiToolbarAlertBannerProps: isLoadingPhotosError
+      ? {
+        color: 'error',
+        children: 'Error loading data',
+      }
+      : undefined,
+    muiTableContainerProps: {
+      sx: {
+        minHeight: '500px',
+      },
+    },
+    onCreatingRowCancel: () => setValidationErrors({}),
+    onCreatingRowSave: handleAddPhoto,
+    onEditingRowCancel: () => setValidationErrors({}),
+    onEditingRowSave: handleSavePhoto,
+
+    renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
+      <>
+        <DialogTitle variant="h3">Add new photo</DialogTitle>
+        <DialogContent
+          sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+        >
+          {internalEditComponents} { }
+        </DialogContent>
+        <DialogActions>
+          <MRT_EditActionButtons variant="text" table={table} row={row} />
+        </DialogActions>
+      </>
+    ),
+    renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
+      <>
+        <DialogTitle variant="h3">Edit photo</DialogTitle>
+        <DialogContent
+          sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+        >
+          {internalEditComponents}
+        </DialogContent>
+        <DialogActions>
+          <MRT_EditActionButtons variant="text" table={table} row={row} />
+        </DialogActions>
+      </>
+    ),
+    renderRowActions: ({ row, table }) => (
+      <Box sx={{ display: 'flex', gap: '1rem' }}>
+        <Tooltip title="Edit">
+          <IconButton onClick={() => table.setEditingRow(row)}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Delete">
+          <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    ),
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Button
+        variant="contained"
+        onClick={() => {
+          table.setCreatingRow(true); //simplest way to open the create row modal with no default values
+          //or you can pass in a row object to set default values with the `createRow` helper function
+          // table.setCreatingRow(
+          //   createRow(table, {
+          //     //optionally pass in default values for the new row, useful for nested data or other complex scenarios
+          //   }),
+          // );
+        }}
+      >
+        Add photo
+      </Button>
+    ),
+    state: {
+      isLoading: isLoadingPhotos,
+      isSaving: isAddingPhoto || isUpdatingPhoto || isDeletingPhoto,
+      showAlertBanner: isLoadingPhotosError,
+      showProgressBars: isFetchingPhotos,
+    },
+  });
+
+  return <MaterialReactTable table={table} />;
 };
 
 export default ManagementTable;
