@@ -7,14 +7,20 @@ import { notFound, useRouter } from 'next/navigation';
 import AvatarPlaceholder from '@/../public/image/avatar-placeholder.svg';
 import ChipList from './ChipList';
 import Chip from '@/components/Chip/Chip';
+import { useTranslations } from 'next-intl';
+import Button from '@/components/Form/Button';
+import { usePopupStore } from '@/stores/popup';
+import AddPhotoToCart from '@/components/Popup/Popups/AddPhotoToCart';
 
 const Separator = () => {
   return <div className='my-5 border-b border-b-black border-opacity-10'></div>;
 };
 
 export default function Photo({ id }: { id: number }) {
+  const t = useTranslations('Photo');
   const query = usePhoto(id);
   const photo = query.data;
+  const pushPopup = usePopupStore((store) => store.pushPopup);
 
   const router = useRouter();
 
@@ -56,7 +62,7 @@ export default function Photo({ id }: { id: number }) {
                 )}
               </picture>
               <p>
-                by{' '}
+                {t('by')}{' '}
                 <span className='font-semibold'>
                   {photo.photograph?.displayedUserName}
                 </span>
@@ -66,28 +72,37 @@ export default function Photo({ id }: { id: number }) {
             <Separator />
 
             <p className='text-xl'>
-              <span className='text-2xl font-semibold'>Price:</span>{' '}
+              <span className='text-2xl font-semibold'>{t('price')}</span>{' '}
               {photo.price?.toLocaleString()} zł
             </p>
-            <p className='text-xl'>
-              <span className='text-2xl font-semibold'>
-                Commercial license price:
-              </span>{' '}
-              {photo.licensePrice?.toLocaleString()} zł
-            </p>
+            {photo.license && (
+              <p className='text-xl'>
+                <span className='text-2xl font-semibold'>
+                  {t('commercial-price')}
+                </span>{' '}
+                {photo.licensePrice?.toLocaleString()} zł
+              </p>
+            )}
 
             <div className='flex flex-col gap-5 mt-10'>
-              <ChipList name='Categories'>
+              <ChipList name={t('categories')}>
                 {photo?.categories?.map((category) => (
                   <Chip key={category.id}>{category.name}</Chip>
                 ))}
               </ChipList>
 
-              <ChipList name='Tags'>
+              <ChipList name={t('tags')}>
                 {photo?.tags?.map((tag) => (
                   <Chip key={tag.id}>{tag.name}</Chip>
                 ))}
+                {photo?.tags?.length === 0 && <p>{t('none')}</p>}
               </ChipList>
+
+              <Button
+                onClick={() => pushPopup(<AddPhotoToCart photo={photo} />)}
+              >
+                {t('cart-add')}
+              </Button>
             </div>
           </div>
         </div>

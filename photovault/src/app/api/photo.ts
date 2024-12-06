@@ -85,12 +85,37 @@ export async function getPhoto(id: number) {
       'id',
       'price',
       'tags',
+      'license',
       'licensePrice',
       'categories',
       'photograph.displayedUserName',
       'photograph.avatarURL',
       'photograph.user.username',
     ],
+  );
+}
+
+export async function getPhotosByIds(ids: Array<number>) {
+  const photos = await prisma.photo.findMany({
+    where: {
+      id: { in: ids },
+    },
+  });
+
+  if (photos?.length === 0) {
+    return null;
+  }
+
+  return photos.map((photo) =>
+    _.pick(
+      {
+        ...photo,
+        price: photo.price.toNumber(),
+        licensePrice: photo.licensePrice.toNumber(),
+        photoURL: getFilePublicUrl(photo.photoURL),
+      },
+      ['title', 'photoURL', 'id', 'price', 'license', 'licensePrice'],
+    ),
   );
 }
 

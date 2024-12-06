@@ -8,6 +8,7 @@ import Providers from './providers';
 import clsx from 'clsx';
 import { TunnelExit, TunnelProvider } from '@mittwald/react-tunnel';
 import './globals.css';
+import PopupController from '@/components/Popup/PopupController';
 
 // Fonts
 const inter = Inter({
@@ -63,6 +64,7 @@ export default async function RootLayout({
           <Providers>
             <Header />
             <main className='max-w-[var(--page-max-width)] mx-auto'>
+              <PopupController />
               {modal}
 
               {/* @see https://github.com/vercel/next.js/discussions/49749 */}

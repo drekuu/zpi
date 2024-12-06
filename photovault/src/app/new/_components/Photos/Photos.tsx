@@ -20,7 +20,12 @@ export default function Photos() {
         {photos && (
           <>
             {photos.map((photo) => (
-              <Link key={photo.id} href={`/photo/${photo.id}`} passHref>
+              <Link
+                scroll={false}
+                key={photo.id}
+                href={`/photo/${photo.id}`}
+                passHref
+              >
                 <Photo photo={photo} />
               </Link>
             ))}

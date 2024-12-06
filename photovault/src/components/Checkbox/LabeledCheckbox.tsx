@@ -7,6 +7,7 @@ interface LabeledCheckbox {
   checked: boolean;
   onClick?: () => void;
   noCheckbox?: boolean;
+  className?: string;
 }
 
 export default function LabeledCheckbox({
@@ -14,12 +15,16 @@ export default function LabeledCheckbox({
   label,
   checked,
   onClick,
+  className,
   noCheckbox = false,
 }: LabeledCheckbox) {
   return (
     <div
       onClick={onClick}
-      className='select-none cursor-pointer flex items-center justify-between'
+      className={clsx(
+        className,
+        'select-none gap-2 cursor-pointer flex items-center justify-between',
+      )}
     >
       <label
         onClick={(e) => e.preventDefault()}

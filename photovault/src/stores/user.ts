@@ -17,7 +17,7 @@ type UserStore = UserState & UserActions;
 export const useUserStore = create<UserStore>()(
   devtools(
     persist(
-      (set) => ({
+      (set): UserStore => ({
         loggedIn: false,
         userData: undefined,
         setLoggedIn: (state: boolean) => set({ loggedIn: state }),
