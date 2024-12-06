@@ -16,6 +16,10 @@ import {
   DialogTitle,
   IconButton,
   Tooltip,
+  Chip,
+  Autocomplete,
+  TextField,
+  Stack
 } from '@mui/material';
 import {
   QueryClient,
@@ -37,7 +41,7 @@ type Photo = {
   id: number;
   image: string;
   title: string;
-  tags: string;
+  tags: string[];
   status: 'Visible' | 'Hidden';
   category: string[];
   license?: string;
@@ -50,7 +54,7 @@ const photos: Photo[] = [
     image:
       'https://cdn.builder.io/api/v1/image/assets/TEMP/1931d5d1c17694c6da1c5360d8955aa360679067164f2aca17044fc0b0db554f?placeholderIfAbsent=true&apiKey=3db36c7a47f0421d9f87c365488106cc',
     title: 'Laying cat',
-    tags: '#cat #nature',
+    tags: ['cat', 'animal', 'nature'],
     status: 'Visible',
     category: ['Animals', 'Nature'],
     license: '465zł',
@@ -61,7 +65,7 @@ const photos: Photo[] = [
     image:
       'https://cdn.builder.io/api/v1/image/assets/TEMP/044c3c09b4b4108d2480c0aafa363627043ad0df7814c95fd1830be57a8eed1d?placeholderIfAbsent=true&apiKey=3db36c7a47f0421d9f87c365488106cc',
     title: 'Horse in mountains',
-    tags: '#horse #nature #mountains',
+    tags: ['horse', 'animal', 'nature'],
     status: 'Hidden',
     category: ['Animals', 'Nature'],
     price: '150zł',
@@ -71,13 +75,21 @@ const photos: Photo[] = [
     image:
       'https://cdn.builder.io/api/v1/image/assets/TEMP/099d10e267291aedff3d6f2a402521bde5258095a16ade67afbf1f38b590c30b?placeholderIfAbsent=true&apiKey=3db36c7a47f0421d9f87c365488106cc',
     title: 'Person in front of a sun...',
-    tags: '#person #people #sunset',
+    tags: ['person', 'people', 'sunset'],
     status: 'Visible',
     category: ['People', 'Landscape'],
     price: '30zł',
   },
 ];
 
+const tags = [
+  {value:'cat', label:'cat'},
+  {value:'animal', label:'animal'},
+  {value:'nature', label:'nature'},
+  {value:'horse', label:'horse'},
+  {value:'people', label:'people'},
+  {value:'sunset', label:'sunset'},
+];
 
 const category = [
   {value:'Animals', label:'Animals'},
@@ -227,13 +239,13 @@ const ManagementTable = () => {
     </QueryClientProvider>
   );
     
-  const validateRequired = (value: string) => !!value.length;
+  const validateRequired = (value: string | string[]) => Array.isArray(value) ? value.length > 0 : !!value.length;
   function validatePhoto(photo: Photo) {
     return {
       title: validateRequired(photo.title) ? undefined : 'Title is required',
       tags: validateRequired(photo.tags) ? undefined : 'Tags are required',
       status: validateRequired(photo.status) ? undefined : 'Status is required',
-      category: photo.category.length > 0 ? undefined : 'Category is required',
+      category: validateRequired(photo.category) ? undefined : 'Category is required',
       price: validateRequired(photo.price) ? undefined : 'Price is required',
     };
   }
@@ -298,11 +310,38 @@ const ManagementTable = () => {
       {
         accessorKey: 'tags',
         header: 'Tags',
-        muiEditTextFieldProps: {
-          required: true,
-          error: !!validationErrors.tags,
-          helperText: validationErrors.tags,
-        },
+        editComponent: ({ cell, column, row, table }) => (
+          <Autocomplete
+            multiple
+            freeSolo
+            value={cell.getValue() || []}
+            onChange={(event, newValue) => {
+              cell.setValue(newValue);
+            }}
+            options={tags} 
+            value={cell.getValue() || []}
+        onChange={(event, newValue) => {
+        // Ensure only the 'value' property is stored in the cell
+        const valuesOnly = newValue.map(tag => typeof tag === 'string' ? tag : tag.value); 
+        cell.setValue(valuesOnly); 
+      }}
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => (
+                <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField 
+                {...params} 
+                label="Tags" 
+                placeholder="Add tags" 
+                error={!!validationErrors.tags} // Apply error state 
+                helperText={validationErrors.tags} // Display error message
+              />
+            )}
+          />
+        ),
+        
       },
       {
         accessorKey: 'status',
