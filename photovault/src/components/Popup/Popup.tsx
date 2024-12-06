@@ -9,7 +9,7 @@ export interface BasePopupProps {
 }
 
 export interface PopupProps {
-  close: () => void;
+  close?: () => void;
 }
 
 export default function withPopup<AdditionalProps>(
@@ -33,7 +33,7 @@ export default function withPopup<AdditionalProps>(
     return (
       <dialog
         ref={dialogRef}
-        className='relative backdrop:backdrop-blur-sm w-11/12 max-w-[500px] m-auto rounded-xl overflow-clip py-8 px-6'
+        className='fixed top-0 left-0 backdrop:backdrop-blur-sm w-11/12 max-w-[500px] m-auto rounded-xl overflow-clip py-8 px-6'
         onClose={onDismiss}
       >
         <div className='w-full h-full overflow-y-auto' ref={contentRef}>

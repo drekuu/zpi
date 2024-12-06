@@ -10,6 +10,7 @@ interface CartState {
 interface CartActions {
   addToCart: (photo: CartPhoto) => void;
   removeFromCart: (index: number) => void;
+  editInCart: (index: number, photo: CartPhoto) => void;
   changeQuantity: (index: number, quantity: number) => void;
   isEmpty: () => boolean;
 }
@@ -29,6 +30,10 @@ export const useCartStore = create<CartStore>()(
           removeFromCart: (index: number) =>
             set((state) => {
               state.photos.splice(index, 1);
+            }),
+          editInCart: (index: number, photo: CartPhoto) =>
+            set((state) => {
+              state.photos[index] = photo;
             }),
           changeQuantity: (index: number, quantity: number) =>
             set((state) => {

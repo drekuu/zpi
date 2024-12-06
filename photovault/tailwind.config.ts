@@ -33,7 +33,9 @@ export default {
         'rammetto-one': ['var(--font-rammetto-one)'],
         afacad: ['var(--font-afacad)'],
       },
-      fontSize: {},
+      fontSize: {
+        xxl: '1.375rem',
+      },
       colors: {
         gray: '#f0f0f0',
         'dark-grey': '#909090',

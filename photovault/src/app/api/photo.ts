@@ -114,7 +114,7 @@ export async function getPhotosByIds(ids: Array<number>) {
         licensePrice: photo.licensePrice.toNumber(),
         photoURL: getFilePublicUrl(photo.photoURL),
       },
-      ['title, photoURL', 'id', 'price', 'license', 'licensePrice'],
+      ['title', 'photoURL', 'id', 'price', 'license', 'licensePrice'],
     ),
   );
 }

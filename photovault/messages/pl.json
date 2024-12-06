@@ -25,12 +25,17 @@
     "cart": "Koszyk"
   },
   "Popups": {
-    "AddPhotoToCart": {
+    "PhotoCart": {
       "select-format": "Wybierz format zdjęcia",
       "format-digital": "Cyfrowy",
       "format-physical": "Fizyczny",
-      "commercial-license": "Licencja komercyjna",
+      "commercial-license": "Licencja komercyjna"
+    },
+    "AddPhotoToCart": {
       "add": "Dodaj"
+    },
+    "EditCartPhoto": {
+      "edit": "Edytuj"
     }
   },
   "HomePage": {
@@ -127,5 +132,21 @@
     "categories": "Kategorie",
     "tags": "Tagi",
     "cart-add": "Dodaj do koszyka"
+  },
+  "Cart": {
+    "empty": "Koszyk jest pusty",
+    "CartItems": {
+      "title": "Koszyk",
+      "digital-copy": "Kopia cyfrowa",
+      "physical-copy": "Kopia fizyczna",
+      "commercial-license": "Licencja komercyjna"
+    },
+    "OrderSummary": {
+      "title": "Podsumowanie",
+      "subtotal": "Suma częściowa",
+      "delivery-fee": "Dostawa",
+      "total": "Suma",
+      "checkout": "Przejdź do kasy"
+    }
   }
 }

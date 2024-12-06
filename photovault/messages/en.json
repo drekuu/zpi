@@ -9,12 +9,17 @@
     "cart": "Cart"
   },
   "Popups": {
-    "AddPhotoToCart": {
+    "PhotoCart": {
       "select-format": "Select photo format",
       "format-digital": "Digital",
       "format-physical": "Physical",
-      "commercial-license": "Commercial license",
+      "commercial-license": "Commercial license"
+    },
+    "AddPhotoToCart": {
       "add": "Add"
+    },
+    "EditCartPhoto": {
+      "edit": "Edit"
     }
   },
   "HomePage": {
@@ -111,5 +116,21 @@
     "categories": "Categories",
     "tags": "Tags",
     "cart-add": "Add to cart"
+  },
+  "Cart": {
+    "empty": "Cart is empty",
+    "CartItems": {
+      "title": "Cart",
+      "digital-copy": "Digital copy",
+      "physical-copy": "Physical copy",
+      "commercial-license": "Commercial license"
+    },
+    "OrderSummary": {
+      "title": "Order summary",
+      "subtotal": "Subtotal",
+      "delivery-fee": "Delivery fee",
+      "total": "Total",
+      "checkout": "Go to checkout"
+    }
   }
 }

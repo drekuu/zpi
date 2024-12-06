@@ -56,7 +56,7 @@ export default function Modal({ children }: ModalProps) {
   return (
     <dialog
       ref={dialogRef}
-      className='relative backdrop:backdrop-blur-sm w-11/12 h-5/6 max-w-[1000px] m-auto rounded-4xl overflow-clip py-16 px-8'
+      className='fixed top-0 left-0 backdrop:backdrop-blur-sm w-11/12 h-5/6 max-w-[1000px] m-auto rounded-4xl overflow-clip py-16 px-8'
       onClose={onDismiss}
     >
       <div className='w-full h-full overflow-y-auto' ref={contentRef}>

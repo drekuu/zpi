@@ -1,22 +1,27 @@
 import withPopup, { PopupProps } from '@/components/Popup/Popup';
-import { FullPhoto } from '@/models/photo';
 import { useState } from 'react';
 import LabeledCheckbox from '@/components/Checkbox/LabeledCheckbox';
 import Button from '@/components/Form/Button';
 import { useCartStore } from '@/stores/cart';
+import { CartPhoto } from '@/models/cart';
+import { CartPhotoDetails } from '@/models/photo';
 import { useTranslations } from 'next-intl';
 
-interface AddPhotoToCartProps extends PopupProps {
-  photo: FullPhoto;
+interface EditCartPhotoProps extends PopupProps {
+  cartPhoto: CartPhoto;
+  photo: CartPhotoDetails;
+  index: number;
 }
 
-function AddPhotoToCart({ photo, close }: AddPhotoToCartProps) {
+function EditCartPhoto({ cartPhoto, photo, index, close }: EditCartPhotoProps) {
   const photoCartT = useTranslations('Popups.PhotoCart');
-  const t = useTranslations('Popups.AddPhotoToCart');
-  const [commercialLicense, setCommercialLicense] = useState(false);
-  const [digitalCopy, setDigitalCopy] = useState(true);
+  const t = useTranslations('Popups.EditCartPhoto');
+  const [commercialLicense, setCommercialLicense] = useState(
+    cartPhoto.commercialLicense,
+  );
+  const [digitalCopy, setDigitalCopy] = useState(cartPhoto.digitalCopy);
 
-  const addToCart = useCartStore((store) => store.addToCart);
+  const editInCart = useCartStore((store) => store.editInCart);
 
   return (
     <div>
@@ -45,19 +50,18 @@ function AddPhotoToCart({ photo, close }: AddPhotoToCartProps) {
       )}
       <Button
         onClick={() => {
-          addToCart({
-            photoId: photo.id!,
-            quantity: 1,
+          editInCart(index, {
+            ...cartPhoto,
             commercialLicense: commercialLicense,
             digitalCopy: digitalCopy,
           });
           close?.();
         }}
       >
-        {t('add')}
+        {t('edit')}
       </Button>
     </div>
   );
 }
 
-export default withPopup(AddPhotoToCart);
+export default withPopup(EditCartPhoto);
