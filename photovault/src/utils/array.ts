@@ -1,11 +1,12 @@
 /**
  * Expands an array with it's repeated values until it reaches a desired minimal length.
  * If the length of the array is bigger than the minimal length, then the original array is returned.
+ * If the original array is empty, then the result is empty aswell.
  * @param array Array to be expanded
  * @param minLength Minimal length of the result
  */
 export function extendWithDuplicates<T>(array: Array<T>, minLength: number) {
-  if (array.length >= minLength) {
+  if (array.length === 0 || array.length >= minLength) {
     return array;
   } else {
     const result: Array<T> = [];

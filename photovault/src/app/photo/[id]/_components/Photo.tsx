@@ -49,11 +49,11 @@ export default function Photo({ id }: { id: number }) {
               }
               className='select-none cursor-pointer flex items-center gap-2'
             >
-              <picture className='w-[50px] h-[50px] object-cover object-center'>
+              <picture className='w-[50px] h-[50px] object-cover object-center rounded-full'>
                 {photo.photograph?.avatarURL ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    className='w-full h-full'
+                    className='w-full h-full rounded-[inherit]'
                     src={photo.photograph.avatarURL}
                     alt=''
                   />

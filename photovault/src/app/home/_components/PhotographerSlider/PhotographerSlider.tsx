@@ -17,7 +17,7 @@ export default function PhotographerSlider() {
       {photographers && (
         <SliderSection title={t('new-photographers')}>
           {extendWithDuplicates(photographers, 10).map((photographer) => (
-            <div className='max-w-[450px]' key={photographer.id}>
+            <div className='max-w-[600px]' key={photographer.id}>
               <PhotographerCard photographer={photographer} />
             </div>
           ))}

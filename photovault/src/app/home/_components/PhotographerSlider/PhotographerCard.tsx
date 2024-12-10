@@ -19,10 +19,14 @@ export default function PhotographerCard({
       className='cursor-pointer gap-5 flex h-[150px] items-center p-4 border border-black rounded-2xxl'
       onClick={() => router.push(`/profile/${photographer.user!.username}`)}
     >
-      <picture className='max-w-[60px] aspect-square object-cover rounded-full'>
+      <picture className='flex-shink-0 max-w-[60px] aspect-square object-cover rounded-full'>
         {photographer.avatarURL ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={photographer.avatarURL} alt='' />
+          <img
+            className='rounded-[inherit]'
+            src={photographer.avatarURL}
+            alt=''
+          />
         ) : (
           <AvatarPlaceholder width='100%' height='100%' />
         )}
@@ -34,7 +38,9 @@ export default function PhotographerCard({
         {photographer.description && (
           <>
             <p className='text-xs text-dark-grey'>{t('about-me')}</p>
-            <p className='text-xs'>{photographer.description}</p>
+            <p className='text-xs text-ellipsis max-w-[200px] line-clamp-2'>
+              {photographer.description}
+            </p>
           </>
         )}
       </div>

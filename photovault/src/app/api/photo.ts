@@ -80,6 +80,12 @@ export async function getPhoto(id: number) {
       price: photo.price.toNumber(),
       licensePrice: photo.licensePrice.toNumber(),
       photoURL: getFilePublicUrl(photo.photoURL),
+      photograph: {
+        ...photo.photograph,
+        avatarURL: photo.photograph.avatarURL
+          ? getFilePublicUrl(photo.photograph.avatarURL)
+          : null,
+      },
     },
     [
       'title',
