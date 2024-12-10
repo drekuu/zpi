@@ -6,7 +6,7 @@ import Accordion from '@/components/Accordion/Accordion';
 import { useEffect, useMemo, useState } from 'react';
 import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
 import { notFound } from 'next/navigation';
-import { useAllCategories } from '@/services/query/category';
+import { useCategories } from '@/services/query/category';
 import { useTranslations } from 'next-intl';
 import { getLocale } from '@/services/localeClient';
 
@@ -23,7 +23,7 @@ export default function Category({
   const t = useTranslations('NewPage.Filters');
   const categoryT = useTranslations('Categories');
 
-  const query = useAllCategories();
+  const query = useCategories();
   const categories = query.data ? Object.values(query.data) : undefined;
 
   const [search, setSearch] = useState('');

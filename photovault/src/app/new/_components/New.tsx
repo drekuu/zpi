@@ -3,9 +3,9 @@
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
 import Filters from './Filters/Filters';
 import { usePathname } from 'next/navigation';
-import { useAllCategories } from '@/services/query/category';
+import { useCategories } from '@/services/query/category';
 import LoadedQueries from '@/components/LoadedQuery/LoadedQueries';
-import { useAllTags } from '@/services/query/tag';
+import { useTags } from '@/services/query/tag';
 import { useTranslations } from 'next-intl';
 import { getLocale } from '@/services/localeClient';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
@@ -16,29 +16,15 @@ export default function New({ children }: { children: ReactNode }) {
   const t = useTranslations('Categories');
   const pathname = usePathname();
 
-  const [startPathname, setStartPathname] = useState<string>();
   const [category, setCategory] = useState<string>();
-
-  /**
-   * Fixes following bug:
-   * 1. Open a modal
-   * 2. Navigate to a page from the modal (ex. user profile from photo modal)
-   * 3. Navigate back in the browser
-   */
-  useEffect(() => {
-    if (!startPathname && !pathname.startsWith('/new')) {
-      window.location.reload();
-    }
-  }, [pathname, startPathname]);
 
   useEffect(() => {
     if (!pathname.startsWith('/photo')) {
-      setStartPathname(pathname);
       setCategory(pathname.split('/')?.[2]);
     }
   }, [pathname]);
 
-  const categoriesQuery = useAllCategories();
+  const categoriesQuery = useCategories();
   const categories = categoriesQuery.data;
   const categoryName = useMemo(() => {
     if (category && categories?.[category]) {
@@ -48,7 +34,7 @@ export default function New({ children }: { children: ReactNode }) {
     return undefined;
   }, [categories, category]);
 
-  const tagsQuery = useAllTags();
+  const tagsQuery = useTags();
 
   return (
     <TunnelEntry staticEntryId='NewPage'>

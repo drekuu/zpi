@@ -56,16 +56,18 @@ export default function Modal({ children }: ModalProps) {
   return (
     <dialog
       ref={dialogRef}
-      className='fixed top-0 left-0 backdrop:backdrop-blur-sm w-11/12 h-5/6 max-w-[1000px] m-auto rounded-4xl overflow-clip py-16 px-8'
+      className='fixed top-0 left-0 backdrop:backdrop-blur-sm w-11/12 h-5/6 max-w-[1000px] m-auto rounded-4xl overflow-clip'
       onClose={onDismiss}
     >
-      <div className='w-full h-full overflow-y-auto' ref={contentRef}>
-        <div>
-          {children}
-          <CloseIcon
-            className='cursor-pointer absolute top-[25px] right-[25px]'
-            onClick={onDismiss}
-          />
+      <div className='w-full h-full py-16 px-8' ref={contentRef}>
+        <div className='w-full h-full overflow-y-auto'>
+          <div>
+            {children}
+            <CloseIcon
+              className='cursor-pointer absolute top-[25px] right-[25px]'
+              onClick={onDismiss}
+            />
+          </div>
         </div>
       </div>
     </dialog>

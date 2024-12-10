@@ -28,6 +28,24 @@ export async function getPhotographer(name: string) {
   ]);
 }
 
+export async function getPhotographers() {
+  const photographers = await prisma.photograph.findMany({
+    include: {
+      user: true,
+    },
+  });
+
+  return photographers.map((photograph) =>
+    _.pick(photograph, [
+      'displayedUserName',
+      'avatarUrl',
+      'description',
+      'user.username',
+      'id',
+    ]),
+  );
+}
+
 export async function getMyself() {
   const session = await verifySession();
   if (!session) {
