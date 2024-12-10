@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import {
+  getFeaturedPhotographers,
   getMyself,
   getPhotographer,
-  getPhotographers,
 } from '@/app/api/photograph';
 
 export function useMyself() {
@@ -19,9 +19,10 @@ export function usePhotographer(name: string) {
   });
 }
 
-export function usePhotographers() {
+export function useFeaturedPhotographers() {
   return useQuery({
-    queryKey: ['photographers'],
-    queryFn: () => getPhotographers().then((photographers) => photographers),
+    queryKey: ['featured-photographers'],
+    queryFn: () =>
+      getFeaturedPhotographers().then((photographers) => photographers),
   });
 }

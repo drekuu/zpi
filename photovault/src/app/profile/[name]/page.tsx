@@ -35,7 +35,7 @@ export default function Profile({ params }: { params: { name: string } }) {
                 <>
                   {photos.map((photo) => (
                     <div
-                      className='flex-auto  max-w-[300px] cursor-pointer'
+                      className='flex-auto max-w-[300px] cursor-pointer'
                       key={photo.id}
                     >
                       <picture>

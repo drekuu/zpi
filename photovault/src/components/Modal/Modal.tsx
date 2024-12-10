@@ -25,6 +25,7 @@ export default function Modal({ children }: ModalProps) {
   const pathname = usePathname();
   const dialogRef = useRef<ElementRef<'dialog'>>(null);
   const contentRef = useRef<ElementRef<'div'>>(null);
+  const [open, setOpen] = useState(true);
   const isPopupOpen = usePopupStore((store) => store.isOpen);
 
   const openedPathname = useState(pathname)[0];
@@ -36,20 +37,22 @@ export default function Modal({ children }: ModalProps) {
   }, [router, pathname, openedPathname]);
 
   useEffect(() => {
-    if (pathname !== openedPathname && dialogRef.current?.open) {
-      dialogRef.current?.close();
+    if (pathname !== openedPathname && open) {
+      setOpen(false);
     }
-  }, [router, openedPathname, pathname]);
+  }, [open, openedPathname, pathname]);
 
   useEffect(() => {
-    if (!dialogRef.current?.open) {
+    if (open) {
       dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
     }
-  }, []);
+  }, [open]);
 
   useOnClickOutside(contentRef, () => {
     if (!isPopupOpen()) {
-      onDismiss();
+      setOpen(false);
     }
   });
 

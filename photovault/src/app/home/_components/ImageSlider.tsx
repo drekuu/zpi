@@ -5,6 +5,7 @@ import { usePhotos } from '@/services/query/photo';
 import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
 import SliderSection from './SliderSection';
 import Link from 'next/link';
+import { extendWithDuplicates } from '@/utils/array';
 
 export default function ImageSlider() {
   const t = useTranslations('HomePage.Sections');
@@ -15,9 +16,9 @@ export default function ImageSlider() {
     <LoadedQuery query={query} handleError={true}>
       {photos && (
         <SliderSection title={t('new-photos')}>
-          {photos.map((photo) => (
+          {extendWithDuplicates(photos, 10).map((photo) => (
             <div className='!w-auto' key={photo.id}>
-              <Link href={`/photo/${photo.id}`}>
+              <Link scroll={false} href={`/photo/${photo.id}`}>
                 <picture>
                   <img
                     className='max-h-[220px]'

@@ -1,5 +1,5 @@
 import { Unpacked } from '@/utils/typescript';
-import { getPhotographers } from '@/app/api/photograph';
+import { getFeaturedPhotographers } from '@/app/api/photograph';
 
 export type PhotographUpdateData = {
   displayedUserName?: string;
@@ -8,6 +8,6 @@ export type PhotographUpdateData = {
   email?: string;
 };
 
-export type Photographer = Unpacked<
-  Awaited<ReturnType<typeof getPhotographers>>
+export type FeaturedPhotographer = Unpacked<
+  Awaited<ReturnType<typeof getFeaturedPhotographers>>
 >;
