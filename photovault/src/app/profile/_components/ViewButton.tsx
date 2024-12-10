@@ -10,10 +10,13 @@ const UserViewButton = ({ username }: UserViewButtonProps) => {
   const redirectToProfile = (username: string) => {
     const url = `/profile/${username}`;
     router.push(url);
-  }
-  
+  };
+
   return (
-    <button onClick={() =>redirectToProfile(username)} className="overflow-hidden self-center mt-16 font-medium text-white bg-black min-h-[44px] rounded-[62px] w-[236px]">
+    <button
+      onClick={() => redirectToProfile(username)}
+      className='overflow-hidden self-center mt-16 font-medium text-white bg-black min-h-[44px] rounded-[62px] w-[236px]'
+    >
       User view
     </button>
   );

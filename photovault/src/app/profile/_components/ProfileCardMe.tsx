@@ -2,10 +2,8 @@
 
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
-import ProfileAvatar from '../static/Profile_avatar_placeholder_large.png';
 import EditIcon from '../static/edit.svg';
 import EmailIcon from '../static/mail.svg';
-import Image from 'next/image';
 import { useMyself } from '@/services/query/photograph';
 import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -56,7 +54,9 @@ export default function PhotographerCardMe() {
     });
   };
 
-  const actualAvatarUrl = data?.avatarURL ? data.avatarURL : ProfileAvatar;
+  const actualAvatarUrl = data?.avatarURL
+    ? data.avatarURL
+    : '/image/avatar-placeholder.png';
 
   return (
     <LoadedQuery query={query} handleError={true}>
@@ -72,11 +72,13 @@ export default function PhotographerCardMe() {
                 placeholder={t('enter-avatar')}
               />
             ) : (
-              <Image
-                src={actualAvatarUrl}
-                alt={t('profile-picture')}
-                className='object-contain aspect-square w-[162px]'
-              />
+              <picture>
+                <img
+                  src={actualAvatarUrl}
+                  alt={t('profile-picture')}
+                  className='object-contain aspect-square w-[162px]'
+                />
+              </picture>
             )}
           </div>
 

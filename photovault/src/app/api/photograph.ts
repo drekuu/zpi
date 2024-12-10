@@ -21,12 +21,17 @@ export async function getPhotographer(name: string) {
     },
   });
 
-  return _.pick(photograph, [
-    'displayedUserName',
-    'avatarUrl',
-    'description',
-    'user.email',
-  ]);
+  return photograph
+    ? _.pick(
+        {
+          ...photograph,
+          avatarURL: photograph.avatarURL
+            ? getFilePublicUrl(photograph.avatarURL)
+            : null,
+        },
+        ['displayedUserName', 'avatarURL', 'description', 'user.email'],
+      )
+    : null;
 }
 
 export async function getFeaturedPhotographers() {
@@ -46,6 +51,9 @@ export async function getFeaturedPhotographers() {
     _.pick(
       {
         ...photograph,
+        avatarURL: photograph.avatarURL
+          ? getFilePublicUrl(photograph.avatarURL)
+          : null,
         photo: photograph.photo
           .slice(0, 2) // take max two photos
           .map((p) =>
@@ -59,7 +67,7 @@ export async function getFeaturedPhotographers() {
       [
         'id',
         'displayedUserName',
-        'avatarUrl',
+        'avatarURL',
         'description',
         'user.username',
         'photo',
@@ -84,12 +92,17 @@ export async function getMyself() {
     },
   });
 
-  return _.pick(photograph, [
-    'displayedUserName',
-    'avatarUrl',
-    'description',
-    'displayedEmail',
-  ]);
+  return photograph
+    ? _.pick(
+        {
+          ...photograph,
+          avatarURL: photograph.avatarURL
+            ? getFilePublicUrl(photograph.avatarURL)
+            : null,
+        },
+        ['displayedUserName', 'avatarURL', 'description', 'displayedEmail'],
+      )
+    : null;
 }
 
 export async function updateMyself(data: PhotographUpdateData) {
