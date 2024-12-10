@@ -5,6 +5,7 @@ import prisma from './_lib/prisma';
 import { verifySession } from '@/app/api/_lib/session';
 import { PhotographUpdateData } from '@/models/photograph';
 import { redirect } from 'next/navigation';
+import { getFilePublicUrl } from '@/app/api/_lib/cloud';
 
 export async function getPhotographer(name: string) {
   const photograph = await prisma.photograph.findFirst({
@@ -26,6 +27,45 @@ export async function getPhotographer(name: string) {
     'description',
     'user.email',
   ]);
+}
+
+export async function getFeaturedPhotographers() {
+  const photographers = await prisma.photograph.findMany({
+    where: {
+      photo: {
+        some: {},
+      },
+    },
+    include: {
+      user: true,
+      photo: true,
+    },
+  });
+
+  return photographers.map((photograph) =>
+    _.pick(
+      {
+        ...photograph,
+        photo: photograph.photo
+          .slice(0, 2) // take max two photos
+          .map((p) =>
+            _.pick({ ...p, photoURL: getFilePublicUrl(p.photoURL) }, [
+              'id',
+              'photoURL',
+              'title',
+            ]),
+          ),
+      },
+      [
+        'id',
+        'displayedUserName',
+        'avatarUrl',
+        'description',
+        'user.username',
+        'photo',
+      ],
+    ),
+  );
 }
 
 export async function getMyself() {

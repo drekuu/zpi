@@ -7,7 +7,7 @@ import {
 } from '@/app/api/photo';
 import { CartPhotosDetails, PhotoFilters } from '@/models/photo';
 
-export function usePhotos(filters: PhotoFilters) {
+export function usePhotos(filters?: PhotoFilters) {
   return useQuery({
     queryKey: ['photos', filters],
     queryFn: () => getPhotos(filters).then((photos) => photos),
@@ -36,7 +36,7 @@ export function usePhotosByIds(ids: Array<number>) {
   });
 }
 
-export function useGetPhotosByPhotographer(username: string) {
+export function usePhotosByPhotographer(username: string) {
   return useQuery({
     queryKey: ['photographer', 'photos', username],
     queryFn: () => getPhotosByPhotographer(username).then((photos) => photos),

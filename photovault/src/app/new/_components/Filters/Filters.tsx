@@ -8,8 +8,8 @@ import Price from './Price';
 import Tags from './Tags';
 import Button from '@/components/Form/Button';
 import { useNewPageStore } from '@/stores/page/new';
-import { useAllCategories } from '@/services/query/category';
-import { useAllTags } from '@/services/query/tag';
+import { useCategories } from '@/services/query/category';
+import { useTags } from '@/services/query/tag';
 import { useTranslations } from 'next-intl';
 
 const Separator = () => {
@@ -25,10 +25,10 @@ export default function Filters({ urlCategory }: FiltersProps) {
   const PAGE_PATH = '/new';
   const router = useRouter();
 
-  const categoriesQuery = useAllCategories();
+  const categoriesQuery = useCategories();
   const categories = categoriesQuery.data;
 
-  const tagsQuery = useAllTags();
+  const tagsQuery = useTags();
   const tags = tagsQuery.data;
 
   const { setCategoryFilter, setPriceRangeFilter, setTagsFilter } =

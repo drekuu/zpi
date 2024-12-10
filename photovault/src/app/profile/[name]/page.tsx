@@ -2,18 +2,18 @@
 
 import React from 'react';
 import ProfileCard from '../_components/ProfileCard';
-import { useGetPhotosByPhotographer } from '@/services/query/photo';
-import { useGetPhotographer } from '@/services/query/photograph';
+import { usePhotosByPhotographer } from '@/services/query/photo';
+import { usePhotographer } from '@/services/query/photograph';
 import LoadedQueries from '@/components/LoadedQuery/LoadedQueries';
 import { useTranslations } from 'next-intl';
 
 export default function Profile({ params }: { params: { name: string } }) {
   const t = useTranslations('Profile');
 
-  const photosQuery = useGetPhotosByPhotographer(params.name);
+  const photosQuery = usePhotosByPhotographer(params.name);
   const photos = photosQuery.data;
 
-  const photographerQuery = useGetPhotographer(params.name);
+  const photographerQuery = usePhotographer(params.name);
   const photographer = photographerQuery.data;
 
   return (
@@ -35,7 +35,7 @@ export default function Profile({ params }: { params: { name: string } }) {
                 <>
                   {photos.map((photo) => (
                     <div
-                      className='flex-auto  max-w-[300px] cursor-pointer'
+                      className='flex-auto max-w-[300px] cursor-pointer'
                       key={photo.id}
                     >
                       <picture>

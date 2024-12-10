@@ -6,7 +6,7 @@ import ProfileAvatar from '../static/Profile_avatar_placeholder_large.png';
 import EditIcon from '../static/edit.svg';
 import EmailIcon from '../static/mail.svg';
 import Image from 'next/image';
-import { useGetMyself } from '@/services/query/photograph';
+import { useMyself } from '@/services/query/photograph';
 import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateMyself } from '@/app/api/photograph';
@@ -16,7 +16,7 @@ export default function PhotographerCardMe() {
   const t = useTranslations('Profile');
 
   const queryClient = useQueryClient();
-  const query = useGetMyself();
+  const query = useMyself();
   const data = query.data;
 
   const { mutate } = useMutation({

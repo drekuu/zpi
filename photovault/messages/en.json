@@ -28,8 +28,7 @@
       "new-photos": "Discover new photos"
     },
     "Photographer": {
-      "about-me": "About me",
-      "from": "Photographer from {location}"
+      "about-me": "About me"
     }
   },
   "NewPage": {

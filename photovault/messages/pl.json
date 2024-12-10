@@ -44,8 +44,7 @@
       "new-photos": "Odkryj nowe zdjęcia"
     },
     "Photographer": {
-      "about-me": "O mnie",
-      "from": "Fotograf z {location}"
+      "about-me": "O mnie"
     }
   },
   "NewPage": {

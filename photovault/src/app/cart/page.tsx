@@ -5,7 +5,7 @@ import { useCartStore } from '@/stores/cart';
 import { usePhotosByIds } from '@/services/query/photo';
 import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
 import { useIsClient } from 'usehooks-ts';
-import Loading from '@/components/LoadedQuery/components/Loading';
+import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import CartItems from './components/CartItems/CartItems';
 import OrderSummary from './components/OrderSummary/OrderSummary';
 import { useTranslations } from 'next-intl';
@@ -24,7 +24,7 @@ export default function CartPage() {
       <Breadcrumbs />
 
       {!isClient || photos === undefined ? (
-        <Loading />
+        <LoadingSpinner />
       ) : (
         <>
           {isEmpty() || photos === null ? (
