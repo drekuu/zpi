@@ -172,14 +172,18 @@ export async function getPhotosByPhotographerWithDetails(username: string) {
       photoURL: getFilePublicUrl(photo.photoURL),
       tags: photo.tags.map((tag) => tag.name),
       categories: photo.categories.map((category) => category.name),
-    }
-  })
+    };
+  });
 }
 
-export async function putPhoto(photoname: string, photofile: StreamingBlobPayloadInputTypes, photo: Photo) {
-  console.log(photo)
-  console.log(photoname)
-  const session = await verifySession();  
+export async function putPhoto(
+  photoname: string,
+  photofile: FormData,
+  photo: Photo,
+) {
+  console.log(photo);
+  console.log(photoname);
+  const session = await verifySession();
   const prismaResponse = await prisma.photo.create({
     data: {
       photographId: session!!.photographId!!,
@@ -194,25 +198,29 @@ export async function putPhoto(photoname: string, photofile: StreamingBlobPayloa
       categories: {
         connect: photo.categories.map((categoryId) => ({ id: categoryId })),
       },
-  }});
+    },
+  });
 
-  const keyName = prismaResponse.id + photoname
+  const keyName = prismaResponse.id + photoname;
 
   prisma.photo.update({
     where: {
-      id: prismaResponse.id ,
+      id: prismaResponse.id,
     },
     data: {
-      photoURL: keyName
-    }
-  })
+      photoURL: keyName,
+    },
+  });
 
-  await putFile(keyName, photofile);
+  const file = photofile.get('image') as File;
+  const arrayBuffer = await file.arrayBuffer();
+  console.log(arrayBuffer);
+  await putFile(keyName, Buffer.from(arrayBuffer));
 
   return { status: 200, content: 'ok' };
 }
 
-export async function updatePhoto(photo: Photo) { 
+export async function updatePhoto(photo: Photo) {
   prisma.photo.update({
     where: {
       id: photo.id,
@@ -228,7 +236,8 @@ export async function updatePhoto(photo: Photo) {
       categories: {
         set: photo.categories.map((categoryId) => ({ id: categoryId })),
       },
-  }});
+    },
+  });
 
   return { status: 200, content: 'ok' };
 }

@@ -38,7 +38,7 @@ export async function putFile(
   body?: StreamingBlobPayloadInputTypes,
 ) {
   try {
-    // console.log('[cloud:putFile] keyName: ', keyName, 'body: ', body);
+    console.log('[cloud:putFile] keyName: ', keyName, 'body: ', body);
     return await s3.send(
       new PutObjectCommand({
         Bucket: BUCKET_NAME,
