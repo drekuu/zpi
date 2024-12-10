@@ -37,6 +37,7 @@ export async function signin(
 
   await createSession({
     userId: user.id,
+    photographId: user.photograph?.id,
     isPhotograph: !!user.photograph,
   });
 

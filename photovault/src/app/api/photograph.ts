@@ -24,7 +24,7 @@ export async function getPhotographer(name: string) {
     'displayedUserName',
     'avatarUrl',
     'description',
-    'user.email',
+    'displayedEmail',
   ]);
 }
 
