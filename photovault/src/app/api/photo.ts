@@ -2,9 +2,10 @@
 
 import prisma from './_lib/prisma';
 import { getFilePublicUrl, putFile } from './_lib/cloud';
-import { PhotoFilters } from '@/models/photo';
+import { Photo, PhotoFilters } from '@/models/photo';
 import { StreamingBlobPayloadInputTypes } from '@smithy/types';
 import _ from 'lodash';
+import { verifySession } from './_lib/session';
 
 export async function getPhotos(filters?: PhotoFilters) {
   const photos = await prisma.photo.findMany({
@@ -150,40 +151,83 @@ export async function getPhotosByPhotographer(username: string) {
   );
 }
 
-export async function putPhoto(photoId: string, photo: StreamingBlobPayloadInputTypes) {
-  await putFile(photoId, photo);
-  await prisma.photo.create({
-    data: {
-      // photographId        Int
-      // photoURL            String
-      // title               String
-      // license             Boolean
-      // tags                Tag[]
-      // price               Decimal
-      // licensePrice        Decimal
-      // categories          Category[]
-      // digitalTransaction  DigitalTransaction[]
-      // physicalTransaction PhysicalTransaction[]
-      photographId: 2,
-      photoURL: photoId,
-      title: 'New photo',
-      license: false,
-      tags: {
-        connect: [
-          {
-            id: 1,
-          },
-        ],
+export async function getPhotosByPhotographerWithDetails(username: string) {
+  const photos = await prisma.photo.findMany({
+    where: {
+      photograph: {
+        user: {
+          username: username,
+        },
       },
-      price: 0,
-      licensePrice: 0,
-      categories: {
-        connect: [
-          {
-            id: 1,
-          },
-        ],
     },
+    include: {
+      tags: true,
+      categories: true,
+    },
+  });
+
+  return photos.map((photo) => {
+    return {
+      ...photo,
+      photoURL: getFilePublicUrl(photo.photoURL),
+      tags: photo.tags.map((tag) => tag.name),
+      categories: photo.categories.map((category) => category.name),
+    }
+  })
+}
+
+export async function putPhoto(photoname: string, photofile: StreamingBlobPayloadInputTypes, photo: Photo) {
+  console.log(photo)
+  console.log(photoname)
+  const session = await verifySession();  
+  const prismaResponse = await prisma.photo.create({
+    data: {
+      photographId: session!!.photographId!!,
+      photoURL: photoname,
+      title: photo.title,
+      license: !!photo.license,
+      tags: {
+        connect: photo.tags.map((tagId) => ({ id: tagId })),
+      },
+      price: photo.price,
+      licensePrice: photo.licensePrice ?? 0,
+      categories: {
+        connect: photo.categories.map((categoryId) => ({ id: categoryId })),
+      },
+  }});
+
+  const keyName = prismaResponse.id + photoname
+
+  prisma.photo.update({
+    where: {
+      id: prismaResponse.id ,
+    },
+    data: {
+      photoURL: keyName
+    }
+  })
+
+  await putFile(keyName, photofile);
+
+  return { status: 200, content: 'ok' };
+}
+
+export async function updatePhoto(photo: Photo) { 
+  prisma.photo.update({
+    where: {
+      id: photo.id,
+    },
+    data: {
+      title: photo.title,
+      license: !!photo.license,
+      tags: {
+        set: photo.tags.map((tagId) => ({ id: tagId })),
+      },
+      price: photo.price,
+      licensePrice: photo.licensePrice ?? 0,
+      categories: {
+        set: photo.categories.map((categoryId) => ({ id: categoryId })),
+      },
   }});
 
   return { status: 200, content: 'ok' };

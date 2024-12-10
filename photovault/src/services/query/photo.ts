@@ -1,12 +1,6 @@
-import {
-  getPhotos,
-  getPhoto,
-  getPhotosByPhotographer,
-  getPhotosByIds,
-  putPhoto,
-} from '@/app/api/photo';
-import { CartPhotosDetails, PhotoFilters } from '@/models/photo';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { CartPhotosDetails, FullPhoto, PhotoFilters } from '@/models/photo';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getPhotos, getPhoto, getPhotosByPhotographer, putPhoto, getPhotosByIds, getPhotosByPhotographerWithDetails, updatePhoto } from '@/app/api/photo';
 import { StreamingBlobPayloadInputTypes } from '@smithy/types';
 
 export function usePhotos(filters?: PhotoFilters) {
@@ -45,9 +39,28 @@ export function usePhotosByPhotographer(username: string) {
   });
 }
 
+export function useGetPhotosByPhotographerWithDetails(username: string) {
+  return useQuery({
+    queryKey: ['photographer', 'photos', username, 'details'],
+    queryFn: () => getPhotosByPhotographerWithDetails(username).then((photos) => photos),
+  });
+}
+
 export function usePutPhoto() {
   const { mutate } = useMutation({
-    mutationFn: (a: {photoId: string, photo: StreamingBlobPayloadInputTypes}) => putPhoto(a.photoId, a.photo),
+    mutationFn: (props: {photoname: string, photofile: StreamingBlobPayloadInputTypes, photo: FullPhoto}) => putPhoto(props.photoname, props.photofile, props.photo),
+    onSuccess: (response) => {
+      console.log("Success")
+    },
+    onError: (error) => console.error('Error:', error),
+  });
+  return { mutate }
+}
+
+export function useUpdatePhoto() {
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: (props: {photo: FullPhoto}) => updatePhoto(props.photo),
     onSuccess: (response) => {
       console.log("Success")
     },

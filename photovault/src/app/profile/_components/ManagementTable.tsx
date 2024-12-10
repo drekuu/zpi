@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   MRT_EditActionButtons,
   MaterialReactTable,
@@ -32,74 +32,61 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { values } from 'lodash';
 import { putFile } from '@/app/api/_lib/cloud';
-import { putPhoto } from '@/app/api/photo';
-import { usePutPhoto } from '@/services/query/photo';
+import { getPhotosByPhotographer, putPhoto } from '@/app/api/photo';
+import { useGetPhotosByPhotographerWithDetails, usePhotos, usePutPhoto } from '@/services/query/photo';
 import { StreamingBlobPayloadInputTypes } from '@smithy/types';
-
+import { getAllTags } from '@/app/api/tag';
+import { Photo as PhotoType } from '@/models/photo';
+import { getAllCategories } from '@/app/api/category';
+import { useSessionStorage } from 'usehooks-ts';
+import { useUserStore } from '@/stores/user';
 
 type Photo = {
   id: number;
-  image: string;
+  photoUrl: string;
   title: string;
   tags: string[];
   status: 'Visible' | 'Hidden';
-  category: string[];
+  categories: string[];
+  additionalcategories?: string[];
   license?: string;
-  price: string;
+  price: number;
 }
 
-const photos: Photo[] = [
-  {
-    id: 1,
-    image:
-      'https://cdn.builder.io/api/v1/image/assets/TEMP/1931d5d1c17694c6da1c5360d8955aa360679067164f2aca17044fc0b0db554f?placeholderIfAbsent=true&apiKey=3db36c7a47f0421d9f87c365488106cc',
-    title: 'Laying cat',
-    tags: ['cat', 'animal', 'nature'],
-    status: 'Visible',
-    category: ['Animals', 'Nature'],
-    license: '465zł',
-    price: '100 zł',
-  },
-  {
-    id: 2,
-    image:
-      'https://cdn.builder.io/api/v1/image/assets/TEMP/044c3c09b4b4108d2480c0aafa363627043ad0df7814c95fd1830be57a8eed1d?placeholderIfAbsent=true&apiKey=3db36c7a47f0421d9f87c365488106cc',
-    title: 'Horse in mountains',
-    tags: ['horse', 'animal', 'nature'],
-    status: 'Hidden',
-    category: ['Animals', 'Nature'],
-    price: '150zł',
-  },
-  {
-    id: 3,
-    image:
-      'https://cdn.builder.io/api/v1/image/assets/TEMP/099d10e267291aedff3d6f2a402521bde5258095a16ade67afbf1f38b590c30b?placeholderIfAbsent=true&apiKey=3db36c7a47f0421d9f87c365488106cc',
-    title: 'Person in front of a sun...',
-    tags: ['person', 'people', 'sunset'],
-    status: 'Visible',
-    category: ['People', 'Landscape'],
-    price: '30zł',
-  },
-];
+// const photos: Photo[] = [
+//   {
+//     id: 1,
+//     image:
+//       'https://cdn.builder.io/api/v1/image/assets/TEMP/1931d5d1c17694c6da1c5360d8955aa360679067164f2aca17044fc0b0db554f?placeholderIfAbsent=true&apiKey=3db36c7a47f0421d9f87c365488106cc',
+//     title: 'Laying cat',
+//     tags: ['cat', 'animal', 'nature'],
+//     status: 'Visible',
+//     categories: ['Animals', 'Nature'],
+//     license: '465zł',
+//     price: '100 zł',
+//   },
+//   {
+//     id: 2,
+//     image:
+//       'https://cdn.builder.io/api/v1/image/assets/TEMP/044c3c09b4b4108d2480c0aafa363627043ad0df7814c95fd1830be57a8eed1d?placeholderIfAbsent=true&apiKey=3db36c7a47f0421d9f87c365488106cc',
+//     title: 'Horse in mountains',
+//     tags: ['horse', 'animal', 'nature'],
+//     status: 'Hidden',
+//     categories: ['Animals', 'Nature'],
+//     price: '150zł',
+//   },
+//   {
+//     id: 3,
+//     image:
+//       'https://cdn.builder.io/api/v1/image/assets/TEMP/099d10e267291aedff3d6f2a402521bde5258095a16ade67afbf1f38b590c30b?placeholderIfAbsent=true&apiKey=3db36c7a47f0421d9f87c365488106cc',
+//     title: 'Person in front of a sun...',
+//     tags: ['person', 'people', 'sunset'],
+//     status: 'Visible',
+//     categories: ['People', 'Landscape'],
+//     price: '30zł',
+//   },
+// ];
 
-const tags = [
-  {value:'cat', label:'cat'},
-  {value:'animal', label:'animal'},
-  {value:'nature', label:'nature'},
-  {value:'horse', label:'horse'},
-  {value:'people', label:'people'},
-  {value:'sunset', label:'sunset'},
-];
-
-const category = [
-  {value:'Animals', label:'Animals'},
-  {value:'Nature', label:'Nature'},
-  {value:'People', label:'People'},
-  {value:'Landscape', label:'Landscape'},
-  {value:'City', label:'City'},
-  {value:'Abstract', label:'Abstract'},
-  {value:'Other', label:'Other'},
-];
 /* 
 const ManagementTable = () => {
   return (
@@ -110,7 +97,7 @@ const ManagementTable = () => {
             <div className='flex shrink-0 w-5 h-5 bg-white rounded-md border-2 border-solid border-zinc-300' />
           </div>
           <div className='flex flex-wrap flex-1 shrink gap-2 justify-center items-center h-full text-sm font-bold tracking-normal leading-5 whitespace-nowrap basis-0 min-w-[240px] text-zinc-800 max-md:max-w-full'>
-            {['Photos', 'Status', 'Category', 'License', 'Price'].map(
+            {['Photos', 'Status', 'categories', 'License', 'Price'].map(
               (header, index) => (
                 <div
                   key={index}
@@ -144,100 +131,45 @@ const ManagementTable = () => {
 };
  */
 
-const ManagementTable = () => {
+interface ManagamentTableProps {
+  username: string;
+}
+
+const ManagementTable = ({ username } : ManagamentTableProps) => {
+
+  const [tags, setTags] = useState<{ id: number; name: string; }[]>([]);
+  const [categories, setCategories] = useState<{ id: number; name: string; }[]>([]);
+
+  getAllTags().then(fetchedTags => {
+    if(tags.length === 0){
+      console.log(fetchedTags)
+      setTags(fetchedTags)
+    }
+  })
+
+  getAllCategories().then(fetchedCategories => {
+    if(categories.length === 0){
+      console.log(fetchedCategories)
+      setCategories(fetchedCategories)
+    }
+  })
+
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string | undefined>
   >({});
 
   const [fileUploaded, setUploadedFile] = useState<Blob>();
+  const [photoFilename, setPhotoFilename] = useState<string>();
 
-  function useAddPhoto() {
-    const queryClient = useQueryClient();
-    return useMutation({
-      mutationFn: async (photo: Photo) => {
-        const key = "ID1"
-        const photoBlob = new Blob([photo.image], { type: 'image/jpeg' });
-        return Promise.resolve();
-      },
-      //client side optimistic update
-      // onMutate: (newUserInfo: Photo) => {
-      //   queryClient.setQueryData(
-      //     ['photos'],
-      //     (prevUsers: any) =>
-      //       [
-      //         ...prevUsers,
-      //         {
-      //           ...newUserInfo,
-      //           id: (Math.random() + 1).toString(36).substring(7),
-      //         },
-      //       ] as Photo[],
-      //   );
-      // },
-      // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
-    });
-  }
+
+  // const queryClient = new QueryClient();
   
-  //READ hook (get users from api)
-  function useGetPhotos() {
-    return useQuery<Photo[]>({
-      queryKey: ['photos'],
-      queryFn: async () => {
-        //send api request here
-        await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-        return Promise.resolve(photos);
-      },
-      refetchOnWindowFocus: false,
-    });
-  }
-  
-  //UPDATE hook (put user in api)
-  function useUpdatePhoto() {
-    const queryClient = useQueryClient();
-    return useMutation({
-      mutationFn: async (photo: Photo) => {
-        //send api update request here
-        await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-        return Promise.resolve();
-      },
-      //client side optimistic update
-      onMutate: (newPhotoInfo: Photo) => {
-        queryClient.setQueryData(['photos'], (prevPhotos: any) =>
-          prevPhotos?.map((prevPhoto: Photo) =>
-            prevPhoto.id === newPhotoInfo.id ? newPhotoInfo : prevPhoto,
-          ),
-        );
-      },
-      // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
-    });
-  }
-  
-  //DELETE hook (delete user in api)
-  function useDeletePhoto() {
-    const queryClient = useQueryClient();
-    return useMutation({
-      mutationFn: async (photoId: number) => {
-        //send api update request here
-        await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-        return Promise.resolve();
-      },
-      //client side optimistic update
-      onMutate: (photoId: number) => {
-        queryClient.setQueryData(['photo'], (prevPhotos: any) =>
-          prevPhotos?.filter((photo: Photo) => photo.id !== photoId),
-        );
-      },
-      // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
-    });
-  }
-  
-  const queryClient = new QueryClient();
-  
-  const ExampleWithProviders = () => (
-    //Put this with your other react-query providers near root of your app
-    <QueryClientProvider client={queryClient}>
-      <ManagementTable />
-    </QueryClientProvider>
-  );
+  // const ExampleWithProviders = () => (
+  //   //Put this with your other react-query providers near root of your app
+  //   <QueryClientProvider client={queryClient}>
+  //     <ManagementTable />
+  //   </QueryClientProvider>
+  // );
     
   const validateRequired = (value: string | string[]) => Array.isArray(value) ? value.length > 0 : !!value.length;
   function validatePhoto(photo: Photo) {
@@ -245,7 +177,7 @@ const ManagementTable = () => {
       title: validateRequired(photo.title) ? undefined : 'Title is required',
       tags: validateRequired(photo.tags) ? undefined : 'Tags are required',
       status: validateRequired(photo.status) ? undefined : 'Status is required',
-      category: validateRequired(photo.category) ? undefined : 'Category is required',
+      categories: validateRequired(photo.categories) ? undefined : 'categories is required',
       price: validateRequired(photo.price) ? undefined : 'Price is required',
     };
   }
@@ -259,7 +191,7 @@ const ManagementTable = () => {
         size: 80,
       },
       {
-        accessorKey: 'image',
+        accessorKey: 'photoUrl',
         header: 'Image',
         enableEditing: true,
         Cell: ({ row }) => (
@@ -271,9 +203,9 @@ const ManagementTable = () => {
                 }}
               >
                 <img
-                  alt="avatar"
+                  alt="photo"
                   height={30}
-                  src={row.original.image}
+                  src={row.original.photoUrl}
                   loading="lazy"
                   style={{ borderRadius: '50%' }}
                 />
@@ -286,8 +218,10 @@ const ManagementTable = () => {
           error: !!validationErrors.image,
           helperText: validationErrors.image,
           onChange: (e: any) => {
-            var file = e.target.files[0]; 
+            var file = e.target.files[0];
             var reader = new FileReader();
+            setPhotoFilename(file.name);
+            debugger
           
             reader.onload = (event) => {
               setUploadedFile(event.target?.result); 
@@ -310,37 +244,44 @@ const ManagementTable = () => {
       {
         accessorKey: 'tags',
         header: 'Tags',
-        editComponent: ({ cell, column, row, table }) => (
-          <Autocomplete
-            multiple
-            freeSolo
-            value={cell.getValue() || []}
-            onChange={(event, newValue) => {
-              cell.setValue(newValue);
-            }}
-            options={tags} 
-            value={cell.getValue() || []}
-        onChange={(event, newValue) => {
-        // Ensure only the 'value' property is stored in the cell
-        const valuesOnly = newValue.map(tag => typeof tag === 'string' ? tag : tag.value); 
-        cell.setValue(valuesOnly); 
-      }}
-            renderTags={(value, getTagProps) =>
-              value.map((option, index) => (
-                <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-              ))
-            }
-            renderInput={(params) => (
-              <TextField 
-                {...params} 
-                label="Tags" 
-                placeholder="Add tags" 
-                error={!!validationErrors.tags} // Apply error state 
-                helperText={validationErrors.tags} // Display error message
-              />
-            )}
-          />
-        ),
+        editSelectOptions: tags.map(tag => tag.name),
+        muiEditTextFieldProps: {
+          select: true,
+          required: true,
+          error: !!validationErrors.tags,
+          helperText: validationErrors.tags,
+        },
+      //   editComponent: ({ cell, column, row, table }) => (
+      //     <Autocomplete
+      //       multiple
+      //       freeSolo
+      //       value={cell.getValue() || []}
+      //       onChange={(event, newValue) => {
+      //         cell.setValue(newValue);
+      //       }}
+      //       // options={tags} 
+      //       value={cell.getValue() || []}
+      //   onChange={(event, newValue) => {
+      //   // Ensure only the 'value' property is stored in the cell
+      //   const valuesOnly = newValue.map(tag => typeof tag === 'string' ? tag : tag.value); 
+      //   cell.setValue(valuesOnly); 
+      // }}
+      //       renderTags={(value, getTagProps) =>
+      //         value.map((option, index) => (
+      //           <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+      //         ))
+      //       }
+      //       renderInput={(params) => (
+      //         <TextField 
+      //           {...params} 
+      //           label="Tags" 
+      //           placeholder="Add tags" 
+      //           error={!!validationErrors.tags} // Apply error state 
+      //           helperText={validationErrors.tags} // Display error message
+      //         />
+      //       )}
+      //     />
+      //   ),
         
       },
       {
@@ -353,28 +294,28 @@ const ManagementTable = () => {
         },
       }, 
     {
-        accessorKey: 'category',
-        header: 'Category',
+        accessorKey: 'categories',
+        header: 'categories',
         editVariant: 'select',
-        editSelectOptions: category,
+        editSelectOptions: categories.map(categories => categories.name),
         muiEditTextFieldProps: {
           select: true,
           required: true,
-          error: !!validationErrors.category,
-          helperText: validationErrors.category,
+          error: !!validationErrors.categories,
+          helperText: validationErrors.categories,
         },
       
       },
       {
-        accessorKey: 'additionalCategory',
-        header: 'Additional category',
+        accessorKey: 'additionalcategories',
+        header: 'Additional categories',
         editVariant: 'select',
-        editSelectOptions: category,
+        editSelectOptions: categories.map(categories => categories.name),
         muiEditTextFieldProps: {
           select: true,
           required: false,
-          error: !!validationErrors.category,
-          helperText: validationErrors.category,
+          error: !!validationErrors.categories,
+          helperText: validationErrors.categories,
         },
         
       },
@@ -397,7 +338,7 @@ const ManagementTable = () => {
         }
       },
     ],
-    [validationErrors],
+    [validationErrors, tags],
   );
 
 
@@ -405,14 +346,16 @@ const ManagementTable = () => {
   const {
     mutateAsync: addPhoto,
     isPending: isAddingPhoto
-  } = useAddPhotoBetter();
+  } = useAddPhoto();
 
   const {
     data: fetchedPhotos = [],
     isError: isLoadingPhotosError,
     isFetching: isFetchingPhotos,
     isLoading: isLoadingPhotos,
-  } = useGetPhotos();
+  } = useGetPhotosByPhotographerWithDetails(username)
+
+  console.log(fetchedPhotos)
 
   const {
     mutateAsync: updatePhoto,
@@ -424,22 +367,67 @@ const ManagementTable = () => {
     isPending: isDeletingPhoto,
   } = useDeletePhoto();
 
-  function useAddPhotoBetter() {
+  function useAddPhoto() {
     const { mutate } = usePutPhoto(); 
 
     return useMutation({
-      mutationFn: async (photo: Photo) => {
-        const key = "ID1.jpg"
-
+      mutationFn: async (photo: PhotoType) => {
+        console.log(photo)
+        photo.categories = [photo.categories, photo.additionalcategories];
+        photo.tags = [photo.tags]
+        photo.tags = photo.tags.map(tag => tags.find(t => t.name === tag)!.id);
+        photo.categories = photo.categories.map(category => categories.find(c => c.name === category)!.id);
+        console.log(photoFilename)
         mutate({
-          photoId: key,
-          photo: fileUploaded!!
+          photoname: photoFilename ?? "missing",
+          photofile: fileUploaded!!,
+          photo: photo
         });
         return Promise.resolve();
       },
     });
   }
 
+    //UPDATE hook (put user in api)
+    function useUpdatePhoto() {
+      const queryClient = useQueryClient();
+      return useMutation({
+        mutationFn: async (photo: Photo) => {
+          //send api update request here
+          await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
+          return Promise.resolve();
+        },
+        //client side optimistic update
+        onMutate: (newPhotoInfo: Photo) => {
+          queryClient.setQueryData(['photos'], (prevPhotos: any) =>
+            prevPhotos?.map((prevPhoto: Photo) =>
+              prevPhoto.id === newPhotoInfo.id ? newPhotoInfo : prevPhoto,
+            ),
+          );
+        },
+        // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+      });
+    }
+    
+    //DELETE hook (delete user in api)
+    function useDeletePhoto() {
+      const queryClient = useQueryClient();
+      return useMutation({
+        mutationFn: async (photoId: number) => {
+          //send api update request here
+          await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
+          return Promise.resolve();
+        },
+        //client side optimistic update
+        onMutate: (photoId: number) => {
+          queryClient.setQueryData(['photo'], (prevPhotos: any) =>
+            prevPhotos?.filter((photo: Photo) => photo.id !== photoId),
+          );
+        },
+        // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+      });
+    }
+    
   //actions
   const handleAddPhoto: MRT_TableOptions<Photo>['onCreatingRowSave'] = async ({
     values,
