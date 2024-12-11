@@ -1,6 +1,6 @@
 import { CartPhotosDetails, FullPhoto, PhotoFilters } from '@/models/photo';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getPhotos, getPhoto, getPhotosByPhotographer, putPhoto, getPhotosByIds, getPhotosByPhotographerWithDetails, updatePhoto } from '@/app/api/photo';
+import { getPhotos, getPhoto, getPhotosByPhotographer, putPhoto, getPhotosByPhotographerWithDetails, updatePhoto, deletePhoto, getPhotosByIds } from '@/app/api/photo';
 
 export function usePhotos(filters?: PhotoFilters) {
   return useQuery({
@@ -42,33 +42,46 @@ export function useGetPhotosByPhotographerWithDetails(username: string) {
   return useQuery({
     queryKey: ['photographer', 'photos', username, 'details'],
     queryFn: () =>
-      getPhotosByPhotographerWithDetails(username).then((photos) => photos),
+      getPhotosByPhotographerWithDetails(username).then((photos) => { 
+        return photos 
+      }),
   });
 }
 
 export function usePutPhoto() {
-  const { mutate } = useMutation({
-    mutationFn: (props: {
+  return useMutation({
+   mutationFn: (props: {
       photoname: string;
       photofile: FormData;
       photo: FullPhoto;
-    }) => putPhoto(props.photoname, props.photofile, props.photo),
+    }) => {
+      return putPhoto(props.photoname, props.photofile, props.photo)
+    },
     onSuccess: (response) => {
       console.log('Success');
     },
     onError: (error) => console.error('Error:', error),
   });
-  return { mutate };
 }
 
 export function useUpdatePhoto() {
-  const queryClient = useQueryClient();
-  const { mutate } = useMutation({
-    mutationFn: (props: {photo: FullPhoto}) => updatePhoto(props.photo),
-    onSuccess: (response) => {
-      console.log('Success');
+  return useMutation({
+    mutationFn: async (props: {photo: FullPhoto}) => {
+      console.log('updatePhoto', props.photo)
+      return updatePhoto(props.photo)
     },
     onError: (error) => console.error('Error:', error),
   });
-  return { mutate };
+}
+
+export function useDeletePhoto() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: number) => deletePhoto(id) ,
+    onMutate: (id: number) => {
+      queryClient.setQueryData(['photos'], (prevPhotos: any) =>
+        prevPhotos?.filter((photo: FullPhoto) => photo.id !== id),
+      );
+    },
+  });
 }

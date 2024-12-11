@@ -56,7 +56,7 @@ export async function deleteFile(keyName: string) {
     await s3.send(
       new DeleteObjectCommand({
         Bucket: BUCKET_NAME,
-        Key: keyName,
+        Key: FILE_PREFIX + keyName,
       }),
     );
   } catch (err) {

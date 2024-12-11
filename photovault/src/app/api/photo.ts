@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from './_lib/prisma';
-import { getFilePublicUrl, putFile } from './_lib/cloud';
+import { deleteFile, getFilePublicUrl, putFile } from './_lib/cloud';
 import { Photo, PhotoFilters } from '@/models/photo';
 import { StreamingBlobPayloadInputTypes } from '@smithy/types';
 import _ from 'lodash';
@@ -203,7 +203,7 @@ export async function putPhoto(
 
   const keyName = prismaResponse.id + photoname;
 
-  prisma.photo.update({
+  await prisma.photo.update({
     where: {
       id: prismaResponse.id,
     },
@@ -221,7 +221,8 @@ export async function putPhoto(
 }
 
 export async function updatePhoto(photo: Photo) {
-  prisma.photo.update({
+  console.log(photo)
+  const res = await prisma.photo.update({
     where: {
       id: photo.id,
     },
@@ -238,6 +239,31 @@ export async function updatePhoto(photo: Photo) {
       },
     },
   });
+  console.log(res)
+
+  return { status: 200, content: 'ok' };
+}
+
+
+export async function deletePhoto(id: number) {
+
+  const photo = await prisma.photo.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!photo) {
+    return { status: 404, content: 'Photo not found' };
+  }
+
+  await prisma.photo.delete({
+    where: {
+      id,
+    },
+  });
+
+  await deleteFile(photo.photoURL);
 
   return { status: 200, content: 'ok' };
 }

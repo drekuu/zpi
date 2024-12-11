@@ -7,6 +7,7 @@ import {
   type MRT_Row,
   type MRT_TableOptions,
   useMaterialReactTable,
+  createRow,
 } from 'material-react-table';
 import {
   Box,
@@ -33,11 +34,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { values } from 'lodash';
 import { putFile } from '@/app/api/_lib/cloud';
 import { getPhotosByPhotographer, putPhoto } from '@/app/api/photo';
-import {
-  useGetPhotosByPhotographerWithDetails,
-  usePhotos,
-  usePutPhoto,
-} from '@/services/query/photo';
+import { useDeletePhoto, useGetPhotosByPhotographerWithDetails, usePhotos, usePutPhoto, useUpdatePhoto } from '@/services/query/photo';
 import { StreamingBlobPayloadInputTypes } from '@smithy/types';
 import { getAllTags } from '@/app/api/tag';
 import { FullPhoto as PhotoType } from '@/models/photo';
@@ -50,46 +47,11 @@ type Photo = {
   photoUrl: string;
   title: string;
   tags: string[];
-  status: 'Visible' | 'Hidden';
   categories: string[];
   additionalcategories?: string[];
   license?: string;
   price: number;
 };
-
-// const photos: Photo[] = [
-//   {
-//     id: 1,
-//     image:
-//       'https://cdn.builder.io/api/v1/image/assets/TEMP/1931d5d1c17694c6da1c5360d8955aa360679067164f2aca17044fc0b0db554f?placeholderIfAbsent=true&apiKey=3db36c7a47f0421d9f87c365488106cc',
-//     title: 'Laying cat',
-//     tags: ['cat', 'animal', 'nature'],
-//     status: 'Visible',
-//     categories: ['Animals', 'Nature'],
-//     license: '465zł',
-//     price: '100 zł',
-//   },
-//   {
-//     id: 2,
-//     image:
-//       'https://cdn.builder.io/api/v1/image/assets/TEMP/044c3c09b4b4108d2480c0aafa363627043ad0df7814c95fd1830be57a8eed1d?placeholderIfAbsent=true&apiKey=3db36c7a47f0421d9f87c365488106cc',
-//     title: 'Horse in mountains',
-//     tags: ['horse', 'animal', 'nature'],
-//     status: 'Hidden',
-//     categories: ['Animals', 'Nature'],
-//     price: '150zł',
-//   },
-//   {
-//     id: 3,
-//     image:
-//       'https://cdn.builder.io/api/v1/image/assets/TEMP/099d10e267291aedff3d6f2a402521bde5258095a16ade67afbf1f38b590c30b?placeholderIfAbsent=true&apiKey=3db36c7a47f0421d9f87c365488106cc',
-//     title: 'Person in front of a sun...',
-//     tags: ['person', 'people', 'sunset'],
-//     status: 'Visible',
-//     categories: ['People', 'Landscape'],
-//     price: '30zł',
-//   },
-// ];
 
 /* 
 const ManagementTable = () => {
@@ -144,17 +106,16 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
   const [categories, setCategories] = useState<{ id: number; name: string }[]>(
     [],
   );
+  const [isEditing, setIsEditing] = useState(false);
 
   getAllTags().then((fetchedTags) => {
     if (tags.length === 0) {
-      console.log(fetchedTags);
       setTags(fetchedTags);
     }
   });
 
   getAllCategories().then((fetchedCategories) => {
     if (categories.length === 0) {
-      console.log(fetchedCategories);
       setCategories(fetchedCategories);
     }
   });
@@ -166,22 +127,13 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
   const [fileUploaded, setUploadedFile] = useState<File>();
   const [photoFilename, setPhotoFilename] = useState<string>();
 
-  // const queryClient = new QueryClient();
 
-  // const ExampleWithProviders = () => (
-  //   //Put this with your other react-query providers near root of your app
-  //   <QueryClientProvider client={queryClient}>
-  //     <ManagementTable />
-  //   </QueryClientProvider>
-  // );
-
-  const validateRequired = (value: string | string[]) =>
-    Array.isArray(value) ? value.length > 0 : !!value.length;
+  const validateRequired = (value: string | string[] | number) =>
+    value !== undefined && value !== null && value !== '' && value != [];
   function validatePhoto(photo: Photo) {
     return {
       title: validateRequired(photo.title) ? undefined : 'Title is required',
       tags: validateRequired(photo.tags) ? undefined : 'Tags are required',
-      status: validateRequired(photo.status) ? undefined : 'Status is required',
       categories: validateRequired(photo.categories)
         ? undefined
         : 'categories is required',
@@ -194,13 +146,13 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
       {
         accessorKey: 'id',
         header: 'Id',
-        enableEditing: false,
+        Edit: () => null,
         size: 80,
       },
       {
         accessorKey: 'photoUrl',
+        enableEditing: !isEditing,
         header: 'Image',
-        enableEditing: true,
         Cell: ({ row }) => (
           <Box
             sx={{
@@ -211,10 +163,11 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
           >
             <img
               alt='photo'
-              height={30}
-              src={row.original.photoUrl}
+              height="50"
+              width="50"
+              src={row.original.photoURL}
               loading='lazy'
-              style={{ borderRadius: '50%' }}
+              style={{ borderRadius: '13%' }}
             />
           </Box>
         ),
@@ -243,78 +196,58 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
       {
         accessorKey: 'tags',
         header: 'Tags',
-        editSelectOptions: tags.map((tag) => tag.name),
+        editSelectOptions: tags.map(tag => (tag.name)),
         muiEditTextFieldProps: {
           select: true,
           required: true,
           error: !!validationErrors.tags,
           helperText: validationErrors.tags,
+          SelectProps: {
+            multiple: true,
+          },
         },
-        //   editComponent: ({ cell, column, row, table }) => (
-        //     <Autocomplete
-        //       multiple
-        //       freeSolo
-        //       value={cell.getValue() || []}
-        //       onChange={(event, newValue) => {
-        //         cell.setValue(newValue);
-        //       }}
-        //       // options={tags}
-        //       value={cell.getValue() || []}
-        //   onChange={(event, newValue) => {
-        //   // Ensure only the 'value' property is stored in the cell
-        //   const valuesOnly = newValue.map(tag => typeof tag === 'string' ? tag : tag.value);
-        //   cell.setValue(valuesOnly);
-        // }}
-        //       renderTags={(value, getTagProps) =>
-        //         value.map((option, index) => (
-        //           <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-        //         ))
-        //       }
-        //       renderInput={(params) => (
-        //         <TextField
-        //           {...params}
-        //           label="Tags"
-        //           placeholder="Add tags"
-        //           error={!!validationErrors.tags} // Apply error state
-        //           helperText={validationErrors.tags} // Display error message
-        //         />
-        //       )}
-        //     />
-        //   ),
-      },
-      {
-        accessorKey: 'status',
-        header: 'Status',
-        muiEditTextFieldProps: {
-          required: true,
-          error: !!validationErrors.status,
-          helperText: validationErrors.status,
-        },
+        Cell: ({ cell }) => (
+          <div>
+            {cell.getValue().map((tag) => (
+              <div key={tag}>{tag}</div>
+            ))}
+          </div>
+        ),
       },
       {
         accessorKey: 'categories',
-        header: 'categories',
+        header: 'Categories',
         editVariant: 'select',
-        editSelectOptions: categories.map((categories) => categories.name),
+        editSelectOptions: categories.map(categories => categories.name),
         muiEditTextFieldProps: {
           select: true,
           required: true,
           error: !!validationErrors.categories,
           helperText: validationErrors.categories,
+          SelectProps: {
+            multiple: true,
+          },
         },
+        Cell: ({ cell }) => (
+          <div>
+            {cell.getValue().map((category) => (
+              <div key={category}>{category}</div>
+            ))}
+          </div>
+        ),
+      
+      
       },
-      {
-        accessorKey: 'additionalcategories',
-        header: 'Additional categories',
-        editVariant: 'select',
-        editSelectOptions: categories.map((categories) => categories.name),
-        muiEditTextFieldProps: {
-          select: true,
-          required: false,
-          error: !!validationErrors.categories,
-          helperText: validationErrors.categories,
-        },
-      },
+      // {
+      //   accessorKey: 'additionalcategories',
+      //   header: 'Additional categories',
+      //   editVariant: 'select',
+      //   editSelectOptions: categories.map((categories) => categories.name),
+      //   muiEditTextFieldProps: {
+      //     select: true,
+      //     required: false,
+      //   },
+      // },
       {
         accessorKey: 'license',
         header: 'License',
@@ -334,95 +267,27 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
         },
       },
     ],
-    [validationErrors, tags],
+    [validationErrors, tags, isEditing],
   );
 
-  //hooks
-  const { mutateAsync: addPhoto, isPending: isAddingPhoto } = useAddPhoto();
+  const { mutateAsync: addPhoto, isPending: isAddingPhoto } = usePutPhoto();
 
   const {
     data: fetchedPhotos = [],
     isError: isLoadingPhotosError,
     isFetching: isFetchingPhotos,
     isLoading: isLoadingPhotos,
+    refetch: refetchPhotos,
   } = useGetPhotosByPhotographerWithDetails(username);
 
-  console.log(fetchedPhotos);
-
-  const { mutateAsync: updatePhoto, isPending: isUpdatingPhoto } =
-    useUpdatePhoto();
+  const {
+    mutateAsync: updatePhoto,
+    isPending: isUpdatingPhoto,
+  } = useUpdatePhoto();
 
   const { mutateAsync: deletePhoto, isPending: isDeletingPhoto } =
     useDeletePhoto();
 
-  function useAddPhoto() {
-    const { mutate } = usePutPhoto();
-
-    return useMutation({
-      mutationFn: async (photo: PhotoType) => {
-        console.log(photo);
-        photo.categories = [photo.categories, photo.additionalcategories];
-        photo.tags = [photo.tags];
-        photo.tags = photo.tags.map(
-          (tag) => tags.find((t) => t.name === tag)!.id,
-        );
-        photo.categories = photo.categories.map(
-          (category) => categories.find((c) => c.name === category)!.id,
-        );
-        console.log(photoFilename);
-        const formData = new FormData();
-        formData.append('image', fileUploaded!);
-        mutate({
-          photoname: photoFilename ?? 'missing',
-          photofile: formData,
-          photo: photo,
-        });
-        return Promise.resolve();
-      },
-    });
-  }
-
-  //UPDATE hook (put user in api)
-  function useUpdatePhoto() {
-    const queryClient = useQueryClient();
-    return useMutation({
-      mutationFn: async (photo: Photo) => {
-        //send api update request here
-        await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-        return Promise.resolve();
-      },
-      //client side optimistic update
-      onMutate: (newPhotoInfo: Photo) => {
-        queryClient.setQueryData(['photos'], (prevPhotos: any) =>
-          prevPhotos?.map((prevPhoto: Photo) =>
-            prevPhoto.id === newPhotoInfo.id ? newPhotoInfo : prevPhoto,
-          ),
-        );
-      },
-      // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
-    });
-  }
-
-  //DELETE hook (delete user in api)
-  function useDeletePhoto() {
-    const queryClient = useQueryClient();
-    return useMutation({
-      mutationFn: async (photoId: number) => {
-        //send api update request here
-        await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-        return Promise.resolve();
-      },
-      //client side optimistic update
-      onMutate: (photoId: number) => {
-        queryClient.setQueryData(['photo'], (prevPhotos: any) =>
-          prevPhotos?.filter((photo: Photo) => photo.id !== photoId),
-        );
-      },
-      // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
-    });
-  }
-
-  //actions
   const handleAddPhoto: MRT_TableOptions<Photo>['onCreatingRowSave'] = async ({
     values,
     table,
@@ -433,27 +298,45 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
       return;
     }
     setValidationErrors({});
-    await addPhoto(values);
+    console.log(values)
+    values.tags = values.tags.map(tag => tag.id);
+    values.categories = values.categories.map(category => category.id);
+    console.log(values)
+    const formData = new FormData();
+    formData.append('image', fileUploaded!);
+
+    await addPhoto({photoname: photoFilename!, photofile: formData, photo: values });
     table.setCreatingRow(null);
+    await refetchPhotos()
   };
 
   const handleSavePhoto: MRT_TableOptions<Photo>['onEditingRowSave'] = async ({
     values,
     table,
   }) => {
+    console.log("checking edit values")
+    console.log(values)
+    console.log(categories.find(c => c.name == 'Nature'))
     const newValidationErrors = validatePhoto(values);
     if (Object.values(newValidationErrors).some((error) => error)) {
       setValidationErrors(newValidationErrors);
       return;
     }
     setValidationErrors({});
-    await updatePhoto(values);
+    const cat = categories.filter((c) => values.categories.includes(c.name)).map((c) => c.id);
+    const tag = tags.filter((t) => values.tags.includes(t.name)).map((t) => t.id);
+    await updatePhoto({ photo: {
+      ...values,
+      tags: tag,
+      categories: cat
+    } });
     table.setEditingRow(null);
   };
 
-  const openDeleteConfirmModal = (row: MRT_Row<Photo>) => {
+  const openDeleteConfirmModal = async (row: MRT_Row<Photo>) => {
     if (window.confirm('Are you sure you want to delete this photo?')) {
       deletePhoto(row.original.id);
+      await refetchPhotos()
     }
   };
 
@@ -493,8 +376,9 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
         </DialogActions>
       </>
     ),
-    renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
-      <>
+    renderEditRowDialogContent: ({ table, row, internalEditComponents }) => {
+    setIsEditing(true);
+    return <>
         <DialogTitle variant='h3'>Edit photo</DialogTitle>
         <DialogContent
           sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
@@ -505,11 +389,14 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
           <MRT_EditActionButtons variant='text' table={table} row={row} />
         </DialogActions>
       </>
-    ),
+    },
     renderRowActions: ({ row, table }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
         <Tooltip title='Edit'>
-          <IconButton onClick={() => table.setEditingRow(row)}>
+          <IconButton onClick={() => {
+            setIsEditing(true);
+            table.setEditingRow(row)
+          }}>
             <EditIcon />
           </IconButton>
         </Tooltip>
@@ -524,13 +411,13 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
       <Button
         variant='contained'
         onClick={() => {
-          table.setCreatingRow(true); //simplest way to open the create row modal with no default values
-          //or you can pass in a row object to set default values with the `createRow` helper function
-          // table.setCreatingRow(
-          //   createRow(table, {
-          //     //optionally pass in default values for the new row, useful for nested data or other complex scenarios
-          //   }),
-          // );
+          setIsEditing(false);
+          table.setCreatingRow(
+            createRow(table, {
+              tags: [],
+              categories: [],
+            }),
+          );
         }}
       >
         Add photo
