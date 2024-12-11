@@ -15,12 +15,14 @@ interface OrderSummaryProps {
   className?: string;
   cartPhotos: Array<CartPhoto>;
   photos: CartPhotosDetails;
+  nextStep(): void;
 }
 
 export default function OrderSummary({
   className,
   cartPhotos,
   photos,
+  nextStep,
 }: OrderSummaryProps) {
   const t = useTranslations('Cart.OrderSummary');
   const subtotal = calculateSubtotal(cartPhotos, photos);
@@ -36,9 +38,9 @@ export default function OrderSummary({
         <Separator />
         <SummaryRow name={t('total')} value={total} total={true} />
 
-        <Button>
+        <Button onClick={nextStep}>
           <div className='flex items-center justify-center gap-2'>
-            <p>{t('checkout')}</p>
+            <p>{t('next-step')}</p>
             <RightArrowLineIcon />
           </div>
         </Button>

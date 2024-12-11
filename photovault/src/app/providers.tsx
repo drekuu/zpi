@@ -23,11 +23,16 @@ export default function Providers({
         },
       }),
   );
-  const setLoggedIn = useUserStore((store) => store.setLoggedIn);
+  const { setLoggedIn, setUserData } = useUserStore((store) => store);
 
   useEffect(() => {
-    updateSession().then((success) => setLoggedIn(success));
-  }, [setLoggedIn]);
+    updateSession().then((success) => {
+      setLoggedIn(success);
+      if (!success) {
+        setUserData();
+      }
+    });
+  }, [setUserData, setLoggedIn]);
 
   /**
    * Fixes following bug:

@@ -145,7 +145,7 @@
       "subtotal": "Suma częściowa",
       "delivery-fee": "Dostawa",
       "total": "Suma",
-      "checkout": "Przejdź do kasy"
+      "next-step": "Przejdź dalej"
     }
   }
 }

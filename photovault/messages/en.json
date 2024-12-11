@@ -129,7 +129,7 @@
       "subtotal": "Subtotal",
       "delivery-fee": "Delivery fee",
       "total": "Total",
-      "checkout": "Go to checkout"
+      "next-step": "Next step"
     }
   }
 }
