@@ -2,7 +2,7 @@
 
 import Accordion from '@/components/Accordion/Accordion';
 import { useMemo, useState } from 'react';
-import { useAllTags } from '@/services/query/tag';
+import { useTags } from '@/services/query/tag';
 import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
 import SearchWithResult from '@/components/Search/SearchWithResult';
 import { useTranslations } from 'next-intl';
@@ -19,7 +19,7 @@ export default function Tags({ selectedTags, setSelectedTags }: TagsProps) {
   const t = useTranslations('NewPage.Filters');
   const tagsT = useTranslations('Tags');
 
-  const query = useAllTags();
+  const query = useTags();
   const tags = query.data ? Object.values(query.data) : undefined;
 
   const [search, setSearch] = useState('');

@@ -17,24 +17,26 @@ type NewPageStore = NewPageState & NewPageActions;
 
 export const useNewPageStore = create<NewPageStore>()(
   devtools(
-    immer((set) => ({
-      filters: {
-        category: undefined,
-        priceRange: [0, 1000],
-        tags: [],
-      },
-      setCategoryFilter: (category: number | undefined) =>
-        set((state) => {
-          state.filters.category = category;
-        }),
-      setPriceRangeFilter: (priceRange: number[]) =>
-        set((state) => {
-          state.filters.priceRange = priceRange;
-        }),
-      setTagsFilter: (tags: Array<number>) =>
-        set((state) => {
-          state.filters.tags = tags;
-        }),
-    })),
+    immer(
+      (set): NewPageStore => ({
+        filters: {
+          category: undefined,
+          priceRange: [0, 1000],
+          tags: [],
+        },
+        setCategoryFilter: (category: number | undefined) =>
+          set((state) => {
+            state.filters.category = category;
+          }),
+        setPriceRangeFilter: (priceRange: number[]) =>
+          set((state) => {
+            state.filters.priceRange = priceRange;
+          }),
+        setTagsFilter: (tags: Array<number>) =>
+          set((state) => {
+            state.filters.tags = tags;
+          }),
+      }),
+    ),
   ),
 );

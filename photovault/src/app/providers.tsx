@@ -29,6 +29,39 @@ export default function Providers({
     updateSession().then((success) => setLoggedIn(success));
   }, [setLoggedIn]);
 
+  /**
+   * Fixes following bug:
+   * 1. Open a modal
+   * 2. Navigate to a page from the modal (ex. user profile from photo modal)
+   * 3. Navigate back in the browser
+   */
+  useEffect(() => {
+    const modalPathnames = ['/photo'];
+    let previousPathname = '';
+
+    const handlePopState = () => {
+      const currentPathname = window.location.pathname;
+      const matchedModalPathname = modalPathnames.find((modalPathname) =>
+        currentPathname.includes(modalPathname),
+      );
+
+      if (
+        matchedModalPathname &&
+        !previousPathname.includes(matchedModalPathname)
+      ) {
+        window.location.reload();
+      }
+
+      previousPathname = currentPathname;
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       {children}

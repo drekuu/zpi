@@ -1,12 +1,13 @@
 import { describe, expect, test } from 'vitest';
 import mockRouter from 'next-router-mock';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
-import { renderWithNextIntl } from './utils';
+import { withMockNextIntl } from './utils';
+import { render } from '@testing-library/react';
 
 describe('Breadcrumbs', () => {
   test('renders only the first crumb if additionalNames is not provided', async () => {
     await mockRouter.push('/new/nature/5/10');
-    const component = await renderWithNextIntl(<Breadcrumbs />);
+    const component = render(await withMockNextIntl(<Breadcrumbs />));
 
     const links = await component.findAllByRole('link');
     const linksData = links.map((link) => ({
@@ -28,8 +29,10 @@ describe('Breadcrumbs', () => {
 
   test('renders additionalNames when provided', async () => {
     await mockRouter.push('/new/nature/5/10');
-    const component = await renderWithNextIntl(
-      <Breadcrumbs additionalNames={['Nature', 'Test', 'Test2']} />,
+    const component = render(
+      await withMockNextIntl(
+        <Breadcrumbs additionalNames={['Nature', 'Test', 'Test2']} />,
+      ),
     );
 
     const links = await component.findAllByRole('link');

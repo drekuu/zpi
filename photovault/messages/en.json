@@ -5,7 +5,22 @@
     "home": "Home",
     "new": "New",
     "explore": "Explore",
-    "photo": "Photo"
+    "photo": "Photo",
+    "cart": "Cart"
+  },
+  "Popups": {
+    "PhotoCart": {
+      "select-format": "Select photo format",
+      "format-digital": "Digital",
+      "format-physical": "Physical",
+      "commercial-license": "Commercial license"
+    },
+    "AddPhotoToCart": {
+      "add": "Add"
+    },
+    "EditCartPhoto": {
+      "edit": "Edit"
+    }
   },
   "HomePage": {
     "Sections": {
@@ -13,8 +28,7 @@
       "new-photos": "Discover new photos"
     },
     "Photographer": {
-      "about-me": "About me",
-      "from": "Photographer from {location}"
+      "about-me": "About me"
     }
   },
   "NewPage": {
@@ -92,5 +106,30 @@
     "enter-about-me": "Enter about me",
     "profile-picture": "Profile picture",
     "no-results": "No results"
+  },
+  "Photo": {
+    "none": "none",
+    "by": "by",
+    "price": "Price:",
+    "commercial-price": "Commercial license price:",
+    "categories": "Categories",
+    "tags": "Tags",
+    "cart-add": "Add to cart"
+  },
+  "Cart": {
+    "empty": "Cart is empty",
+    "CartItems": {
+      "title": "Cart",
+      "digital-copy": "Digital copy",
+      "physical-copy": "Physical copy",
+      "commercial-license": "Commercial license"
+    },
+    "OrderSummary": {
+      "title": "Order summary",
+      "subtotal": "Subtotal",
+      "delivery-fee": "Delivery fee",
+      "total": "Total",
+      "checkout": "Go to checkout"
+    }
   }
 }

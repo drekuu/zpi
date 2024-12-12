@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useState } from 'react';
 import { UseQueryResult } from '@tanstack/react-query';
-import Loading from './components/Loading';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import Button from '@/components/Form/Button';
 
 interface LoadedQueriesProps {
@@ -47,7 +47,7 @@ export default function LoadedQueries({
           </Button>
         </div>
       )}
-      {loaded ? children : <Loading />}
+      {loaded ? children : <LoadingSpinner />}
     </>
   );
 }

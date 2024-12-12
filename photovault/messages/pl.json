@@ -21,7 +21,22 @@
     "home": "Główna",
     "new": "Nowe",
     "explore": "Odkryj",
-    "photo": "Zdjęcie"
+    "photo": "Zdjęcie",
+    "cart": "Koszyk"
+  },
+  "Popups": {
+    "PhotoCart": {
+      "select-format": "Wybierz format zdjęcia",
+      "format-digital": "Cyfrowy",
+      "format-physical": "Fizyczny",
+      "commercial-license": "Licencja komercyjna"
+    },
+    "AddPhotoToCart": {
+      "add": "Dodaj"
+    },
+    "EditCartPhoto": {
+      "edit": "Edytuj"
+    }
   },
   "HomePage": {
     "Sections": {
@@ -29,8 +44,7 @@
       "new-photos": "Odkryj nowe zdjęcia"
     },
     "Photographer": {
-      "about-me": "O mnie",
-      "from": "Fotograf z {location}"
+      "about-me": "O mnie"
     }
   },
   "NewPage": {
@@ -108,5 +122,30 @@
     "enter-username": "Wprowadź nazwę użytkownika",
     "profile-picture": "Zdjęcie profilowe",
     "no-results": "Brak wyników"
+  },
+  "Photo": {
+    "none": "brak",
+    "by": "przez",
+    "price": "Cena:",
+    "commercial-price": "Cena licencji komercyjnej:",
+    "categories": "Kategorie",
+    "tags": "Tagi",
+    "cart-add": "Dodaj do koszyka"
+  },
+  "Cart": {
+    "empty": "Koszyk jest pusty",
+    "CartItems": {
+      "title": "Koszyk",
+      "digital-copy": "Kopia cyfrowa",
+      "physical-copy": "Kopia fizyczna",
+      "commercial-license": "Licencja komercyjna"
+    },
+    "OrderSummary": {
+      "title": "Podsumowanie",
+      "subtotal": "Suma częściowa",
+      "delivery-fee": "Dostawa",
+      "total": "Suma",
+      "checkout": "Przejdź do kasy"
+    }
   }
 }

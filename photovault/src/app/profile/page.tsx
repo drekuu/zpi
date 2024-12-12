@@ -16,7 +16,7 @@ export default function Profile() {
         <div className='flex overflow-hidden relative flex-col py-12'>
           <ProfileCardMe />
           <ViewButton username={username} />
-          <ManagementTable />
+          <ManagementTable username={username} />
         </div>
       </div>
     )

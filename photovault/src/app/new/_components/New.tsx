@@ -3,31 +3,45 @@
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
 import Filters from './Filters/Filters';
 import { usePathname } from 'next/navigation';
-import { useAllCategories } from '@/services/query/category';
+import { useCategories } from '@/services/query/category';
 import LoadedQueries from '@/components/LoadedQuery/LoadedQueries';
-import { useAllTags } from '@/services/query/tag';
+import { useTags } from '@/services/query/tag';
 import { useTranslations } from 'next-intl';
 import { getLocale } from '@/services/localeClient';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { TunnelEntry } from '@mittwald/react-tunnel';
 
 export default function New({ children }: { children: ReactNode }) {
   const locale = getLocale();
   const t = useTranslations('Categories');
   const pathname = usePathname();
-  const category = pathname.split('/')?.[2];
 
-  const categoriesQuery = useAllCategories();
+  const [category, setCategory] = useState<string>();
+
+  useEffect(() => {
+    if (!pathname.startsWith('/photo')) {
+      setCategory(pathname.split('/')?.[2]);
+    }
+  }, [pathname]);
+
+  const categoriesQuery = useCategories();
   const categories = categoriesQuery.data;
-  const categoryName = categories?.[category]?.name;
+  const categoryName = useMemo(() => {
+    if (category && categories?.[category]) {
+      return categories[category].name;
+    }
 
-  const tagsQuery = useAllTags();
+    return undefined;
+  }, [categories, category]);
+
+  const tagsQuery = useTags();
 
   return (
     <TunnelEntry staticEntryId='NewPage'>
       <LoadedQueries queries={[categoriesQuery, tagsQuery]}>
         <div>
           <Breadcrumbs
+            prefixesBlacklist={['/photo']}
             additionalNames={
               categoryName
                 ? [locale === 'en' ? categoryName : t(category as any)]
