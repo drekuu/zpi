@@ -9,6 +9,8 @@ import {
   useMaterialReactTable,
   createRow,
 } from 'material-react-table';
+import { MRT_Localization_PL } from 'material-react-table/locales/pl';
+import { MRT_Localization_EN } from 'material-react-table/locales/en';
 import {
   Box,
   Button,
@@ -21,6 +23,7 @@ import {
   Autocomplete,
   TextField,
   Stack,
+  FormControlLabel,
 } from '@mui/material';
 import {
   QueryClient,
@@ -34,68 +37,34 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { values } from 'lodash';
 import { putFile } from '@/app/api/_lib/cloud';
 import { getPhotosByPhotographer, putPhoto } from '@/app/api/photo';
-import { useDeletePhoto, useGetPhotosByPhotographerWithDetails, usePhotos, usePutPhoto, useUpdatePhoto } from '@/services/query/photo';
+import {
+  useDeletePhoto,
+  useGetPhotosByPhotographerWithDetails,
+  usePhotos,
+  usePutPhoto,
+  useUpdatePhoto,
+} from '@/services/query/photo';
 import { StreamingBlobPayloadInputTypes } from '@smithy/types';
 import { getAllTags } from '@/app/api/tag';
-import { FullPhoto as PhotoType } from '@/models/photo';
+import { FullPhoto, FullPhoto as PhotoType } from '@/models/photo';
 import { getAllCategories } from '@/app/api/category';
 import { useSessionStorage } from 'usehooks-ts';
 import { useUserStore } from '@/stores/user';
+import { useTranslations } from 'next-intl';
+import { NodeNextRequest } from 'next/dist/server/base-http/node';
+import { Afacad } from 'next/font/google';
 
 type Photo = {
   id: number;
-  photoUrl: string;
+  photoURL: string;
   title: string;
   tags: string[];
   categories: string[];
   additionalcategories?: string[];
-  license?: string;
+  license?: boolean;
+  licensePrice?: any;
   price: number;
 };
-
-/* 
-const ManagementTable = () => {
-  return (
-    <section className='flex z-0 flex-col justify-center p-6 mt-16 w-full bg-white max-md:px-5 max-md:mt-10 max-md:max-w-full'>
-      <div className='flex flex-col w-full max-md:max-w-full'>
-        <div className='flex flex-wrap gap-4 px-4 py-2 w-full border-b border-solid border-b-neutral-300 min-h-[64px] max-md:max-w-full'>
-          <div className='flex overflow-hidden flex-col justify-center p-0.5 my-auto w-6 rounded-lg'>
-            <div className='flex shrink-0 w-5 h-5 bg-white rounded-md border-2 border-solid border-zinc-300' />
-          </div>
-          <div className='flex flex-wrap flex-1 shrink gap-2 justify-center items-center h-full text-sm font-bold tracking-normal leading-5 whitespace-nowrap basis-0 min-w-[240px] text-zinc-800 max-md:max-w-full'>
-            {['Photos', 'Status', 'categories', 'License', 'Price'].map(
-              (header, index) => (
-                <div
-                  key={index}
-                  className='flex flex-1 shrink gap-2 self-stretch my-auto basis-0 min-h-[50px]'
-                >
-                  <div className='flex flex-1 shrink gap-2 px-2 basis-0 size-full'>
-                    <div className='flex-1 shrink gap-2 size-full'>
-                      {header}
-                      {header === 'Photos' && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          loading='lazy'
-                          src='https://cdn.builder.io/api/v1/image/assets/TEMP/25408c89777d130b5ea9602ff169a4f834929cbd86a708e8bc19778a0afe65e0?placeholderIfAbsent=true&apiKey=3db36c7a47f0421d9f87c365488106cc'
-                          alt=''
-                          className='object-contain shrink-0 my-auto w-6 aspect-square'
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ),
-            )}
-          </div>
-        </div>
-        {photos.map((photo) => (
-          <PhotoTableRow key={photo.id} photo={photo} />
-        ))}
-      </div>
-    </section>
-  );
-};
- */
 
 interface ManagamentTableProps {
   username: string;
@@ -107,6 +76,7 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
     [],
   );
   const [isEditing, setIsEditing] = useState(false);
+  const t = useTranslations('Profile');
 
   getAllTags().then((fetchedTags) => {
     if (tags.length === 0) {
@@ -127,17 +97,19 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
   const [fileUploaded, setUploadedFile] = useState<File>();
   const [photoFilename, setPhotoFilename] = useState<string>();
 
-
   const validateRequired = (value: string | string[] | number) =>
-    value !== undefined && value !== null && value !== '' && value != [];
+    value !== undefined &&
+    value !== null &&
+    value !== '' &&
+    (!Array.isArray(value) || value.length > 0);
   function validatePhoto(photo: Photo) {
     return {
-      title: validateRequired(photo.title) ? undefined : 'Title is required',
-      tags: validateRequired(photo.tags) ? undefined : 'Tags are required',
+      title: validateRequired(photo.title) ? undefined : t('title-required'),
+      tags: validateRequired(photo.tags) ? undefined : t('tags-required'),
       categories: validateRequired(photo.categories)
         ? undefined
-        : 'categories is required',
-      price: validateRequired(photo.price) ? undefined : 'Price is required',
+        : t('categories-required'),
+      price: validateRequired(photo.price) ? undefined : t('price-required'),
     };
   }
 
@@ -152,7 +124,7 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
       {
         accessorKey: 'photoUrl',
         enableEditing: !isEditing,
-        header: 'Image',
+        header: t('images'),
         Cell: ({ row }) => (
           <Box
             sx={{
@@ -163,8 +135,8 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
           >
             <img
               alt='photo'
-              height="50"
-              width="50"
+              height='50'
+              width='50'
               src={row.original.photoURL}
               loading='lazy'
               style={{ borderRadius: '13%' }}
@@ -186,7 +158,7 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
       },
       {
         accessorKey: 'title',
-        header: 'Title',
+        header: t('title'),
         muiEditTextFieldProps: {
           required: true,
           error: !!validationErrors.title,
@@ -195,8 +167,8 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
       },
       {
         accessorKey: 'tags',
-        header: 'Tags',
-        editSelectOptions: tags.map(tag => (tag.name)),
+        header: t('tags'),
+        editSelectOptions: tags.map((tag) => tag.name),
         muiEditTextFieldProps: {
           select: true,
           required: true,
@@ -208,7 +180,7 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
         },
         Cell: ({ cell }) => (
           <div>
-            {cell.getValue().map((tag) => (
+            {(cell.getValue() as string[]).map((tag) => (
               <div key={tag}>{tag}</div>
             ))}
           </div>
@@ -216,9 +188,9 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
       },
       {
         accessorKey: 'categories',
-        header: 'Categories',
+        header: t('categories'),
         editVariant: 'select',
-        editSelectOptions: categories.map(categories => categories.name),
+        editSelectOptions: categories.map((categories) => categories.name),
         muiEditTextFieldProps: {
           select: true,
           required: true,
@@ -230,36 +202,38 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
         },
         Cell: ({ cell }) => (
           <div>
-            {cell.getValue().map((category) => (
+            {(cell.getValue() as string[]).map((category) => (
               <div key={category}>{category}</div>
             ))}
           </div>
         ),
-      
-      
       },
-      // {
-      //   accessorKey: 'additionalcategories',
-      //   header: 'Additional categories',
-      //   editVariant: 'select',
-      //   editSelectOptions: categories.map((categories) => categories.name),
-      //   muiEditTextFieldProps: {
-      //     select: true,
-      //     required: false,
-      //   },
-      // },
       {
         accessorKey: 'license',
-        header: 'License',
+        header: t('license'),
+        editVariant: 'select',
+        editSelectOptions: ['true', 'false'],
         muiEditTextFieldProps: {
           required: false,
           error: !!validationErrors.license,
           helperText: validationErrors.license,
         },
+        Cell: ({ cell }) => (
+          <div>{cell.getValue() ? t('available') : t('not-available')}</div>
+        ),
+      },
+      {
+        accessorKey: 'licensePrice',
+        header: t('license-price'),
+        muiEditTextFieldProps: {
+          required: false,
+          error: !!validationErrors.licensePrice,
+          helperText: validationErrors.licensePrice,
+        },
       },
       {
         accessorKey: 'price',
-        header: 'Price',
+        header: t('price'),
         muiEditTextFieldProps: {
           required: true,
           error: !!validationErrors.price,
@@ -280,10 +254,8 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
     refetch: refetchPhotos,
   } = useGetPhotosByPhotographerWithDetails(username);
 
-  const {
-    mutateAsync: updatePhoto,
-    isPending: isUpdatingPhoto,
-  } = useUpdatePhoto();
+  const { mutateAsync: updatePhoto, isPending: isUpdatingPhoto } =
+    useUpdatePhoto();
 
   const { mutateAsync: deletePhoto, isPending: isDeletingPhoto } =
     useDeletePhoto();
@@ -298,45 +270,52 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
       return;
     }
     setValidationErrors({});
-    console.log(values)
-    values.tags = values.tags.map(tag => tag.id);
-    values.categories = values.categories.map(category => category.id);
-    console.log(values)
+    values.tags = values.tags.map((tag: { id: number }) => tag.id);
+    values.categories = values.categories.map(
+      (category: { id: number }) => category.id,
+    );
     const formData = new FormData();
     formData.append('image', fileUploaded!);
 
-    await addPhoto({photoname: photoFilename!, photofile: formData, photo: values });
+    await addPhoto({
+      photoname: photoFilename!,
+      photofile: formData,
+      photo: values,
+    });
     table.setCreatingRow(null);
-    await refetchPhotos()
+    await refetchPhotos();
   };
 
   const handleSavePhoto: MRT_TableOptions<Photo>['onEditingRowSave'] = async ({
     values,
     table,
   }) => {
-    console.log("checking edit values")
-    console.log(values)
-    console.log(categories.find(c => c.name == 'Nature'))
     const newValidationErrors = validatePhoto(values);
     if (Object.values(newValidationErrors).some((error) => error)) {
       setValidationErrors(newValidationErrors);
       return;
     }
     setValidationErrors({});
-    const cat = categories.filter((c) => values.categories.includes(c.name)).map((c) => c.id);
-    const tag = tags.filter((t) => values.tags.includes(t.name)).map((t) => t.id);
-    await updatePhoto({ photo: {
-      ...values,
-      tags: tag,
-      categories: cat
-    } });
+    const cat = categories
+      .filter((c) => values.categories.includes(c.name))
+      .map((c) => c.id);
+    const tag = tags
+      .filter((t) => values.tags.includes(t.name))
+      .map((t) => t.id);
+    await updatePhoto({
+      photo: {
+        ...values,
+        tags: tag,
+        categories: cat,
+      },
+    });
     table.setEditingRow(null);
   };
 
   const openDeleteConfirmModal = async (row: MRT_Row<Photo>) => {
-    if (window.confirm('Are you sure you want to delete this photo?')) {
+    if (window.confirm(t('delete-confirm'))) {
       deletePhoto(row.original.id);
-      await refetchPhotos()
+      await refetchPhotos();
     }
   };
 
@@ -358,6 +337,8 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
         minHeight: '500px',
       },
     },
+    localization:
+      t('localization') === 'pl' ? MRT_Localization_PL : MRT_Localization_EN,
     onCreatingRowCancel: () => setValidationErrors({}),
     onCreatingRowSave: handleAddPhoto,
     onEditingRowCancel: () => setValidationErrors({}),
@@ -365,7 +346,7 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
 
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant='h3'>Add new photo</DialogTitle>
+        <DialogTitle variant='h3'>{t('add-photo')}</DialogTitle>
         <DialogContent
           sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
         >
@@ -377,30 +358,34 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
       </>
     ),
     renderEditRowDialogContent: ({ table, row, internalEditComponents }) => {
-    setIsEditing(true);
-    return <>
-        <DialogTitle variant='h3'>Edit photo</DialogTitle>
-        <DialogContent
-          sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-        >
-          {internalEditComponents}
-        </DialogContent>
-        <DialogActions>
-          <MRT_EditActionButtons variant='text' table={table} row={row} />
-        </DialogActions>
-      </>
+      setIsEditing(true);
+      return (
+        <>
+          <DialogTitle variant='h3'>{t('edit')}</DialogTitle>
+          <DialogContent
+            sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+          >
+            {internalEditComponents}
+          </DialogContent>
+          <DialogActions>
+            <MRT_EditActionButtons variant='text' table={table} row={row} />
+          </DialogActions>
+        </>
+      );
     },
     renderRowActions: ({ row, table }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
-        <Tooltip title='Edit'>
-          <IconButton onClick={() => {
-            setIsEditing(true);
-            table.setEditingRow(row)
-          }}>
+        <Tooltip title={t('edit')}>
+          <IconButton
+            onClick={() => {
+              setIsEditing(true);
+              table.setEditingRow(row);
+            }}
+          >
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title='Delete'>
+        <Tooltip title={t('delete')}>
           <IconButton color='error' onClick={() => openDeleteConfirmModal(row)}>
             <DeleteIcon />
           </IconButton>
@@ -410,17 +395,34 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
     renderTopToolbarCustomActions: ({ table }) => (
       <Button
         variant='contained'
+        className='overflow-hidden self-center mt-16 font-medium text-white bg-black min-h-[44px] rounded-[62px] w-[236px]'
+        sx={{
+          overflow: 'hidden',
+          alignSelf: 'center',
+          fontFamily: 'inherit',
+          fontWeight: 'medium',
+          color: 'white',
+          backgroundColor: 'black',
+          minHeight: '10px',
+          borderRadius: '62px',
+          width: '130px',
+          textTransform: 'capitalize',
+        }}
         onClick={() => {
           setIsEditing(false);
           table.setCreatingRow(
             createRow(table, {
+              id: 0,
+              photoURL: '',
+              title: '',
               tags: [],
               categories: [],
+              price: 0,
             }),
           );
         }}
       >
-        Add photo
+        {t('add-photo')}
       </Button>
     ),
     state: {
