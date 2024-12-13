@@ -18,7 +18,11 @@ export default function PhotographerCardMe() {
   const data = query.data;
 
   const { mutate } = useMutation({
-    mutationFn: (data: PhotographUpdateData) => updateMyself(data),
+    mutationFn: (data: PhotographUpdateData) => {
+      const formData = new FormData();
+      formData.append('image', avatarUrlFile!);
+      return updateMyself(avatarUrlFile!.name, formData, data);
+    },
     onSuccess: async () =>
       await queryClient.invalidateQueries({ queryKey: ['photograph', 'me'] }),
     onError: (error) => console.error('Error updating user data:', error),
@@ -30,14 +34,15 @@ export default function PhotographerCardMe() {
   const [aboutMeTemp, setDescriptionTemp] = useState<string>();
   const [emailTemp, setEmailTemp] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [avatarUrlFile, setAvatarUrlFile] = useState<File>();
 
   useEffect(() => {
     if (data) {
       if (data.displayedUserName)
         setDisplayedUsernameTemp(data.displayedUserName);
-      if (data.avatarURL) setAvatarUrlTemp(data.avatarURL);
       if (data.description) setDescriptionTemp(data.description);
       if (data.displayedEmail) setEmailTemp(data.displayedEmail);
+      if (data.avatarURL) setAvatarUrlTemp(data.avatarURL);
     }
   }, [data]);
 
@@ -62,13 +67,19 @@ export default function PhotographerCardMe() {
     <LoadedQuery query={query} handleError={true}>
       {data && (
         <header className='flex overflow-hidden z-0 flex-wrap gap-8 justify-center items-start self-center px-4 py-5 max-md:max-w-full'>
-          <div className='flex overflow-hidden flex-col rounded-[62px] w-[162px]'>
+          <div className='flex overflow-hidden flex-col' >
             {isEditing ? (
               <input
-                type='text'
-                name='avatarUrl'
-                value={avatarUrlTemp}
-                onChange={(e) => setAvatarUrlTemp(e.target.value)}
+                type='file'
+                accept='image/*'
+                name='avatar'
+                onChange={(e:any) => 
+                  { 
+                    var file = e.target.files[0]; 
+                    setAvatarUrlTemp(file.name);
+                    setAvatarUrlFile(file);
+                  }
+                }
                 placeholder={t('enter-avatar')}
               />
             ) : (
@@ -76,7 +87,7 @@ export default function PhotographerCardMe() {
                 <img
                   src={actualAvatarUrl}
                   alt={t('profile-picture')}
-                  className='object-contain aspect-square w-[162px]'
+                  className='object-cover rounded-[62px] w-[162px] h-[162px]'
                 />
               </picture>
             )}

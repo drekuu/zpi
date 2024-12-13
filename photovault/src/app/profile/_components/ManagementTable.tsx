@@ -19,24 +19,10 @@ import {
   DialogTitle,
   IconButton,
   Tooltip,
-  Chip,
-  Autocomplete,
-  TextField,
-  Stack,
-  FormControlLabel,
 } from '@mui/material';
-import {
-  QueryClient,
-  QueryClientProvider,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { values } from 'lodash';
-import { putFile } from '@/app/api/_lib/cloud';
-import { getPhotosByPhotographer, putPhoto } from '@/app/api/photo';
 import {
   useDeletePhoto,
   useGetPhotosByPhotographerWithDetails,
@@ -44,15 +30,10 @@ import {
   usePutPhoto,
   useUpdatePhoto,
 } from '@/services/query/photo';
-import { StreamingBlobPayloadInputTypes } from '@smithy/types';
 import { getAllTags } from '@/app/api/tag';
 import { FullPhoto, FullPhoto as PhotoType } from '@/models/photo';
 import { getAllCategories } from '@/app/api/category';
-import { useSessionStorage } from 'usehooks-ts';
-import { useUserStore } from '@/stores/user';
 import { useTranslations } from 'next-intl';
-import { NodeNextRequest } from 'next/dist/server/base-http/node';
-import { Afacad } from 'next/font/google';
 
 type Photo = {
   id: number;

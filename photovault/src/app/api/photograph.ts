@@ -5,7 +5,7 @@ import prisma from './_lib/prisma';
 import { verifySession } from '@/app/api/_lib/session';
 import { PhotographUpdateData } from '@/models/photograph';
 import { redirect } from 'next/navigation';
-import { getFilePublicUrl } from '@/app/api/_lib/cloud';
+import { deleteFile, getFilePublicUrl, putFile } from '@/app/api/_lib/cloud';
 
 export async function getPhotographer(name: string) {
   const photograph = await prisma.photograph.findFirst({
@@ -105,12 +105,27 @@ export async function getMyself() {
     : null;
 }
 
-export async function updateMyself(data: PhotographUpdateData) {
+export async function updateMyself(photoname:string, photofile:FormData, data: PhotographUpdateData) {
   const session = await verifySession();
   if (!session) {
     return { status: 401 };
   }
-
+  const photographdata = await prisma.photograph.findFirst({
+    where: {
+      userId: session.userId,
+    },
+  });
+  if (!photographdata) {
+    return { status: 404 };
+  }
+  if (photographdata.avatarURL) {
+    await deleteFile(photographdata.avatarURL);
+  }
+  const keyName = 'avatar/' + session.userId + photoname;
+  const file = photofile.get('image') as File;
+  const arrayBuffer = await file.arrayBuffer();
+  await putFile(keyName, Buffer.from(arrayBuffer));
+  
   try {
     const updatedPhotograph = await prisma.photograph.update({
       where: {
@@ -118,7 +133,7 @@ export async function updateMyself(data: PhotographUpdateData) {
       },
       data: {
         displayedUserName: data.displayedUserName,
-        avatarURL: data.avatarUrl,
+        avatarURL: keyName,
         description: data.aboutMe,
         displayedEmail: data.email,
       },

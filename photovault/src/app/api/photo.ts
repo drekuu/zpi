@@ -181,8 +181,6 @@ export async function putPhoto(
   photofile: FormData,
   photo: Photo,
 ) {
-  console.log(photo);
-  console.log(photoname);
   const session = await verifySession();
   const prismaResponse = await prisma.photo.create({
     data: {
@@ -191,12 +189,12 @@ export async function putPhoto(
       title: photo.title,
       license: !!photo.license,
       tags: {
-        connect: photo.tags.map((tagId) => ({ id: tagId })),
+        connect: photo.tags.map((tagId: number) => ({ id: tagId })),
       },
       price: photo.price,
       licensePrice: photo.licensePrice ?? 0,
       categories: {
-        connect: photo.categories.map((categoryId) => ({ id: categoryId })),
+        connect: photo.categories.map((categoryId: number) => ({ id: categoryId })),
       },
     },
   });
@@ -214,14 +212,12 @@ export async function putPhoto(
 
   const file = photofile.get('image') as File;
   const arrayBuffer = await file.arrayBuffer();
-  console.log(arrayBuffer);
   await putFile(keyName, Buffer.from(arrayBuffer));
 
   return { status: 200, content: 'ok' };
 }
 
 export async function updatePhoto(photo: Photo) {
-  console.log(photo)
   const res = await prisma.photo.update({
     where: {
       id: photo.id,
@@ -230,12 +226,12 @@ export async function updatePhoto(photo: Photo) {
       title: photo.title,
       license: !!photo.license,
       tags: {
-        set: photo.tags.map((tagId) => ({ id: tagId })),
+        set: photo.tags.map((tagId: number) => ({ id: tagId })),
       },
       price: photo.price,
       licensePrice: photo.licensePrice ?? 0,
       categories: {
-        set: photo.categories.map((categoryId) => ({ id: categoryId })),
+        set: photo.categories.map((categoryId: number) => ({ id: categoryId })),
       },
     },
   });
