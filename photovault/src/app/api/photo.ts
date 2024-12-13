@@ -1,9 +1,11 @@
 'use server';
 
 import prisma from './_lib/prisma';
-import { getFilePublicUrl } from './_lib/cloud';
-import { PhotoFilters } from '@/models/photo';
+import { deleteFile, getFilePublicUrl, putFile } from './_lib/cloud';
+import { Photo, PhotoFilters } from '@/models/photo';
+import { StreamingBlobPayloadInputTypes } from '@smithy/types';
 import _ from 'lodash';
+import { verifySession } from './_lib/session';
 
 export async function getPhotos(filters?: PhotoFilters) {
   const photos = await prisma.photo.findMany({
@@ -147,4 +149,117 @@ export async function getPhotosByPhotographer(username: string) {
       ['title', 'photoURL', 'id'],
     ),
   );
+}
+
+export async function getPhotosByPhotographerWithDetails(username: string) {
+  const photos = await prisma.photo.findMany({
+    where: {
+      photograph: {
+        user: {
+          username: username,
+        },
+      },
+    },
+    include: {
+      tags: true,
+      categories: true,
+    },
+  });
+
+  return photos.map((photo) => {
+    return {
+      ...photo,
+      photoURL: getFilePublicUrl(photo.photoURL),
+      tags: photo.tags.map((tag) => tag.name),
+      categories: photo.categories.map((category) => category.name),
+    };
+  });
+}
+
+export async function putPhoto(
+  photoname: string,
+  photofile: FormData,
+  photo: Photo,
+) {
+  const session = await verifySession();
+  const prismaResponse = await prisma.photo.create({
+    data: {
+      photographId: session!!.photographId!!,
+      photoURL: photoname,
+      title: photo.title,
+      license: !!photo.license,
+      tags: {
+        connect: photo.tags.map((tagId: number) => ({ id: tagId })),
+      },
+      price: photo.price,
+      licensePrice: photo.licensePrice ?? 0,
+      categories: {
+        connect: photo.categories.map((categoryId: number) => ({ id: categoryId })),
+      },
+    },
+  });
+
+  const keyName = prismaResponse.id + photoname;
+
+  await prisma.photo.update({
+    where: {
+      id: prismaResponse.id,
+    },
+    data: {
+      photoURL: keyName,
+    },
+  });
+
+  const file = photofile.get('image') as File;
+  const arrayBuffer = await file.arrayBuffer();
+  await putFile(keyName, Buffer.from(arrayBuffer));
+
+  return { status: 200, content: 'ok' };
+}
+
+export async function updatePhoto(photo: Photo) {
+  const res = await prisma.photo.update({
+    where: {
+      id: photo.id,
+    },
+    data: {
+      title: photo.title,
+      license: !!photo.license,
+      tags: {
+        set: photo.tags.map((tagId: number) => ({ id: tagId })),
+      },
+      price: photo.price,
+      licensePrice: photo.licensePrice ?? 0,
+      categories: {
+        set: photo.categories.map((categoryId: number) => ({ id: categoryId })),
+      },
+    },
+  });
+  console.log(res)
+
+  return { status: 200, content: 'ok' };
+}
+
+
+export async function deletePhoto(id: number) {
+
+  const photo = await prisma.photo.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!photo) {
+    return { status: 404, content: 'Photo not found' };
+  }
+
+  await prisma.photo.delete({
+    where: {
+      id,
+    },
+  });
+
+  await deleteFile(photo.photoURL);
+
+  return { status: 200, content: 'ok' };
 }
