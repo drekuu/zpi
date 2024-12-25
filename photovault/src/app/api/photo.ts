@@ -2,8 +2,7 @@
 
 import prisma from './_lib/prisma';
 import { deleteFile, getFilePublicUrl, putFile } from './_lib/cloud';
-import { Photo, PhotoFilters } from '@/models/photo';
-import { StreamingBlobPayloadInputTypes } from '@smithy/types';
+import { ManagementTablePhoto, PhotoFilters } from '@/models/photo';
 import _ from 'lodash';
 import { verifySession } from './_lib/session';
 
@@ -164,14 +163,21 @@ export async function getPhotosByPhotographerWithDetails(username: string) {
       tags: true,
       categories: true,
     },
+    orderBy: [
+      {
+        id: 'asc',
+      },
+    ],
   });
 
   return photos.map((photo) => {
     return {
       ...photo,
       photoURL: getFilePublicUrl(photo.photoURL),
-      tags: photo.tags.map((tag) => tag.name),
-      categories: photo.categories.map((category) => category.name),
+      price: photo.price.toNumber(),
+      licensePrice: photo.price.toNumber(),
+      tags: photo.tags.map((tag) => tag.id),
+      categories: photo.categories.map((category) => category.id),
     };
   });
 }
@@ -179,22 +185,26 @@ export async function getPhotosByPhotographerWithDetails(username: string) {
 export async function putPhoto(
   photoname: string,
   photofile: FormData,
-  photo: Photo,
+  photo: ManagementTablePhoto,
 ) {
   const session = await verifySession();
+  if (!session || !session.photographId) {
+    return null;
+  }
+
   const prismaResponse = await prisma.photo.create({
     data: {
-      photographId: session!!.photographId!!,
+      photographId: session.photographId,
       photoURL: photoname,
       title: photo.title,
       license: !!photo.license,
       tags: {
-        connect: photo.tags.map((tagId: number) => ({ id: tagId })),
+        connect: photo.tags.map((tag) => ({ id: tag })),
       },
       price: photo.price,
       licensePrice: photo.licensePrice ?? 0,
       categories: {
-        connect: photo.categories.map((categoryId: number) => ({ id: categoryId })),
+        connect: photo.categories.map((category) => ({ id: category })),
       },
     },
   });
@@ -217,8 +227,8 @@ export async function putPhoto(
   return { status: 200, content: 'ok' };
 }
 
-export async function updatePhoto(photo: Photo) {
-  const res = await prisma.photo.update({
+export async function updatePhoto(photo: ManagementTablePhoto) {
+  await prisma.photo.update({
     where: {
       id: photo.id,
     },
@@ -226,23 +236,20 @@ export async function updatePhoto(photo: Photo) {
       title: photo.title,
       license: !!photo.license,
       tags: {
-        set: photo.tags.map((tagId: number) => ({ id: tagId })),
+        set: photo.tags.map((tag) => ({ id: tag })),
       },
       price: photo.price,
       licensePrice: photo.licensePrice ?? 0,
       categories: {
-        set: photo.categories.map((categoryId: number) => ({ id: categoryId })),
+        set: photo.categories.map((category) => ({ id: category })),
       },
     },
   });
-  console.log(res)
 
   return { status: 200, content: 'ok' };
 }
 
-
 export async function deletePhoto(id: number) {
-
   const photo = await prisma.photo.findUnique({
     where: {
       id,

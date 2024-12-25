@@ -3,7 +3,10 @@
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
 import Filters from './Filters/Filters';
 import { usePathname } from 'next/navigation';
-import { useCategories } from '@/services/query/category';
+import {
+  mapCategoriesByHrefKey,
+  useCategories,
+} from '@/services/query/category';
 import LoadedQueries from '@/components/LoadedQuery/LoadedQueries';
 import { useTags } from '@/services/query/tag';
 import { useTranslations } from 'next-intl';
@@ -25,7 +28,7 @@ export default function New({ children }: { children: ReactNode }) {
   }, [pathname]);
 
   const categoriesQuery = useCategories();
-  const categories = categoriesQuery.data;
+  const categories = mapCategoriesByHrefKey(categoriesQuery.data);
   const categoryName = useMemo(() => {
     if (category && categories?.[category]) {
       return categories[category].name;

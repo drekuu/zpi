@@ -8,5 +8,5 @@ export type Category = Unpacked<
 };
 
 export type Categories = {
-  [key: string]: Category;
+  [key: string | number]: Category;
 };

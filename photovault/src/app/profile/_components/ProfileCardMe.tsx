@@ -67,19 +67,17 @@ export default function PhotographerCardMe() {
     <LoadedQuery query={query} handleError={true}>
       {data && (
         <header className='flex overflow-hidden z-0 flex-wrap gap-8 justify-center items-start self-center px-4 py-5 max-md:max-w-full'>
-          <div className='flex overflow-hidden flex-col' >
+          <div className='flex overflow-hidden flex-col'>
             {isEditing ? (
               <input
                 type='file'
                 accept='image/*'
                 name='avatar'
-                onChange={(e:any) => 
-                  { 
-                    var file = e.target.files[0]; 
-                    setAvatarUrlTemp(file.name);
-                    setAvatarUrlFile(file);
-                  }
-                }
+                onChange={(e: any) => {
+                  const file = e.target.files[0];
+                  setAvatarUrlTemp(file.name);
+                  setAvatarUrlFile(file);
+                }}
                 placeholder={t('enter-avatar')}
               />
             ) : (

@@ -122,9 +122,9 @@
     "save": "Zapisz",
     "cancel": "Anuluj",
     "enter-avatar": "Wprowadź URL awatara",
-    "enter-about-me": "Wprowadź opis o mnie",
-    "enter-email": "Wprowadź adres email",
     "enter-username": "Wprowadź nazwę użytkownika",
+    "enter-email": "Wprowadź adres email",
+    "enter-about-me": "Wprowadź opis o mnie",
     "profile-picture": "Zdjęcie profilowe",
     "no-results": "Brak wyników",
     "add-photo": "Dodaj zdjęcie",
@@ -132,8 +132,8 @@
     "tags-required": "Tagi są wymagane",
     "categories-required": "Kategorie są wymagane",
     "price-required": "Cena jest wymagana",
-    "delete-confirm": "Czy na pewno chcesz usunąć to zdjęcie?",
-    "localization": "pl"
+    "price-invalid": "Cena musi być nieujemną liczbą",
+    "delete-confirm": "Czy na pewno chcesz usunąć to zdjęcie?"
   },
   "Photo": {
     "none": "brak",
