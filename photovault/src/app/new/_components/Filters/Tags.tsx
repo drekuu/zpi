@@ -20,7 +20,7 @@ export default function Tags({ selectedTags, setSelectedTags }: TagsProps) {
   const tagsT = useTranslations('Tags');
 
   const query = useTags();
-  const tags = query.data ? Object.values(query.data) : undefined;
+  const tags = query.data;
 
   const [search, setSearch] = useState('');
   const filteredTags = useMemo(

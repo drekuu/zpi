@@ -3,5 +3,5 @@ import { getAllTags } from '@/app/api/tag';
 
 export type Tag = Unpacked<Awaited<ReturnType<typeof getAllTags>>>;
 export type Tags = {
-  [key: string]: Tag;
+  [key: string | number]: Tag;
 };

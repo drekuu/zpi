@@ -1,4 +1,9 @@
-import { getPhoto, getPhotos, getPhotosByIds } from '@/app/api/photo';
+import {
+  getPhoto,
+  getPhotos,
+  getPhotosByIds,
+  getPhotosByPhotographerWithDetails,
+} from '@/app/api/photo';
 import { Unpacked } from '@/utils/typescript';
 
 export type PhotoFilters = {
@@ -24,6 +29,9 @@ export type GalleryPhoto = NonNullable<
 export type FullPhoto = NonNullable<Awaited<ReturnType<typeof getPhoto>>>;
 export type CartPhotoDetails = NonNullable<
   Unpacked<Awaited<ReturnType<typeof getPhotosByIds>>>
+>;
+export type ManagementTablePhoto = Unpacked<
+  Awaited<ReturnType<typeof getPhotosByPhotographerWithDetails>>
 >;
 
 export type CartPhotosDetails = {
