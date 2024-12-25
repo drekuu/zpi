@@ -71,8 +71,10 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
     categoriesQuery.isLoading || tagsQuery.isLoading || photosQuery.isLoading;
   const isError =
     categoriesQuery.isError || tagsQuery.isError || photosQuery.isError;
-  const isPending =
-    categoriesQuery.isPending || tagsQuery.isPending || photosQuery.isPending;
+  const isFetching =
+    categoriesQuery.isFetching ||
+    tagsQuery.isFetching ||
+    photosQuery.isFetching;
 
   const [isEditing, setIsEditing] = useState(false);
   const [validationErrors, setValidationErrors] = useState<
@@ -442,7 +444,7 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
       isLoading: isLoading,
       isSaving: isAddingPhoto || isUpdatingPhoto || isDeletingPhoto,
       showAlertBanner: isError,
-      showProgressBars: isPending,
+      showProgressBars: isFetching,
     },
   });
 
