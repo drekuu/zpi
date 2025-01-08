@@ -9,19 +9,30 @@ export default function BuyerDetails() {
   const user = query.data;
 
   const loggedIn = !!user;
-  const hasDeliveryData = !!user?.deliveryData;
+  const hasDeliveryData = loggedIn && !!user?.deliveryData;
 
-  const [fullname, setFullname] = useState(hasDeliveryData ? `${user.deliveryData.}`);
+  const [name, setName] = useState(
+    hasDeliveryData ? user.deliveryData!.name : '',
+  );
+  const [surname, setSurname] = useState(
+    hasDeliveryData ? user.deliveryData!.surname : '',
+  );
 
   return (
     <Section title='Buyer details'>
       <LoadedQuery query={query} handleError={true}>
         <div className='flex flex-col gap-5'>
           <InputField
-            label='Full name'
+            label='First name'
             type='text'
-            value={fullname}
-            onChange={(e) => setFullname(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <InputField
+            label='Surname'
+            type='text'
+            value={surname}
+            onChange={(e) => setSurname(e.target.value)}
           />
         </div>
       </LoadedQuery>
