@@ -205,3 +205,43 @@ export const getPhotosByPhotographer = publicProcedure
       ),
     );
   });
+
+export const getPhotosByPhotographerWithDetails = publicProcedure
+  .input(
+    z.object({
+      username: z.string(),
+    }),
+  )
+  .query(async (opts) => {
+    const { username } = opts.input;
+
+    const photos = await prisma.photo.findMany({
+      where: {
+        photograph: {
+          user: {
+            username: username,
+          },
+        },
+      },
+      include: {
+        tags: true,
+        categories: true,
+      },
+      orderBy: [
+        {
+          id: 'asc',
+        },
+      ],
+    });
+
+    return photos.map((photo) => {
+      return {
+        ...photo,
+        photoURL: getFilePublicUrl(photo.photoURL),
+        price: photo.price.toNumber(),
+        licensePrice: photo.price.toNumber(),
+        tags: photo.tags.map((tag) => tag.id),
+        categories: photo.categories.map((category) => category.id),
+      };
+    });
+  });

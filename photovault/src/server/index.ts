@@ -7,11 +7,11 @@ import {
   getPhotos,
   getPhotosByIds,
   getPhotosByPhotographer,
+  getPhotosByPhotographerWithDetails,
 } from '@/app/api/_routes/photo';
 import { getAllTags } from '@/app/api/_routes/tag';
 import {
   getMyself as getMyselfPhotograph,
-  updateMyself,
   getPhotographer,
   getFeaturedPhotographers,
 } from '@/app/api/_routes/photograph';
@@ -28,13 +28,13 @@ export const appRouter = router({
     getPhotos,
     getPhotosByIds,
     getPhotosByPhotographer,
+    getPhotosByPhotographerWithDetails,
   },
   tag: {
     getAllTags,
   },
   photograph: {
     getMyself: getMyselfPhotograph,
-    updateMyself,
     getPhotographer,
     getFeaturedPhotographers,
   },

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import FilterIcon from '@/../public/icons/filter.svg';
 import Category from './Category';
@@ -29,7 +29,10 @@ export default function Filters({ urlCategory }: FiltersProps) {
   const router = useRouter();
 
   const categoriesQuery = useCategories();
-  const categories = mapCategoriesByHrefKey(categoriesQuery.data);
+  const categories = useMemo(
+    () => mapCategoriesByHrefKey(categoriesQuery.data),
+    [categoriesQuery.data],
+  );
 
   const tagsQuery = useTags();
   const tags = mapTagsByName(tagsQuery.data);
@@ -40,7 +43,9 @@ export default function Filters({ urlCategory }: FiltersProps) {
   const [selectedCategory, setSelectedCategory] = useState<
     string | undefined
   >();
-  const [selectedPriceRange, setSelectedPriceRange] = useState<number[]>([]);
+  const [selectedPriceRange, setSelectedPriceRange] = useState<
+    [number, number]
+  >([0, 0]);
   const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
 
   useEffect(() => {

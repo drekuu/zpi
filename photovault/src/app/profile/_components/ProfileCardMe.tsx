@@ -6,15 +6,17 @@ import EditIcon from '../static/edit.svg';
 import EmailIcon from '../static/mail.svg';
 import { useMyself } from '@/services/query/photograph';
 import LoadedQuery from '@/components/LoadedQuery/LoadedQuery';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+import { PhotographUpdateData } from '@/models/photograph';
+import { updateMyself } from '@/app/api/photograph';
 import { trpc } from '@/trpc/client';
 
 export default function PhotographerCardMe() {
   const t = useTranslations('Profile');
 
-  const queryClient = useQueryClient();
   const query = useMyself();
   const data = query.data;
+  const utils = trpc.useUtils();
 
   const { mutate } = useMutation({
     mutationFn: (data: PhotographUpdateData) => {
@@ -22,9 +24,7 @@ export default function PhotographerCardMe() {
       formData.append('image', avatarUrlFile!);
       return updateMyself(avatarUrlFile!.name, formData, data);
     },
-  const { mutate } = trpc.photograph.updateMyself.useMutation({
-    onSuccess: async () =>
-      await queryClient.invalidateQueries({ queryKey: ['photograph', 'me'] }),
+    onSuccess: () => utils.photograph.getMyself.invalidate(),
     onError: (error) => console.error('Error updating user data:', error),
     onSettled: () => setIsEditing(false),
   });

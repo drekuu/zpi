@@ -9,7 +9,6 @@ import clsx from 'clsx';
 import { TunnelExit, TunnelProvider } from '@mittwald/react-tunnel';
 import './globals.css';
 import PopupController from '@/components/Popup/PopupController';
-import TRPCProvider from '@/trpc/TRPCProvider';
 
 // Fonts
 const inter = Inter({

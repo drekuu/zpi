@@ -1,22 +1,7 @@
-import { PhotoFilters } from '@/models/photo';
 import { trpc } from '@/trpc/client';
-import {
-  CartPhotosDetails,
-  FullPhoto,
-  ManagementTablePhoto,
-  PhotoFilters,
-} from '@/models/photo';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  getPhotos,
-  getPhoto,
-  getPhotosByPhotographer,
-  putPhoto,
-  getPhotosByPhotographerWithDetails,
-  updatePhoto,
-  deletePhoto,
-  getPhotosByIds,
-} from '@/app/api/photo';
+import { FullPhoto, ManagementTablePhoto, PhotoFilters } from '@/models/photo';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { putPhoto, updatePhoto, deletePhoto } from '@/app/api/photo';
 
 export function usePhotos(filters?: PhotoFilters) {
   return trpc.photo.getPhotos.useQuery(filters);
@@ -35,11 +20,7 @@ export function usePhotosByPhotographer(username: string) {
 }
 
 export function useGetPhotosByPhotographerWithDetails(username: string) {
-  return useQuery({
-    queryKey: ['photographer', 'photos', username, 'details'],
-    queryFn: () =>
-      getPhotosByPhotographerWithDetails(username).then((photos) => photos),
-  });
+  return trpc.photo.getPhotosByPhotographerWithDetails.useQuery({ username });
 }
 
 export function usePutPhoto() {
