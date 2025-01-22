@@ -1,5 +1,8 @@
 import { Unpacked } from '@/utils/typescript';
-import { getFeaturedPhotographers } from '@/app/api/photograph';
+import type { inferRouterOutputs } from '@trpc/server';
+import { AppRouter } from '@/server';
+
+type RouterOutput = inferRouterOutputs<AppRouter>;
 
 export type PhotographUpdateData = {
   displayedUserName?: string;
@@ -9,5 +12,5 @@ export type PhotographUpdateData = {
 };
 
 export type FeaturedPhotographer = Unpacked<
-  Awaited<ReturnType<typeof getFeaturedPhotographers>>
+  Awaited<RouterOutput['photograph']['getFeaturedPhotographers']>
 >;

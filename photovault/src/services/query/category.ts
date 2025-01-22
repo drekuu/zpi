@@ -1,18 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
-import { getAllCategories } from '@/app/api/category';
+import { trpc } from '@/trpc/client';
 import { Category, Categories } from '@/models/category';
 
 export function useCategories() {
-  return useQuery({
-    queryKey: ['categories'],
-    queryFn: () =>
-      getAllCategories().then((categories) =>
-        categories.map((category) => ({
-          ...category,
-          hrefKey: category.name.toLowerCase().replace(' ', '_'),
-        })),
-      ),
-  });
+  return trpc.category.getAllCategories.useQuery();
 }
 
 export function mapCategoriesByHrefKey(categories?: Array<Category>) {

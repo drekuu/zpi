@@ -1,7 +1,10 @@
 import { Unpacked } from '@/utils/typescript';
-import { getAllTags } from '@/app/api/tag';
+import type { inferRouterOutputs } from '@trpc/server';
+import { AppRouter } from '@/server';
 
-export type Tag = Unpacked<Awaited<ReturnType<typeof getAllTags>>>;
+type RouterOutput = inferRouterOutputs<AppRouter>;
+
+export type Tag = Unpacked<Awaited<RouterOutput['tag']['getAllTags']>>;
 export type Tags = {
   [key: string | number]: Tag;
 };

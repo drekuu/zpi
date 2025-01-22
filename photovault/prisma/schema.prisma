@@ -16,7 +16,7 @@ model User {
   username            String                @unique
   password            String
   photograph          Photograph?
-  deliveryData        DeliveryData[]
+  deliveryData        DeliveryData?
   digitalTransaction  DigitalTransaction[]
   physicalTransaction PhysicalTransaction[]
 }

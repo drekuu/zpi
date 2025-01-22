@@ -4,10 +4,11 @@ import { ReactNode, useEffect, useState } from 'react';
 import { UseQueryResult } from '@tanstack/react-query';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import Button from '@/components/Form/Button';
+import { UseTRPCQueryResult } from '@trpc/react-query/shared';
 
 interface LoadedQueriesProps {
   children: ReactNode;
-  queries: Array<UseQueryResult>;
+  queries: Array<UseQueryResult | UseTRPCQueryResult<any, any>>;
   onlyFirstLoad?: boolean;
   handleError?: boolean;
 }

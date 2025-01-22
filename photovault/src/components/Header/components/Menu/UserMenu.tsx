@@ -24,7 +24,7 @@ export default function UserMenu({ children }: UserMenuProps) {
   const username = userData?.username;
   const isPhotograph = userData?.isPhotograph;
 
-  const { setLoggedIn, loggedIn } = useUserStore((store) => store);
+  const { setLoggedIn, loggedIn, setUserData } = useUserStore((store) => store);
   const t = useTranslations('Header.UserMenu');
   const ref = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -62,6 +62,7 @@ export default function UserMenu({ children }: UserMenuProps) {
               onClick={() => {
                 void logout();
                 setLoggedIn(false);
+                setUserData();
                 setOpen(false);
               }}
             >

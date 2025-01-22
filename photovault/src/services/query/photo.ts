@@ -1,63 +1,26 @@
-import {
-  CartPhotosDetails,
-  FullPhoto,
-  ManagementTablePhoto,
-  PhotoFilters,
-} from '@/models/photo';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  getPhotos,
-  getPhoto,
-  getPhotosByPhotographer,
-  putPhoto,
-  getPhotosByPhotographerWithDetails,
-  updatePhoto,
-  deletePhoto,
-  getPhotosByIds,
-} from '@/app/api/photo';
+import { trpc } from '@/trpc/client';
+import { FullPhoto, ManagementTablePhoto, PhotoFilters } from '@/models/photo';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { putPhoto, updatePhoto, deletePhoto } from '@/app/api/photo';
 
 export function usePhotos(filters?: PhotoFilters) {
-  return useQuery({
-    queryKey: ['photos', filters],
-    queryFn: () => getPhotos(filters).then((photos) => photos),
-  });
+  return trpc.photo.getPhotos.useQuery(filters);
 }
 
 export function usePhoto(id: number) {
-  return useQuery({
-    queryKey: ['photo', id],
-    queryFn: () => getPhoto(id).then((photo) => photo),
-  });
+  return trpc.photo.getPhoto.useQuery({ id });
 }
 
 export function usePhotosByIds(ids: Array<number>) {
-  return useQuery({
-    queryKey: ['photos/ids', ids],
-    queryFn: () =>
-      getPhotosByIds(ids).then((photos) =>
-        photos
-          ? photos.reduce((result: CartPhotosDetails, photo) => {
-              result[photo.id!] = photo;
-              return result;
-            }, {})
-          : null,
-      ),
-  });
+  return trpc.photo.getPhotosByIds.useQuery({ ids });
 }
 
 export function usePhotosByPhotographer(username: string) {
-  return useQuery({
-    queryKey: ['photographer', 'photos', username],
-    queryFn: () => getPhotosByPhotographer(username).then((photos) => photos),
-  });
+  return trpc.photo.getPhotosByPhotographer.useQuery({ username });
 }
 
 export function useGetPhotosByPhotographerWithDetails(username: string) {
-  return useQuery({
-    queryKey: ['photographer', 'photos', username, 'details'],
-    queryFn: () =>
-      getPhotosByPhotographerWithDetails(username).then((photos) => photos),
-  });
+  return trpc.photo.getPhotosByPhotographerWithDetails.useQuery({ username });
 }
 
 export function usePutPhoto() {

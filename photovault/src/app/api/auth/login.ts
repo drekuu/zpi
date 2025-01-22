@@ -1,8 +1,8 @@
 'use server';
 
 import bcrypt from 'bcrypt';
-import prisma from '../_lib/prisma';
-import { createSession } from '../_lib/session';
+import prisma from '../../../server/prisma';
+import { createSession } from '../../../server/session';
 import { UserData } from '@/models/user';
 
 type SigninResult = {

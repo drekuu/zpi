@@ -1,37 +1,20 @@
-import {
-  getPhoto,
-  getPhotos,
-  getPhotosByIds,
-  getPhotosByPhotographerWithDetails,
-} from '@/app/api/photo';
 import { Unpacked } from '@/utils/typescript';
+import type { inferRouterOutputs, inferRouterInputs } from '@trpc/server';
+import type { AppRouter } from '@/server';
 
-export type PhotoFilters = {
-  /**
-   * Category ID
-   */
-  category?: number;
+type RouterInput = inferRouterInputs<AppRouter>;
+type RouterOutput = inferRouterOutputs<AppRouter>;
 
-  /**
-   * Two element array containing minimum and maximum price
-   */
-  priceRange: number[];
-
-  /**
-   * List of tag IDs
-   */
-  tags: Array<number>;
-};
-
+export type PhotoFilters = RouterInput['photo']['getPhotos'];
 export type GalleryPhoto = NonNullable<
-  Unpacked<Awaited<ReturnType<typeof getPhotos>>>
+  Unpacked<Awaited<RouterOutput['photo']['getPhoto']>>
 >;
-export type FullPhoto = NonNullable<Awaited<ReturnType<typeof getPhoto>>>;
+export type FullPhoto = NonNullable<Awaited<RouterOutput['photo']['getPhoto']>>;
 export type CartPhotoDetails = NonNullable<
-  Unpacked<Awaited<ReturnType<typeof getPhotosByIds>>>
+  Unpacked<Awaited<RouterOutput['photo']['getPhotosByIds']>>
 >;
 export type ManagementTablePhoto = Unpacked<
-  Awaited<ReturnType<typeof getPhotosByPhotographerWithDetails>>
+  Awaited<RouterOutput['photo']['getPhotosByPhotographerWithDetails']>
 >;
 
 export type CartPhotosDetails = {

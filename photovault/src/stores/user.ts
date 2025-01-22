@@ -9,7 +9,7 @@ interface UserState {
 
 interface UserActions {
   setLoggedIn: (state: boolean) => void;
-  setUserData: (state: UserData) => void;
+  setUserData: (state?: UserData) => void;
 }
 
 type UserStore = UserState & UserActions;
@@ -21,7 +21,7 @@ export const useUserStore = create<UserStore>()(
         loggedIn: false,
         userData: undefined,
         setLoggedIn: (state: boolean) => set({ loggedIn: state }),
-        setUserData: (state: UserData) => set({ userData: state }),
+        setUserData: (state?: UserData) => set({ userData: state }),
       }),
       { name: 'user', storage: createJSONStorage(() => localStorage) },
     ),

@@ -5,7 +5,7 @@ import Accordion from '@/components/Accordion/Accordion';
 import { useTranslations } from 'next-intl';
 
 interface PriceProps {
-  setValue(value: number[]): void;
+  setValue(value: [number, number]): void;
 }
 
 export default function Price({ setValue }: PriceProps) {
