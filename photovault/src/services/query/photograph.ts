@@ -1,28 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
-import {
-  getFeaturedPhotographers,
-  getMyself,
-  getPhotographer,
-} from '@/app/api/photograph';
+import { trpc } from '@/trpc/client';
 
 export function useMyself() {
-  return useQuery({
-    queryKey: ['photograph', 'me'],
-    queryFn: () => getMyself().then((me) => me),
-  });
+  return trpc.photograph.getMyself.useQuery();
 }
 
 export function usePhotographer(name: string) {
-  return useQuery({
-    queryKey: ['photograph', 'name', name],
-    queryFn: () => getPhotographer(name).then((photographer) => photographer),
-  });
+  return trpc.photograph.getPhotographer.useQuery({ name });
 }
 
 export function useFeaturedPhotographers() {
-  return useQuery({
-    queryKey: ['featured-photographers'],
-    queryFn: () =>
-      getFeaturedPhotographers().then((photographers) => photographers),
-  });
+  return trpc.photograph.getFeaturedPhotographers.useQuery();
 }

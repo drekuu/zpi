@@ -1,10 +1,10 @@
-'use server';
-
+import 'server-only';
 import _ from 'lodash';
-import prisma from './_lib/prisma';
-import { verifySession } from '@/app/api/_lib/session';
+import prisma from '@/server/prisma';
+import { verifySession } from '@/server/session';
+import { publicProcedure } from '@/server/trpc';
 
-export async function getMyself() {
+export const getMyself = publicProcedure.query(async () => {
   const session = await verifySession();
   if (!session) {
     return null;
@@ -31,4 +31,4 @@ export async function getMyself() {
         'deliveryData.telephone',
       ])
     : null;
-}
+});

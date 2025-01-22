@@ -3,10 +3,11 @@ import { UseQueryResult } from '@tanstack/react-query';
 import Button from '@/components/Form/Button';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { useTranslations } from 'next-intl';
+import { UseTRPCQueryResult } from '@trpc/react-query/shared';
 
 interface LoadedQueryProps {
   children: ReactNode;
-  query: UseQueryResult;
+  query: UseQueryResult | UseTRPCQueryResult<any, any>;
   handleError?: boolean;
 }
 

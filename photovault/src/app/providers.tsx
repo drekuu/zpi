@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useEffect, ReactNode, useState } from 'react';
 import { updateSession } from '@/app/api/auth/session';
 import { useUserStore } from '@/stores/user';
+import TRPCProvider from '@/trpc/TRPCProvider';
 
 export default function Providers({
   children,
@@ -69,7 +70,7 @@ export default function Providers({
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <TRPCProvider>{children}</TRPCProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

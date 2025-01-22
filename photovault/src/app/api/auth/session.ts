@@ -1,6 +1,9 @@
 'use server';
 
-import { deleteSession, updateSession as update } from '../_lib/session';
+import {
+  deleteSession,
+  updateSession as update,
+} from '../../../server/session';
 import { redirect } from 'next/navigation';
 
 export async function updateSession(): Promise<boolean> {

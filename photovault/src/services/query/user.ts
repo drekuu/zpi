@@ -1,9 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { getMyself } from '@/app/api/user';
+import { trpc } from '@/trpc/client';
 
 export function useMyself() {
-  return useQuery({
-    queryKey: ['me'],
-    queryFn: () => getMyself().then((me) => me),
-  });
+  return trpc.user.getMyself.useQuery();
 }

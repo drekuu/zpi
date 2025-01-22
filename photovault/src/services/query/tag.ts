@@ -1,16 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { getAllTags } from '@/app/api/tag';
-import { Tags } from '@/models/tag';
+import { trpc } from '@/trpc/client';
 
 export function useTags() {
-  return useQuery({
-    queryKey: ['tags'],
-    queryFn: () =>
-      getAllTags().then((tags) =>
-        tags.reduce((result: Tags, tag) => {
-          result[tag.name] = tag;
-          return result;
-        }, {}),
-      ),
-  });
+  return trpc.tag.getAllTags.useQuery();
 }

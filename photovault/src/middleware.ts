@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { decryptSession } from '@/app/api/_lib/session';
+import { decryptSession } from '@/server/session';
 import { cookies } from 'next/headers';
 
 const photographProtectedRoutes = ['/profile'];

@@ -1,7 +1,7 @@
 'use server';
 
 import bcrypt from 'bcrypt';
-import prisma from '../_lib/prisma';
+import prisma from '../../../server/prisma';
 import { RegisterData } from '@/models/register';
 
 export async function signup(data: RegisterData) {

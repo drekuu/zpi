@@ -1,5 +1,5 @@
 import { Unpacked } from '@/utils/typescript';
-import { getAllCategories } from '@/app/api/category';
+import { getAllCategories } from '@/app/api/_routes/category';
 
 export type Category = Unpacked<
   Awaited<ReturnType<typeof getAllCategories>>

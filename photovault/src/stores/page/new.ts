@@ -9,7 +9,7 @@ interface NewPageState {
 
 interface NewPageActions {
   setCategoryFilter: (category: number | undefined) => void;
-  setPriceRangeFilter: (priceRange: number[]) => void;
+  setPriceRangeFilter: (priceRange: [number, number]) => void;
   setTagsFilter: (tags: Array<number>) => void;
 }
 
@@ -26,15 +26,15 @@ export const useNewPageStore = create<NewPageStore>()(
         },
         setCategoryFilter: (category: number | undefined) =>
           set((state) => {
-            state.filters.category = category;
+            state.filters!.category = category;
           }),
-        setPriceRangeFilter: (priceRange: number[]) =>
+        setPriceRangeFilter: (priceRange: [number, number]) =>
           set((state) => {
-            state.filters.priceRange = priceRange;
+            state.filters!.priceRange = priceRange;
           }),
         setTagsFilter: (tags: Array<number>) =>
           set((state) => {
-            state.filters.tags = tags;
+            state.filters!.tags = tags;
           }),
       }),
     ),
