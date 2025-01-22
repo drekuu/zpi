@@ -21,10 +21,10 @@ export default function Category({
 }: CategoryProps) {
   const locale = getLocale();
   const t = useTranslations('NewPage.Filters');
-  const categoryT = useTranslations('Categories');
+  const categoriesT = useTranslations('Categories');
 
   const query = useCategories();
-  const categories = query.data ? Object.values(query.data) : undefined;
+  const categories = query.data;
 
   const [search, setSearch] = useState('');
   const filteredCategories = useMemo(
@@ -35,12 +35,12 @@ export default function Category({
           name:
             locale === 'en'
               ? category.name
-              : categoryT(category.hrefKey as any),
+              : categoriesT(category.hrefKey as any),
         }))
         ?.filter((category) =>
           category.name.toLowerCase().includes(search.toLowerCase()),
         ),
-    [categories, search, categoryT, locale],
+    [categories, search, categoriesT, locale],
   );
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export default function Category({
                   label={
                     locale === 'en'
                       ? category.name
-                      : categoryT(category.hrefKey as any)
+                      : categoriesT(category.hrefKey as any)
                   }
                   onClick={() => {
                     if (selectedCategory === category.hrefKey) {

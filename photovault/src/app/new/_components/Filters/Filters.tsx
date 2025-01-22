@@ -8,8 +8,11 @@ import Price from './Price';
 import Tags from './Tags';
 import Button from '@/components/Form/Button';
 import { useNewPageStore } from '@/stores/page/new';
-import { useCategories } from '@/services/query/category';
-import { useTags } from '@/services/query/tag';
+import {
+  mapCategoriesByHrefKey,
+  useCategories,
+} from '@/services/query/category';
+import { mapTagsByName, useTags } from '@/services/query/tag';
 import { useTranslations } from 'next-intl';
 
 const Separator = () => {
@@ -26,10 +29,10 @@ export default function Filters({ urlCategory }: FiltersProps) {
   const router = useRouter();
 
   const categoriesQuery = useCategories();
-  const categories = categoriesQuery.data;
+  const categories = mapCategoriesByHrefKey(categoriesQuery.data);
 
   const tagsQuery = useTags();
-  const tags = tagsQuery.data;
+  const tags = mapTagsByName(tagsQuery.data);
 
   const { setCategoryFilter, setPriceRangeFilter, setTagsFilter } =
     useNewPageStore((store) => store);
