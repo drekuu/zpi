@@ -4,7 +4,6 @@ import { getFilePublicUrl } from '@/server/cloud';
 import _ from 'lodash';
 import { publicProcedure } from '@/server/trpc';
 import { z } from 'zod';
-import { Unpacked } from '@/utils/typescript';
 
 const photoFilterSchema = z
   .object({
@@ -153,7 +152,7 @@ export const getPhotosByIds = publicProcedure
       return null;
     }
 
-    const photosSanitated = photos.map((photo) =>
+    return photos.map((photo) =>
       _.pick(
         {
           ...photo,
@@ -164,16 +163,6 @@ export const getPhotosByIds = publicProcedure
         ['title', 'photoURL', 'id', 'price', 'license', 'licensePrice'],
       ),
     );
-
-    type Photo = Unpacked<typeof photosSanitated>;
-    type Photos = {
-      [id: number]: Photo;
-    };
-
-    return photosSanitated.reduce((result: Photos, photo) => {
-      result[photo.id!] = photo;
-      return result;
-    }, {});
   });
 
 export const getPhotosByPhotographer = publicProcedure
