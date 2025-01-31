@@ -6,9 +6,11 @@ import { usePhotosByPhotographer } from '@/services/query/photo';
 import { usePhotographer } from '@/services/query/photograph';
 import LoadedQueries from '@/components/LoadedQuery/LoadedQueries';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 
 export default function Profile({ params }: { params: { name: string } }) {
   const t = useTranslations('Profile');
+  const router = useRouter();
 
   const photosQuery = usePhotosByPhotographer(params.name);
   const photos = photosQuery.data;
@@ -37,6 +39,7 @@ export default function Profile({ params }: { params: { name: string } }) {
                     <div
                       className='flex-auto max-w-[300px] cursor-pointer'
                       key={photo.id}
+                      onClick={() => router.push(`/photo/${photo.id}`)}
                     >
                       <picture>
                         <img

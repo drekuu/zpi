@@ -19,11 +19,11 @@ export default function PhotographerCard({
       className='cursor-pointer gap-5 flex h-[150px] items-center p-4 border border-black rounded-2xxl'
       onClick={() => router.push(`/profile/${photographer.user!.username}`)}
     >
-      <picture className='flex-shink-0 max-w-[60px] aspect-square object-cover rounded-full'>
+      <picture className='flex-shink-0 w-[60px] aspect-square object-cover rounded-full'>
         {photographer.avatarURL ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            className='rounded-[inherit]'
+            className='rounded-[inherit] w-full h-full'
             src={photographer.avatarURL}
             alt=''
           />

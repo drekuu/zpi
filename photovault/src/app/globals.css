@@ -4,7 +4,7 @@
 
 :root {
   /* page size constraints */
-  --page-min-width: 280px;
+  --page-min-width: 320px;
   --page-max-width: 1920px;
   --page-content-width: 96%;
 

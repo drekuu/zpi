@@ -4,6 +4,7 @@ import { getFilePublicUrl } from '@/server/cloud';
 import _ from 'lodash';
 import { publicProcedure } from '@/server/trpc';
 import { z } from 'zod';
+import { Unpacked } from '@/utils/typescript';
 
 const photoFilterSchema = z
   .object({
@@ -59,6 +60,31 @@ export const getPhotos = publicProcedure
                 : {},
           }
         : {},
+    });
+
+    return photos.map((photo) =>
+      _.pick(
+        {
+          ...photo,
+          photoURL: getFilePublicUrl(photo.photoURL),
+        },
+        ['title', 'photoURL', 'id'],
+      ),
+    );
+  });
+
+export const getPhotosByName = publicProcedure
+  .input(z.object({ needle: z.string() }))
+  .query(async (opts) => {
+    const { needle } = opts.input;
+
+    const photos = await prisma.photo.findMany({
+      where: {
+        title: {
+          contains: needle,
+          mode: 'insensitive',
+        },
+      },
     });
 
     return photos.map((photo) =>
@@ -152,7 +178,7 @@ export const getPhotosByIds = publicProcedure
       return null;
     }
 
-    return photos.map((photo) =>
+    const photosMapped = photos.map((photo) =>
       _.pick(
         {
           ...photo,
@@ -163,6 +189,16 @@ export const getPhotosByIds = publicProcedure
         ['title', 'photoURL', 'id', 'price', 'license', 'licensePrice'],
       ),
     );
+
+    type Photo = Unpacked<typeof photosMapped>;
+    type Photos = {
+      [id: number]: Photo;
+    };
+
+    return photosMapped.reduce((result: Photos, current) => {
+      result[current.id] = current;
+      return result;
+    }, {});
   });
 
 export const getPhotosByPhotographer = publicProcedure

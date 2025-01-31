@@ -4,8 +4,8 @@ import { useTranslations } from 'next-intl';
 import Menu from '@/components/Menu/Menu';
 import MenuItem from '@/components/Menu/components/MenuItem';
 import Separator from '@/components/Menu/components/Separator';
-import CreditCardIcon from '@/../public/icons/menu/credit-card.svg';
-import SettingsIcon from '@/../public/icons/menu/settings.svg';
+// import CreditCardIcon from '@/../public/icons/menu/credit-card.svg';
+// import SettingsIcon from '@/../public/icons/menu/settings.svg';
 import UserIcon from '@/../public/icons/menu/user.svg';
 import LogoutIcon from '@/../public/icons/menu/logout.svg';
 import LoginIcon from '@/../public/icons/menu/login.svg';
@@ -47,7 +47,7 @@ export default function UserMenu({ children }: UserMenuProps) {
               </MenuItem>
             )}
 
-            <MenuItem onClick={() => router.push('/transactions')}>
+            {/*<MenuItem onClick={() => router.push('/transactions')}>
               <CreditCardIcon draggable={false} />
               <p>{t('transactions')}</p>
             </MenuItem>
@@ -55,7 +55,7 @@ export default function UserMenu({ children }: UserMenuProps) {
             <MenuItem onClick={() => router.push('/settings')}>
               <SettingsIcon draggable={false} />
               <p>{t('settings')}</p>
-            </MenuItem>
+            </MenuItem>*/}
 
             <Separator />
             <MenuItem

@@ -6,7 +6,7 @@ export default function Links() {
   const links = [
     { name: 'home', href: '/home' },
     { name: 'new', href: '/new' },
-    { name: 'explore', href: '/explore' },
+    // { name: 'explore', href: '/explore' },
   ] as const;
 
   return (
