@@ -29,8 +29,13 @@ if (!global.s3) {
   });
 }
 
-export function getFilePublicUrl(keyName: string) {
-  return `${PUBLIC_URL}${FILE_PREFIX}${keyName}`;
+export function getFilePublicUrl(
+  keyName: string,
+  ignorePrefix: boolean = false,
+) {
+  return ignorePrefix
+    ? `${PUBLIC_URL}${keyName}`
+    : `${PUBLIC_URL}${FILE_PREFIX}${keyName}`;
 }
 
 export async function putFile(

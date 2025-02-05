@@ -1,7 +1,6 @@
 import 'server-only';
 import sharp from 'sharp';
-import { join } from 'path';
-import { readFileSync } from 'node:fs';
+import { getFilePublicUrl } from '@/server/cloud';
 
 export async function preprocessImage(input: Buffer): Promise<Buffer | null> {
   // Image optimization settings
@@ -13,11 +12,11 @@ export async function preprocessImage(input: Buffer): Promise<Buffer | null> {
   const OPACITY = 0.1;
   const ROTATION = 30;
 
-  // Read watermark
-  const watermarkPath = join(process.cwd(), 'data', 'watermark.png');
-  const watermark = readFileSync(watermarkPath);
-
   try {
+    // Read watermark
+    const response = await fetch(getFilePublicUrl('other/watermark.png', true));
+    const watermark = Buffer.from(await response.arrayBuffer());
+
     const image = sharp(input).withMetadata().resize({
       width: MAX_IMAGE_SIZE,
       height: MAX_IMAGE_SIZE,
@@ -39,6 +38,7 @@ export async function preprocessImage(input: Buffer): Promise<Buffer | null> {
           blend: 'dest-in',
         },
       ])
+      .toFormat('png')
       .toBuffer({ resolveWithObject: true });
 
     const { width: watermarkWidth, height: watermarkHeight } = watermarkInfo;
