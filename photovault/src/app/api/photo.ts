@@ -4,6 +4,7 @@ import prisma from '@/server/prisma';
 import { deleteFile, putFile } from '@/server/cloud';
 import { ManagementTablePhoto } from '@/models/photo';
 import { verifySession } from '@/server/session';
+import { preprocessImage } from '@/server/image';
 
 export async function putPhoto(
   photoname: string,
@@ -13,6 +14,14 @@ export async function putPhoto(
   const session = await verifySession();
   if (!session || !session.photographId) {
     return null;
+  }
+
+  const file = photofile.get('image') as File;
+  const arrayBuffer = await file.arrayBuffer();
+
+  const processedImageBuffer = await preprocessImage(Buffer.from(arrayBuffer));
+  if (!processedImageBuffer) {
+    return { status: 500, content: 'failed to preprocess image' };
   }
 
   const prismaResponse = await prisma.photo.create({
@@ -32,7 +41,7 @@ export async function putPhoto(
     },
   });
 
-  const keyName = prismaResponse.id + photoname;
+  const keyName = crypto.randomUUID() + '.webp';
 
   await prisma.photo.update({
     where: {
@@ -43,10 +52,7 @@ export async function putPhoto(
     },
   });
 
-  const file = photofile.get('image') as File;
-  const arrayBuffer = await file.arrayBuffer();
-  await putFile(keyName, Buffer.from(arrayBuffer));
-
+  await putFile(keyName, processedImageBuffer);
   return { status: 200, content: 'ok' };
 }
 

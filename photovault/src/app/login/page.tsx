@@ -7,10 +7,11 @@ import InputField from '@/components/Form/InputField';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { signin } from '@/app/api/auth/login';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/user';
 import { UserData } from '@/models/user';
+import { trpc } from '@/trpc/client';
 
 type LoginData = {
   email: string;
@@ -18,7 +19,7 @@ type LoginData = {
 };
 
 export default function Login() {
-  const queryClient = useQueryClient();
+  const utils = trpc.useUtils();
   const { setLoggedIn, setUserData } = useUserStore((store) => store);
   const router = useRouter();
   const { mutate } = useMutation({
@@ -30,7 +31,7 @@ export default function Login() {
 
         setLoggedIn(true);
         setUserData(userData);
-        await queryClient.invalidateQueries({ queryKey: ['me'] });
+        await utils.user.getMyself.invalidate();
 
         router.push('/home');
       } else if (response?.status === 403) {

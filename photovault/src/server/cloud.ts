@@ -38,7 +38,7 @@ export async function putFile(
   body?: StreamingBlobPayloadInputTypes,
 ) {
   try {
-    console.log('[cloud:putFile] keyName: ', keyName, 'body: ', body);
+    console.log('[cloud:putFile] keyName:', keyName, 'body:', body);
     return await s3.send(
       new PutObjectCommand({
         Bucket: BUCKET_NAME,
@@ -47,7 +47,7 @@ export async function putFile(
       }),
     );
   } catch (err) {
-    console.error('[cloud:putFile] error: ', err);
+    console.error('[cloud:putFile] error:', err);
   }
 }
 
@@ -60,6 +60,6 @@ export async function deleteFile(keyName: string) {
       }),
     );
   } catch (err) {
-    console.error('[cloud:deleteFile] error: ', err);
+    console.error('[cloud:deleteFile] error:', err);
   }
 }

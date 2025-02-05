@@ -32,8 +32,8 @@ import { useTranslations } from 'next-intl';
 import { ManagementTablePhoto } from '@/models/photo';
 import { mapTagsById, useTags } from '@/services/query/tag';
 import { mapCategoriesById, useCategories } from '@/services/query/category';
-import { useQueryClient } from '@tanstack/react-query';
 import { getLocale } from '@/services/localeClient';
+import { trpc } from '@/trpc/client';
 
 interface ManagamentTableProps {
   username: string;
@@ -44,8 +44,9 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
   const tagsT = useTranslations('Tags');
   const categoriesT = useTranslations('Categories');
 
+  const utils = trpc.useUtils();
+
   const locale = getLocale();
-  const queryClient = useQueryClient();
 
   const categoriesQuery = useCategories();
   const categories = mapCategoriesById(
@@ -90,6 +91,7 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
     value === '' ||
     (Array.isArray(value) && value.length === 0);
   const validateNonNegative = (value: number) => isNaN(value) || value < 0;
+
   function validatePhoto(photo: ManagementTablePhoto) {
     return {
       title: validateRequired(photo.title) ? t('title-required') : undefined,
@@ -219,7 +221,16 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
               accessorKey: 'license',
               header: t('license'),
               editVariant: 'select',
-              editSelectOptions: ['true', 'false'],
+              editSelectOptions: [
+                {
+                  value: true,
+                  label: 'true',
+                },
+                {
+                  value: false,
+                  label: 'false',
+                },
+              ],
               muiEditTextFieldProps: {
                 required: false,
                 error: !!validationErrors.license,
@@ -299,8 +310,8 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
       });
       table.setCreatingRow(null);
 
-      await queryClient.invalidateQueries({
-        queryKey: ['photographer', 'photos', username, 'details'],
+      await utils.photo.getPhotosByPhotographerWithDetails.invalidate({
+        username,
       });
     };
 
@@ -322,16 +333,17 @@ const ManagementTable = ({ username }: ManagamentTableProps) => {
       });
       table.setEditingRow(null);
 
-      await queryClient.invalidateQueries({
-        queryKey: ['photographer', 'photos', username, 'details'],
+      await utils.photo.getPhotosByPhotographerWithDetails.invalidate({
+        username,
       });
     };
 
   const openDeleteConfirmModal = async (row: MRT_Row<ManagementTablePhoto>) => {
     if (window.confirm(t('delete-confirm'))) {
       await deletePhoto(row.original.id);
-      await queryClient.invalidateQueries({
-        queryKey: ['photographer', 'photos', username, 'details'],
+
+      await utils.photo.getPhotosByPhotographerWithDetails.invalidate({
+        username,
       });
     }
   };
