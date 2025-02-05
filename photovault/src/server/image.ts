@@ -14,7 +14,7 @@ export async function preprocessImage(input: Buffer): Promise<Buffer | null> {
   const ROTATION = 30;
 
   // Read watermark
-  const watermarkPath = join(process.cwd(), 'public', 'watermark.png');
+  const watermarkPath = join(process.cwd(), 'data', 'watermark.png');
   const watermark = readFileSync(watermarkPath);
 
   try {
