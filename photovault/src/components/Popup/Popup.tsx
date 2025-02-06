@@ -33,7 +33,7 @@ export default function withPopup<AdditionalProps>(
     return (
       <dialog
         ref={dialogRef}
-        className='fixed top-0 left-0 backdrop:backdrop-blur-sm w-11/12 max-w-[500px] m-auto rounded-xl overflow-clip py-8 px-6'
+        className='fixed top-0 left-0 backdrop:backdrop-blur-sm w-11/12 min-w-[--page-min-width] max-w-[500px] m-auto rounded-xl overflow-clip py-8 px-6'
         onClose={onDismiss}
       >
         <div className='w-full h-full overflow-y-auto' ref={contentRef}>

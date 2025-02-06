@@ -57,7 +57,7 @@ export default function Filters({ urlCategory }: FiltersProps) {
   }, [setCategoryFilter, categories, urlCategory]);
 
   return (
-    <div className='flex flex-col w-full max-w-[260px] gap-6 px-6 py-5 rounded-2xxl border border-black border-opacity-10'>
+    <div className='flex flex-col w-full md:max-w-[260px] gap-6 px-6 py-5 rounded-2xxl border border-black border-opacity-10'>
       <div className='flex items-center justify-between gap-2'>
         <p className='text-xl font-bold'>{t('filters')}</p>
         <FilterIcon draggable={false} />

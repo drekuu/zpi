@@ -52,7 +52,7 @@ export default function New({ children }: { children: ReactNode }) {
             }
           />
 
-          <div className='flex gap-10 items-start'>
+          <div className='flex gap-10 md:items-start flex-col md:flex-row'>
             <Filters urlCategory={category} />
             {children}
           </div>

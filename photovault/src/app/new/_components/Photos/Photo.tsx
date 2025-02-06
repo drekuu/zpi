@@ -8,7 +8,7 @@ interface PhotoProps {
 
 export default function Photo({ photo }: PhotoProps) {
   return (
-    <div className='relative flex-auto h-[250px] [&:nth-last-child(-n+2)]:max-w-[300px] cursor-pointer'>
+    <div className='relative flex-auto md:h-[250px] md:[&:nth-last-child(-n+2)]:max-w-[300px] cursor-pointer'>
       <picture>
         <img
           className='object-cover object-center w-full h-full'

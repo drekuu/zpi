@@ -59,7 +59,7 @@ export default function CartItem({ photo, cartPhoto, index }: CartItemProps) {
           {cartPhoto.commercialLicense && <p>{t('commercial-license')}</p>}
         </div>
 
-        <div className='flex justify-between items-center gap-2'>
+        <div className='flex justify-between md:items-center gap-2 flex-col md:flex-row'>
           <p className='font-bold text-xl'>
             {calculatePrice(cartPhoto, photo).toLocaleString()}zł
           </p>

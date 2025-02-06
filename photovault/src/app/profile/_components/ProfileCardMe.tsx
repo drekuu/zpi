@@ -66,32 +66,30 @@ export default function PhotographerCardMe() {
   return (
     <LoadedQuery query={query} handleError={true}>
       {data && (
-        <header className='flex overflow-hidden z-0 flex-wrap gap-8 justify-center items-start self-center px-4 py-5 max-md:max-w-full'>
-          <div className='flex overflow-hidden flex-col'>
-            {isEditing ? (
-              <input
-                type='file'
-                accept='image/*'
-                name='avatar'
-                onChange={(e: any) => {
-                  const file = e.target.files[0];
-                  setAvatarUrlTemp(file.name);
-                  setAvatarUrlFile(file);
-                }}
-                placeholder={t('enter-avatar')}
+        <header className='flex gap-4 md:gap-20 justify-center px-4 py-5 items-center flex-col md:flex-row'>
+          {isEditing ? (
+            <input
+              type='file'
+              accept='image/*'
+              name='avatar'
+              onChange={(e: any) => {
+                const file = e.target.files[0];
+                setAvatarUrlTemp(file.name);
+                setAvatarUrlFile(file);
+              }}
+              placeholder={t('enter-avatar')}
+            />
+          ) : (
+            <picture className='rounded-[62px] shrink-0 w-[162px] aspect-square object-cover'>
+              <img
+                src={actualAvatarUrl}
+                alt={t('profile-picture')}
+                className='rounded-[inherit]'
               />
-            ) : (
-              <picture>
-                <img
-                  src={actualAvatarUrl}
-                  alt={t('profile-picture')}
-                  className='object-cover rounded-[62px] w-[162px] h-[162px]'
-                />
-              </picture>
-            )}
-          </div>
+            </picture>
+          )}
 
-          <div className='flex overflow-hidden flex-col items-start px-16 pt-1.5 pb-9 text-xs text-black min-w-[240px] w-[558px] max-md:px-5 max-md:max-w-full relative'>
+          <div className='flex flex-col items-center md:items-stretch text-xs text-black min-w-[240px] max-w-[600px] relative text-center md:text-left'>
             {isEditing ? (
               <input
                 type='text'
@@ -99,7 +97,7 @@ export default function PhotographerCardMe() {
                 value={displayedUsernameTemp}
                 onChange={(e) => setDisplayedUsernameTemp(e.target.value)}
                 placeholder={t('enter-username')}
-                className='text-3xl font-bold w-full'
+                className='text-3xl font-bold'
               />
             ) : (
               <h1 className='text-3xl font-bold'>
@@ -108,27 +106,24 @@ export default function PhotographerCardMe() {
                   : t('no-username')}
               </h1>
             )}
-            <div className='flex gap-3.5 mt-9 whitespace-nowrap'>
+            <div className='flex gap-3.5 mt-3 md:mt-9'>
               <EmailIcon
                 alt='Email icon'
                 className='object-contain w-6 aspect-square'
               />
-              <div style={{ display: 'inline-block' }}>
-                {isEditing ? (
-                  <input
-                    type='text'
-                    name='email'
-                    value={emailTemp}
-                    onChange={(e) => setEmailTemp(e.target.value)}
-                    placeholder={t('enter-email')}
-                    className='basic-auto'
-                  />
-                ) : (
-                  <span className='basic-auto'>
-                    {data.displayedEmail ? data.displayedEmail : t('no-email')}
-                  </span>
-                )}
-              </div>
+              {isEditing ? (
+                <input
+                  type='text'
+                  name='email'
+                  value={emailTemp}
+                  onChange={(e) => setEmailTemp(e.target.value)}
+                  placeholder={t('enter-email')}
+                />
+              ) : (
+                <p>
+                  {data.displayedEmail ? data.displayedEmail : t('no-email')}
+                </p>
+              )}
             </div>
             <h2 className='mt-6 text-neutral-400'>{t('about-me')}</h2>
             {isEditing ? (
@@ -137,7 +132,7 @@ export default function PhotographerCardMe() {
                 value={aboutMeTemp}
                 onChange={(e) => setDescriptionTemp(e.target.value)}
                 placeholder={t('enter-about-me')}
-                className='mt-3'
+                className='mt-3 w-full'
               />
             ) : (
               <p className='mt-3'>

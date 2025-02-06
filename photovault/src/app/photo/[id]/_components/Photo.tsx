@@ -33,14 +33,14 @@ export default function Photo({ id }: { id: number }) {
   return (
     <LoadedQuery query={query} handleError={true}>
       {photo && (
-        <div className='flex items-start gap-5 my-8'>
-          <div className='w-1/2'>
+        <div className='flex md:items-start gap-5 my-8 flex-col md:flex-row'>
+          <div className='md:w-1/2'>
             <picture>
               <img src={photo.photoURL} alt={photo.title} />
             </picture>
           </div>
 
-          <div className='w-1/2'>
+          <div className='md:w-1/2'>
             <p className='text-4xl font-bold mb-2'>{photo.title}</p>
 
             <div

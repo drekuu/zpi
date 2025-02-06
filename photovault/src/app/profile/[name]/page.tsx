@@ -32,12 +32,12 @@ export default function Profile({ params }: { params: { name: string } }) {
               avatarUrl={photographer.avatarURL}
               aboutMe={photographer.description}
             />
-            <div className='w-full flex flex-wrap gap-5'>
+            <div className='w-full flex flex-col sm:flex-row sm:flex-wrap gap-5'>
               {photos && (
                 <>
                   {photos.map((photo) => (
                     <div
-                      className='flex-auto max-w-[300px] cursor-pointer'
+                      className='flex-auto sm:max-w-[300px] cursor-pointer'
                       key={photo.id}
                       onClick={() => router.push(`/photo/${photo.id}`)}
                     >
