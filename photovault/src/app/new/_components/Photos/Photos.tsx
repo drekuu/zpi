@@ -15,7 +15,7 @@ export default function Photos() {
   const photos = query.data;
 
   return (
-    <div className='w-full flex flex-wrap gap-5'>
+    <div className='w-full flex flex-col md:flex-row md:flex-wrap gap-5'>
       <LoadedQuery handleError={true} query={query}>
         {photos && (
           <>

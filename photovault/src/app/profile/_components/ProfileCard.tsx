@@ -22,30 +22,28 @@ export default function PhotographerCard({
     : '/image/avatar-placeholder.png';
 
   return (
-    <header className='flex overflow-hidden z-0 flex-wrap gap-8 justify-center items-start self-center px-4 py-5 max-md:max-w-full'>
-      <div className='flex overflow-hidden flex-col rounded-[62px] w-[162px]'>
-        <picture>
-          <img
-            src={actualAvatarUrl}
-            alt='Profile picture'
-            className='object-contain aspect-square w-[162px]'
-          />
-        </picture>
-      </div>
-      <div className='flex overflow-hidden flex-col items-start px-16 pt-1.5 pb-9 text-xs text-black min-w-[240px] w-[558px] max-md:px-5 max-md:max-w-full'>
+    <div className='flex gap-4 md:gap-20 justify-center px-4 py-5 items-center flex-col md:flex-row'>
+      <picture className='object-cover aspect-square rounded-4xl shrink-0 w-[162px]'>
+        <img
+          src={actualAvatarUrl}
+          alt='Profile picture'
+          className='rounded-[inherit]'
+        />
+      </picture>
+      <div className='flex flex-col items-center md:items-start text-xs text-black min-w-[240px] max-w-[600px] text-center md:text-left'>
         <h1 className='text-3xl font-bold'>
           {displayedUsername ? displayedUsername : t('no-username')}
         </h1>
-        <div className='flex gap-3.5 mt-9 whitespace-nowrap'>
+        <div className='flex gap-3.5 mt-3 md:mt-9'>
           <EmailIcon
             alt='Email icon'
             className='object-contain w-6 aspect-square'
           />
-          <span className='basis-auto'>{email ? email : t('no-email')}</span>
+          <p>{email ? email : t('no-email')}</p>
         </div>
         <h2 className='mt-6 text-neutral-400'>{t('about-me')}</h2>
         <p className='mt-3'>{aboutMe ? aboutMe : t('no-about-me')}</p>
       </div>
-    </header>
+    </div>
   );
 }

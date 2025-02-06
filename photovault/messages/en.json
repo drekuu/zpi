@@ -65,7 +65,8 @@
   },
   "Search": {
     "placeholder": "Search...",
-    "no-results": "No results"
+    "no-results": "No results",
+    "loading": "Loading..."
   },
   "LoadedQuery": {
     "load-failed": "Failed to load data",
@@ -142,6 +143,16 @@
       "delivery-fee": "Delivery fee",
       "total": "Total",
       "next-step": "Next step"
+    },
+    "BuyerDetails": {
+      "title": "Buyer details",
+      "first-name": "First name",
+      "surname": "Surname",
+      "country": "Country",
+      "city": "City",
+      "street": "Street",
+      "zip-code": "Zip code",
+      "phone-number": "Phone number"
     }
   }
 }

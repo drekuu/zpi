@@ -81,7 +81,8 @@
   },
   "Search": {
     "placeholder": "Szukaj...",
-    "no-results": "Brak wyników"
+    "no-results": "Brak wyników",
+    "loading": "Ładowanie..."
   },
   "LoadedQuery": {
     "load-failed": "Nie udało się załadować danych",
@@ -158,6 +159,16 @@
       "delivery-fee": "Dostawa",
       "total": "Suma",
       "next-step": "Przejdź dalej"
+    },
+    "BuyerDetails": {
+      "title": "Dane klienta",
+      "first-name": "Imię",
+      "surname": "Nazwisko",
+      "country": "Kraj",
+      "city": "Miasto",
+      "street": "Ulica",
+      "zip-code": "Kod pocztowy",
+      "phone-number": "Numer telefonu"
     }
   }
 }

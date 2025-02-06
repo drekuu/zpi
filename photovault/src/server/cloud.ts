@@ -29,8 +29,13 @@ if (!global.s3) {
   });
 }
 
-export function getFilePublicUrl(keyName: string) {
-  return `${PUBLIC_URL}${FILE_PREFIX}${keyName}`;
+export function getFilePublicUrl(
+  keyName: string,
+  ignorePrefix: boolean = false,
+) {
+  return ignorePrefix
+    ? `${PUBLIC_URL}${keyName}`
+    : `${PUBLIC_URL}${FILE_PREFIX}${keyName}`;
 }
 
 export async function putFile(
@@ -38,7 +43,7 @@ export async function putFile(
   body?: StreamingBlobPayloadInputTypes,
 ) {
   try {
-    console.log('[cloud:putFile] keyName: ', keyName, 'body: ', body);
+    console.log('[cloud:putFile] keyName:', keyName, 'body:', body);
     return await s3.send(
       new PutObjectCommand({
         Bucket: BUCKET_NAME,
@@ -47,7 +52,7 @@ export async function putFile(
       }),
     );
   } catch (err) {
-    console.error('[cloud:putFile] error: ', err);
+    console.error('[cloud:putFile] error:', err);
   }
 }
 
@@ -60,6 +65,6 @@ export async function deleteFile(keyName: string) {
       }),
     );
   } catch (err) {
-    console.error('[cloud:deleteFile] error: ', err);
+    console.error('[cloud:deleteFile] error:', err);
   }
 }

@@ -7,6 +7,10 @@ export function usePhotos(filters?: PhotoFilters) {
   return trpc.photo.getPhotos.useQuery(filters);
 }
 
+export function usePhotosByName(needle: string) {
+  return trpc.photo.getPhotosByName.useQuery({ needle });
+}
+
 export function usePhoto(id: number) {
   return trpc.photo.getPhoto.useQuery({ id });
 }

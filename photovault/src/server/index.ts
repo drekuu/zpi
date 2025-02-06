@@ -5,6 +5,7 @@ import { getMyself as getMyselfUser } from '@/app/api/_routes/user';
 import {
   getPhoto,
   getPhotos,
+  getPhotosByName,
   getPhotosByIds,
   getPhotosByPhotographer,
   getPhotosByPhotographerWithDetails,
@@ -26,6 +27,7 @@ export const appRouter = router({
   photo: {
     getPhoto,
     getPhotos,
+    getPhotosByName,
     getPhotosByIds,
     getPhotosByPhotographer,
     getPhotosByPhotographerWithDetails,
